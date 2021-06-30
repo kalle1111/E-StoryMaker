@@ -2,7 +2,7 @@ package com.eStory.service
 
 import com.eStory.model.friendship.Friendship
 import com.eStory.table.*
-import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.text.SimpleDateFormat
@@ -90,8 +90,12 @@ class FriendshipService {
         val friendship = getMyFriendsByUserName(myUserName).first { it.friend.userName == friendUserName }
         transaction {
             FriendshipEntity.find {
-
-                FriendshipsTable.requesterUserName.eq(myUserName) and (FriendshipsTable.friendName.eq(friendUserName))
+                val bool1 =
+                    FriendshipsTable.requesterUserName.eq(myUserName) and (FriendshipsTable.friendName.eq(friendUserName))
+                val bool2 = FriendshipsTable.requesterUserName.eq(friendUserName) and (FriendshipsTable.friendName.eq(
+                    friendUserName
+                ))
+                bool1.or(bool2)
 
             }.first().delete()
         }

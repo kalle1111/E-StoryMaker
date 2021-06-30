@@ -4,6 +4,7 @@ import io.ktor.locations.*
 
 const val API_VERSION = "/v1"
 const val USERS = "$API_VERSION/users"
+const val GET_ALL_USERS = "$USERS/getAll"
 const val REGISTER_REQUEST = "$USERS/register"
 const val LOGIN_REQUEST = "$USERS/login"
 

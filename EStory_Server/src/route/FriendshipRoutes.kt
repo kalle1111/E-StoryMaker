@@ -1,7 +1,8 @@
 package com.eStory.route
 
-import com.eStory.model.friendship.FriendshipRequest
+import com.eStory.model.friendship.FriendshipServiceModel
 import com.eStory.model.SimpleResponse
+import com.eStory.model.user.User
 import com.eStory.service.FriendshipService
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -59,6 +60,141 @@ fun Route.FriendshipRoutes(
 ) {
     authenticate("jwt") {
 
-        //TODO: define the routes .. 
+        post<FriendshipRequestRoute> {
+
+            val friendshipRequest = try {
+
+                call.receive<FriendshipServiceModel>()
+
+
+            } catch (e: Exception) {
+
+                call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "Missing Fields.."))
+                return@post
+            }
+            try {
+                val username = call.principal<User>()!!.userName
+                friendshipService.insertRequest(username, friendshipRequest.friendUserName)
+                call.respond(HttpStatusCode.OK, SimpleResponse(true, "Friendship requested Successfully!"))
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+            }
+
+        }
+
+        get<MyFriendshipsGetRoute> {
+            try {
+                val userName = call.principal<User>()!!.userName
+                val myFriendships = friendshipService.getMyFriendsByUserName(userName)
+                call.respond(HttpStatusCode.OK, myFriendships)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
+
+            }
+
+        }
+        get<FriendshipsRequestsTOMeGetRoute> {
+            try {
+                val userName = call.principal<User>()!!.userName
+                val requestedFriendshipsToMe = friendshipService.getAllRequestsToMe(userName)
+                call.respond(HttpStatusCode.OK, requestedFriendshipsToMe)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
+            }
+        }
+
+
+        get<FriendshipsRequestsFromMeGetRoute> {
+            try {
+                val userName = call.principal<User>()!!.userName
+                val requestedFriendshipsFromMe = friendshipService.getAllRequestsFromMe(userName)
+                call.respond(HttpStatusCode.OK, requestedFriendshipsFromMe)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
+            }
+        }
+
+        post<FriendshipRejectRequestRoute> {
+
+            val friendshipReject = try {
+
+                call.receive<FriendshipServiceModel>()
+
+
+            } catch (e: Exception) {
+
+                call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "Missing Fields.."))
+                return@post
+            }
+            try {
+                val username = call.principal<User>()!!.userName
+                friendshipService.rejectRequestFromOther(username, friendshipReject.friendUserName)
+                call.respond(HttpStatusCode.OK, SimpleResponse(true, "Friendship rejected Successfully!"))
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+            }
+
+        }
+
+        post<FriendshipAcceptRequestRoute> {
+
+            val friendshipAccept = try {
+
+                call.receive<FriendshipServiceModel>()
+
+
+            } catch (e: Exception) {
+
+                call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "Missing Fields.."))
+                return@post
+            }
+            try {
+                val username = call.principal<User>()!!.userName
+                friendshipService.acceptRequestFromOther(username, friendshipAccept.friendUserName)
+                call.respond(HttpStatusCode.OK, SimpleResponse(true, "Friendship accepted Successfully!"))
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+            }
+
+        }
+
+        post<FriendshipCancelRequestRoute> {
+
+            val friendshipCancel = try {
+
+                call.receive<FriendshipServiceModel>()
+
+
+            } catch (e: Exception) {
+
+                call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "Missing Fields.."))
+                return@post
+            }
+            try {
+                val username = call.principal<User>()!!.userName
+                friendshipService.cancelARequestFromMeTOAnother(username, friendshipCancel.friendUserName)
+                call.respond(HttpStatusCode.OK, SimpleResponse(true, "Friendship canceled Successfully!"))
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+            }
+
+        }
+
+        delete<FriendshipDeleteRoute> {
+            val friendshipDelete = try {
+                call.receive<FriendshipServiceModel>()
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "Missing Fields.."))
+                return@delete
+            }
+            try {
+                val username = call.principal<User>()!!.userName
+                friendshipService.deleteAFriendship(username, friendshipDelete.friendUserName)
+                call.respond(HttpStatusCode.OK, SimpleResponse(true, "friendship deleted Successfully!"))
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+            }
+        }
+
     }
 }

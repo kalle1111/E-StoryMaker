@@ -4,8 +4,10 @@ import authentication.JwtService
 import com.eStory.model.user.LoginRequest
 import com.eStory.model.user.RegisterRequest
 import com.eStory.model.SimpleResponse
+import com.eStory.model.user.User
 import com.eStory.service.UserService
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.locations.*
 import io.ktor.request.*
@@ -13,6 +15,8 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import java.lang.Exception
 
+@Location(GET_ALL_USERS)
+class UsersGetRoute
 
 @Location(REGISTER_REQUEST)
 class UserRegisterRoute
@@ -20,12 +24,21 @@ class UserRegisterRoute
 @Location(LOGIN_REQUEST)
 class UserLoginRoute
 
+
 fun Route.UserRoutes(
     userService: UserService,
     jwtService: JwtService,
     hashFunction: (String) -> String
 ) {
+    get<UsersGetRoute> {
+        try {
+            val allUsers = userService.getAll()
+            call.respond(HttpStatusCode.OK, allUsers)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
 
+        }
+    }
     post<UserRegisterRoute> {
         val registerRequest = try {
             call.receive<RegisterRequest>()

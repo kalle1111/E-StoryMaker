@@ -13,10 +13,16 @@ const val MY_STORIES = "$STORIES/myStories"
 const val CREAT_STORIES = "$STORIES/create"
 const val UPDATE_STORIES = "$STORIES/update"
 const val DELETE_STORIES = "$STORIES/delete"
+
 const val RATE_STORIES = "$STORIES/rateStory"
 const val UPDATE_RATED_STORIES = "$STORIES/updateRatedStory"
 const val RATED_STORIES = "$STORIES/ratedStories"
 const val FROM_ME_RATED_STORIES = "$STORIES/fromMeRatedStories"
+
+const val FAVORITE_STORIES = "$STORIES/favoriteStories"
+const val MY_FAVORITE_STORIES = "$FAVORITE_STORIES/getMyFavoriteStories"
+const val SET_FAVORITE_STORIES = "$FAVORITE_STORIES/setFavorite"
+const val SET_AS_NOT_FAVORITE_STORIES = "$FAVORITE_STORIES/setNotFavorite"
 
 const val FRIENDSHIPS = "$API_VERSION/friendships"
 const val MY_FRIENDSHIPS = "$FRIENDSHIPS/myFriendships"

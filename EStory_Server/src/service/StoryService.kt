@@ -1,6 +1,7 @@
 package com.eStory.service
 
 import com.eStory.model.story.RatedStory
+import com.eStory.model.story.StoryAsFavorite
 import com.eStory.models.story.Story
 import com.eStory.table.*
 import org.jetbrains.exposed.sql.and
@@ -63,17 +64,16 @@ class StoryService {
     }
 
     /****************RATING_STORY****************/
-    fun rateStory(userName: String, storyId: String, isFavorite: Boolean, ratingValue: Int): RatedStory =
+    fun rateStory(userName: String, storyId: String, ratingValue: Int): RatedStory =
         transaction {
             RatedStoryEntity.new {
                 this.userEntity = UserEntity.find { UsersTable.userName eq userName }.first()
                 this.storyEntity = StoryEntity[UUID.fromString(storyId)]
-                this.isFavorite = isFavorite
                 this.ratingValue = ratingValue
             }.toDTO()
         }
 
-    fun updateRatedStory(userName: String, storyId: String, isFavorite: Boolean?, ratingValue: Int?) {
+    fun updateRatedStory(userName: String, storyId: String, ratingValue: Int?) {
 
         transaction {
             RatedStoriesTable.update(
@@ -82,10 +82,6 @@ class StoryService {
                             RatedStoriesTable.userName.eq(userName)
                 }
             ) { rs ->
-                if (isFavorite != null) {
-                    rs[this.isFavorite] = isFavorite
-                }
-
                 if (ratingValue != null) {
                     rs[this.ratingValue] = ratingValue
                 }
@@ -99,6 +95,43 @@ class StoryService {
     fun getFromMeRatedStories(userName: String): List<RatedStory> =
         getAllRatedStories().filter { it.user.userName == userName }
 
+    //fun getTopRatedStory(): List<RatedStory> =  transaction { RatedStoryEntity.all(). }
+
+        /******************Story as Favorite *****************/
+    fun setStoryAsFavorite(userName: String, storyId: String) {
+        transaction {
+            StoryAsFavoriteEntity.new {
+                this.userEntity = UserEntity.find { UsersTable.userName eq userName }.first()
+                this.storyEntity = StoryEntity[UUID.fromString(storyId)]
+            }.toDTO()
+        }
+    }
+
+    fun getAllStoriesAsFavorite(): List<StoryAsFavorite> =
+        transaction { StoryAsFavoriteEntity.all().map { it.toDTO() } }
+
+    fun getMyFavoriteStories(userName: String): List<StoryAsFavorite> =
+        getAllStoriesAsFavorite().filter { it.user.userName == userName }
+
+    fun setStoryAsNotFavorite(userName: String, storyId: String): StoryAsFavorite {
+        val storyAsFavorite = getMyFavoriteStories(userName).first { it.story.uuid.toString() == storyId }
+        transaction {
+            StoryAsFavoriteEntity.find {
+
+                StoriesAsFavoriteTable.userName.eq(userName) and (StoriesAsFavoriteTable.storyId.eq(
+                    UUID.fromString(
+                        storyId
+                    )
+                ))
+
+            }.first().delete()
+        }
+
+        return storyAsFavorite;
+
+    }
+
+    /*****************get Date ***************/
     private fun getDate(): String {
         val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
         return sdf.format(Date())

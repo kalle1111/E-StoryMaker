@@ -3,6 +3,7 @@ package com.eStory.route
 import com.eStory.model.story.InsertStoryRequest
 import com.eStory.model.SimpleResponse
 import com.eStory.model.story.RateStoryRequest
+import com.eStory.model.story.StoryAsFavoriteRequest
 import com.eStory.model.story.UpdateStoryRequest
 import com.eStory.model.user.User
 import com.eStory.service.StoryService
@@ -43,6 +44,17 @@ class RatedStoriesGetRoute
 @Location(FROM_ME_RATED_STORIES)
 class FromMeRatedStoriesGetRoute
 
+@Location(FAVORITE_STORIES)
+class FavoriteStoriesGetRoute
+
+@Location(MY_FAVORITE_STORIES)
+class MyFavoriteStoriesGetRoute
+
+@Location(SET_FAVORITE_STORIES)
+class SetFavoriteStoryRoute
+
+@Location(SET_AS_NOT_FAVORITE_STORIES)
+class SetAsNotFavoriteStoryRoute
 
 
 fun Route.StoryRoutes(
@@ -130,10 +142,70 @@ fun Route.StoryRoutes(
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
             }
         }
+        /****************Set Story as Favorite ************/
+        //We dont need it, it is not so important in the app
+        get<FavoriteStoriesGetRoute> {
+            try {
+                val favoriteStories = storyService.getAllStoriesAsFavorite()
+                call.respond(HttpStatusCode.OK, favoriteStories)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
+
+            }
+        }
+        // this is more important to see just my important Stories
+        get<MyFavoriteStoriesGetRoute> {
+            try {
+                val userName = call.principal<User>()!!.userName
+                val myFavoriteStories = storyService.getMyFavoriteStories(userName)
+                call.respond(HttpStatusCode.OK, myFavoriteStories)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
+
+            }
+        }
+
+        post<SetFavoriteStoryRoute> {
+            val setFavorite = try {
+
+                call.receive<StoryAsFavoriteRequest>()
+
+            } catch (e: Exception) {
+
+                call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "Missing Fields.."))
+                return@post
+            }
+            try {
+                val username = call.principal<User>()!!.userName
+                storyService.setStoryAsFavorite(username, setFavorite.storyId)
+                call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story is now as favorite!"))
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+            }
+
+        }
+        post<SetAsNotFavoriteStoryRoute> {
+            val setNotFavorite = try {
+
+                call.receive<StoryAsFavoriteRequest>()
+
+            } catch (e: Exception) {
+
+                call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "Missing Fields.."))
+                return@post
+            }
+            try {
+                val username = call.principal<User>()!!.userName
+                storyService.setStoryAsFavorite(username, setNotFavorite.storyId)
+                call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story is now as not favorite!"))
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+            }
+
+        }
 
         /**************Rating Story*******************/
         post<StoryRateRoute> {
-            print("HiHIHIHIH")
             val rateStory = try {
 
                 call.receive<RateStoryRequest>()
@@ -145,7 +217,7 @@ fun Route.StoryRoutes(
             }
             try {
                 val username = call.principal<User>()!!.userName
-                storyService.rateStory(username, rateStory.storyId, rateStory.isFavorite, rateStory.ratingValue)
+                storyService.rateStory(username, rateStory.storyId, rateStory.ratingValue)
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story has been rated Successfully!"))
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
@@ -167,7 +239,6 @@ fun Route.StoryRoutes(
                 storyService.updateRatedStory(
                     username,
                     ratedStory.storyId,
-                    ratedStory.isFavorite,
                     ratedStory.ratingValue
                 )
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story has been rated Successfully!"))
@@ -199,7 +270,6 @@ fun Route.StoryRoutes(
             }
 
         }
-
 
 
     }

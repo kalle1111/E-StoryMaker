@@ -24,12 +24,27 @@ class UserRegisterRoute
 @Location(LOGIN_REQUEST)
 class UserLoginRoute
 
+@Location(GET_PROFILE)
+class UserGetProfile
 
 fun Route.UserRoutes(
     userService: UserService,
     jwtService: JwtService,
     hashFunction: (String) -> String
 ) {
+    authenticate("jwt") {
+        get<UserGetProfile> {
+            try {
+                val username = call.principal<User>()!!.userName
+                val user = userService.getByUserName(username)
+                call.respond(HttpStatusCode.OK, user)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
+
+            }
+        }
+    }
+
     get<UsersGetRoute> {
         try {
             val allUsers = userService.getAll()

@@ -23,6 +23,6 @@ class FriendshipEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var isAccepted by FriendshipsTable.isAccepted
     var requestTime by FriendshipsTable.requestTime
 
-    fun toDTO(): Friendship = Friendship(this.id.toString(), requesterUserEntity.toDTO(), friendEntity.toDTO(),isAccepted ,requestTime)
-
+    fun toDTO(): Friendship =
+        Friendship(this.id.toString(), requesterUserEntity.toDTO(), friendEntity.toDTO(), isAccepted, requestTime)
 }

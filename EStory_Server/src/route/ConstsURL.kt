@@ -1,12 +1,23 @@
 package com.eStory.route
 
-import io.ktor.locations.*
+/**
+Beim Login bekommt man den Access-Token als message vom dem Server.
+dies wird gespeichert, und immer beim Anfrafen so anhängen:
+
+val authHeaderValue = "Bearer " + message;
+connection.setRequestProperty("Authorization", authHeaderValue)
+
+
+Ein User darf Anfragen senden, nur wenn er Online ist.
+Beim Anhängen dieses Messages, zeigt der User, dass er online ist
+ */
 
 const val API_VERSION = "/v1"
 const val USERS = "$API_VERSION/users"
 const val GET_ALL_USERS = "$USERS/getAll"
 const val REGISTER_REQUEST = "$USERS/register"
 const val LOGIN_REQUEST = "$USERS/login"
+const val GET_PROFILE = "$USERS/getMyProfile"
 
 const val STORIES = "$API_VERSION/stories"
 const val MY_STORIES = "$STORIES/myStories"

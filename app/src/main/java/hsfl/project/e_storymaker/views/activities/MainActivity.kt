@@ -1,4 +1,4 @@
-package hsfl.project.e_storymaker
+package hsfl.project.e_storymaker.views.activities
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -9,6 +9,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import hsfl.project.e_storymaker.R
 import hsfl.project.e_storymaker.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

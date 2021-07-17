@@ -12,6 +12,7 @@ import hsfl.project.e_storymaker.R
 import hsfl.project.e_storymaker.databinding.LoginFragmentBinding
 
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.LoginFragVM
+import hsfl.project.e_storymaker.views.activities.AuthActivity
 
 class LoginFragment : Fragment() {
 
@@ -40,6 +41,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.registerButton.setOnClickListener{
+            (requireActivity() as AuthActivity).supportActionBar!!.show()
             findNavController().navigate(R.id.action_loginFragment_to_RegisterFragment)
         }
     }

@@ -3,16 +3,16 @@ package hsfl.project.e_storymaker.views.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import hsfl.project.e_storymaker.R
-import hsfl.project.e_storymaker.views.fragments.StoryFinderFragment
+import hsfl.project.e_storymaker.views.fragments.LoginFragment
 
-class MainActivity : AppCompatActivity() {
+class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+        setContentView(R.layout.auth_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, StoryFinderFragment.newInstance())
+                .replace(R.id.container, LoginFragment.newInstance())
                 .commitNow()
         }
     }

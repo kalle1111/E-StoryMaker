@@ -3,7 +3,7 @@ package hsfl.project.e_storymaker.views.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import hsfl.project.e_storymaker.R
-import hsfl.project.e_storymaker.views.fragments.ReadingOverviewFragment
+import hsfl.project.e_storymaker.views.fragments.ReadOverviewFragment
 
 class ReadingActivity : AppCompatActivity() {
 
@@ -12,7 +12,7 @@ class ReadingActivity : AppCompatActivity() {
         setContentView(R.layout.reading_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, ReadingOverviewFragment.newInstance())
+                .replace(R.id.container, ReadOverviewFragment.newInstance())
                 .commitNow()
         }
     }

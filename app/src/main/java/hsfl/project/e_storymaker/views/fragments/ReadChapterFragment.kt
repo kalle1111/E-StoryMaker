@@ -6,27 +6,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import hsfl.project.e_storymaker.viewModels.ReadingViewModel
+import hsfl.project.e_storymaker.viewModels.ReadingVM
 import hsfl.project.e_storymaker.R
+import hsfl.project.e_storymaker.viewModels.fragmentViewModels.ReadChapterFragVM
 
-class ReadingOverviewFragment : Fragment() {
+class ReadChapterFragment : Fragment() {
 
     companion object {
-        fun newInstance() = ReadingOverviewFragment()
+        fun newInstance() = ReadChapterFragment()
     }
 
-    private lateinit var viewModel: ReadingViewModel
+    private lateinit var viewModel: ReadChapterFragVM
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.reading_overview_fragment, container, false)
+        return inflater.inflate(R.layout.reading_chapter_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ReadingViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ReadChapterFragVM::class.java)
         // TODO: Use the ViewModel
     }
 

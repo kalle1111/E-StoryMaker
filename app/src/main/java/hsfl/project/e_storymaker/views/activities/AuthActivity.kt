@@ -29,7 +29,6 @@ class AuthActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_auth)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
-        supportActionBar?.hide()
 
         /*
         if (savedInstanceState == null) {
@@ -42,7 +41,6 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_auth)
-        supportActionBar?.hide()
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }

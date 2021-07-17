@@ -40,6 +40,8 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
 
+        (requireActivity() as AuthActivity).supportActionBar!!.hide()
+
         binding.registerButton.setOnClickListener{
             (requireActivity() as AuthActivity).supportActionBar!!.show()
             findNavController().navigate(R.id.action_loginFragment_to_RegisterFragment)

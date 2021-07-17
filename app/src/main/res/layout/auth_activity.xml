@@ -4,4 +4,8 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.activities.AuthActivity" />
+    tools:context=".views.activities.AuthActivity">
+    <include layout="@layout/content_auth" />
+
+</FrameLayout>
+

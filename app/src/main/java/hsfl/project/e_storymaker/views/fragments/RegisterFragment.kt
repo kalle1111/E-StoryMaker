@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import hsfl.project.e_storymaker.viewModels.AuthVM
 import hsfl.project.e_storymaker.R
@@ -36,9 +37,6 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toLoginButton.setOnClickListener{
-            findNavController().navigate(R.id.action_RegisterFragment_to_LoginFragment)
-        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

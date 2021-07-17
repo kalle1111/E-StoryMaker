@@ -7,25 +7,100 @@
     android:layout_height="match_parent"
     tools:context="views.fragments.LoginFragment">
 
-    <TextView
-        android:id="@+id/message"
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/mailInputLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LoginFragment"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="80dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
-    <Button
-        android:id="@+id/registerButton"
+        <EditText
+            android:id="@+id/loginEmail"
+            style="@style/Widget.AppCompat.EditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:ems="15"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/passwordInputLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Register!"
+        android:layout_marginTop="30dp"
+        app:boxBackgroundColor="#00FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mailInputLayout"
+        app:passwordToggleEnabled="true">
+
+        <EditText
+            android:id="@+id/loginPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="15"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginEmail" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="Login"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/message" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout" />
+
+
+    <Button
+        android:id="@+id/registerButton"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:text="Don't have an account? Register here!"
+        android:textAllCaps="false"
+        android:textColor="#4A86E8"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:fontFamily="sans-serif-thin"
+        android:text="E-Story\n Maker"
+        android:textAlignment="center"
+        android:textColor="#0A25B8"
+        android:textSize="48sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

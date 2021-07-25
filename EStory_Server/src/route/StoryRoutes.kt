@@ -217,7 +217,14 @@ fun Route.StoryRoutes(
             }
             try {
                 val username = call.principal<User>()!!.userName
-                storyService.rateStory(username, rateStory.storyId, rateStory.ratingValue)
+                storyService.rateStory(
+                    username, rateStory.storyId,
+                    rateStory.ratingOverallValue,
+                    rateStory.ratingStyleValue,
+                    rateStory.ratingStoryValue,
+                    rateStory.ratingGrammarValue,
+                    rateStory.ratingCharacterValue
+                )
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story has been rated Successfully!"))
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
@@ -239,7 +246,11 @@ fun Route.StoryRoutes(
                 storyService.updateRatedStory(
                     username,
                     ratedStory.storyId,
-                    ratedStory.ratingValue
+                    ratedStory.ratingOverallValue,
+                    ratedStory.ratingStyleValue,
+                    ratedStory.ratingStoryValue,
+                    ratedStory.ratingGrammarValue,
+                    ratedStory.ratingCharacterValue
                 )
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story has been rated Successfully!"))
             } catch (e: Exception) {

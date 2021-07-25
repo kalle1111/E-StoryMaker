@@ -12,8 +12,13 @@ import java.util.*
 
 object RatedStoriesTable : UUIDTable() {
     val userName = varchar("userName", 512).references(UsersTable.userName)
-    val storyId =  reference("storyID", StoriesTable.id)
-    val ratingValue = integer("ratingValue")
+    val storyId = reference("storyID", StoriesTable.id)
+    val ratingOverallValue = integer("ratingOverallValue")
+    val ratingStyleValue = integer("ratingStyleValue")
+    val ratingStoryValue = integer("ratingStoryValue")
+    val ratingGrammarValue = integer("ratingGrammarValue")
+    val ratingCharacterValue = integer("ratingCharacterValue")
+
 }
 
 class RatedStoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {
@@ -21,8 +26,22 @@ class RatedStoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {
 
     var userEntity by UserEntity referencedOn RatedStoriesTable.userName
     var storyEntity by StoryEntity referencedOn RatedStoriesTable.storyId
-    var ratingValue by RatedStoriesTable.ratingValue
+    var ratingOverallValue by RatedStoriesTable.ratingOverallValue
+    var ratingStyleValue by RatedStoriesTable.ratingStyleValue
+    var ratingStoryValue by RatedStoriesTable.ratingStoryValue
+    var ratingGrammarValue by RatedStoriesTable.ratingGrammarValue
+    var ratingCharacterValue by RatedStoriesTable.ratingCharacterValue
 
-    fun toDTO(): RatedStory = RatedStory(this.id.toString(), userEntity.toDTO(), storyEntity.toDTO(), ratingValue)
+
+    fun toDTO(): RatedStory = RatedStory(
+        this.id.toString(),
+        userEntity.toDTO(),
+        storyEntity.toDTO(),
+        ratingOverallValue,
+        ratingStyleValue,
+        ratingStoryValue,
+        ratingGrammarValue,
+        ratingCharacterValue
+    )
 
 }

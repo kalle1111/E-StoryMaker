@@ -64,16 +64,34 @@ class StoryService {
     }
 
     /****************RATING_STORY****************/
-    fun rateStory(userName: String, storyId: String, ratingValue: Int): RatedStory =
+    fun rateStory(
+        userName: String, storyId: String,
+        ratingOverallValue: Int,
+        ratingStyleValue: Int,
+        ratingStoryValue: Int,
+        ratingGrammarValue: Int,
+        ratingCharacterValue: Int
+    ): RatedStory =
         transaction {
             RatedStoryEntity.new {
                 this.userEntity = UserEntity.find { UsersTable.userName eq userName }.first()
                 this.storyEntity = StoryEntity[UUID.fromString(storyId)]
-                this.ratingValue = ratingValue
+                this.ratingOverallValue = ratingOverallValue
+                this.ratingStyleValue = ratingStyleValue
+                this.ratingStoryValue = ratingStoryValue
+                this.ratingGrammarValue = ratingGrammarValue
+                this.ratingCharacterValue = ratingCharacterValue
             }.toDTO()
         }
 
-    fun updateRatedStory(userName: String, storyId: String, ratingValue: Int?) {
+    fun updateRatedStory(
+        userName: String, storyId: String,
+        ratingOverallValue: Int?,
+        ratingStyleValue: Int?,
+        ratingStoryValue: Int?,
+        ratingGrammarValue: Int?,
+        ratingCharacterValue: Int?
+    ) {
 
         transaction {
             RatedStoriesTable.update(
@@ -82,8 +100,20 @@ class StoryService {
                             RatedStoriesTable.userName.eq(userName)
                 }
             ) { rs ->
-                if (ratingValue != null) {
-                    rs[this.ratingValue] = ratingValue
+                if (ratingOverallValue != null) {
+                    rs[this.ratingOverallValue] = ratingOverallValue
+                }
+                if (ratingStyleValue != null) {
+                    rs[this.ratingStyleValue] = ratingStyleValue
+                }
+                if (ratingStoryValue != null) {
+                    rs[this.ratingStoryValue] = ratingStoryValue
+                }
+                if (ratingGrammarValue != null) {
+                    rs[this.ratingGrammarValue] = ratingGrammarValue
+                }
+                if (ratingCharacterValue != null) {
+                    rs[this.ratingCharacterValue] = ratingCharacterValue
                 }
 
             }
@@ -97,7 +127,7 @@ class StoryService {
 
     //fun getTopRatedStory(): List<RatedStory> =  transaction { RatedStoryEntity.all(). }
 
-        /******************Story as Favorite *****************/
+    /******************Story as Favorite *****************/
     fun setStoryAsFavorite(userName: String, storyId: String) {
         transaction {
             StoryAsFavoriteEntity.new {

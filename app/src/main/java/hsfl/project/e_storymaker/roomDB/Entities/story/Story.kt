@@ -13,7 +13,7 @@ data class Story(
     @ColumnInfo(name = "storyTitle") val storyTitle: String,
     @ColumnInfo(name = "releaseDate") val releaseDate: String,
     @ColumnInfo(name = "ageRestriction") val ageRestriction: Int,
-    @ColumnInfo(name = "description") val story_description: String,
+    @ColumnInfo(name = "story_description") val story_description: String,
     @ColumnInfo(name = "storyUrl") val storyUrl: String,
     @ColumnInfo(name = "coverUrl") val coverUrl: String
 )

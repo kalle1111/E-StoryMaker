@@ -7,7 +7,7 @@ import hsfl.project.e_storymaker.roomDB.Entities.user.User
 
 @Entity
 data class UserSubscribesUser (
-    @PrimaryKey(autoGenerate = false) val uuid: String,
+    @PrimaryKey(autoGenerate = false) val UserSubscribesUser_uuid: String,
     @Embedded val subscriber: User,
     @Embedded val subscribed: User
 )

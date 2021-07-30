@@ -9,8 +9,8 @@ import hsfl.project.e_storymaker.roomDB.Entities.user.User
 
 @Entity
 data class UserReadsStory (
-    @PrimaryKey(autoGenerate = false) val uuid: String,
-    @Embedded val user: User,
-    @Embedded val story: Story,
+    @PrimaryKey(autoGenerate = false) val UserReadsStory_uuid: String,
+    @Embedded val UserReadsStory_user: User,
+    @Embedded val UserReadsStory_story: Story,
     @ColumnInfo(name = "chapter") val chapter: Int
 )

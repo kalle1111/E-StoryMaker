@@ -8,7 +8,7 @@ import hsfl.project.e_storymaker.roomDB.Entities.story.Tag
 
 @Entity
 data class StoryHasTag (
-    @PrimaryKey(autoGenerate = false) val uuid: String,
-    @Embedded val story: Story,
-    @Embedded val tag: Tag
+    @PrimaryKey(autoGenerate = false) val StoryHasTag_uuid: String,
+    @Embedded val StoryHasTag_story: Story,
+    @Embedded val StoryHasTag_tag: Tag
 )

@@ -10,7 +10,7 @@ data class User(
     @ColumnInfo(name = "firstname") val firstname: String,
     @ColumnInfo(name = "lastname") val lastname: String,
     @ColumnInfo(name = "userName") val userName: String,
-    @ColumnInfo(name = "description") val user_description: String,
+    @ColumnInfo(name = "user_description") val user_description: String,
     @ColumnInfo(name = "birthday") val birthday: String,
     @ColumnInfo(name = "hashPassword") val hashPassword: String
 )

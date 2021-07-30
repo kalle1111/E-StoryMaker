@@ -10,7 +10,6 @@ import hsfl.project.e_storymaker.roomDB.Entities.friendship.FriendshipDao
 
 import hsfl.project.e_storymaker.roomDB.Entities.story.Story
 import hsfl.project.e_storymaker.roomDB.Entities.story.Tag
-import hsfl.project.e_storymaker.roomDB.Entities.story.Audiobook
 import hsfl.project.e_storymaker.roomDB.Entities.story.StoryDao
 import hsfl.project.e_storymaker.roomDB.Entities.transitives.StoryHasTag
 import hsfl.project.e_storymaker.roomDB.Entities.transitives.UserFavorsStory
@@ -25,8 +24,8 @@ import hsfl.project.e_storymaker.roomDB.Entities.user.UserDao
 
 @Database(
     entities = [User::class, Story::class, Friendship::class,
-        Audiobook::class, Tag::class, StoryHasTag::class,
-        UserFavorsStory::class, UserRatesStory::class, UserReadsStory::class,
+        Tag::class, StoryHasTag::class, UserFavorsStory::class,
+        UserRatesStory::class, UserReadsStory::class,
         UserSubscribesUser::class],
     version = 1,
     exportSchema = false)

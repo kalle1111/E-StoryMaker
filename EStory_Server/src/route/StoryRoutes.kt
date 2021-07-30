@@ -56,6 +56,8 @@ class SetFavoriteStoryRoute
 @Location(SET_AS_NOT_FAVORITE_STORIES)
 class SetAsNotFavoriteStoryRoute
 
+@Location(SEARCH_BY_TITLE_STORIES)
+class StorySearchByTitleRoute
 
 fun Route.StoryRoutes(
     storyService: StoryService
@@ -138,6 +140,21 @@ fun Route.StoryRoutes(
             try {
                 storyService.deleteByUUID(storyId)
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story deleted Successfully!"))
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+            }
+        }
+        /****************Serching by title ************/
+        get<StorySearchByTitleRoute> {
+            val storyTilte = try {
+                call.request.queryParameters["title"]!!
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:tilte ist not present"))
+                return@delete
+            }
+            try {
+                val story = storyService.getStoryByTitle(storyTilte)
+                call.respond(HttpStatusCode.OK, story)
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
             }

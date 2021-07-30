@@ -25,6 +25,8 @@ const val CREAT_STORIES = "$STORIES/create"
 const val UPDATE_STORIES = "$STORIES/update"
 const val DELETE_STORIES = "$STORIES/delete"
 
+const val SEARCH_BY_TITLE_STORIES = "$STORIES/searchByTilte"
+
 const val RATE_STORIES = "$STORIES/rateStory"
 const val UPDATE_RATED_STORIES = "$STORIES/updateRatedStory"
 const val RATED_STORIES = "$STORIES/ratedStories"

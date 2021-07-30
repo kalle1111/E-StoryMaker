@@ -15,7 +15,7 @@ object DatabaseFactory {
             SchemaUtils.create(StoriesTable)
             SchemaUtils.create(FriendshipsTable)
             SchemaUtils.create(RatedStoriesTable)
-
+            SchemaUtils.create(StoriesAsFavoriteTable)
 /*
             UsersTable.deleteAll()
             StoriesTable.deleteAll()

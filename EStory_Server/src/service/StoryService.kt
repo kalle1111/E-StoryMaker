@@ -18,6 +18,7 @@ class StoryService {
 
     fun getAllByUserName(userName: String): List<Story> = getAll().filter { it.user.userName == userName }
 
+    fun getStoryByTitle(title: String): List<Story> = getAll().filter { it.storyTitle == title }
 
     //private val users = listOf(testUser).associateBy(User::id)
     fun deleteByUUID(uuid: String): Story? {

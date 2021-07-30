@@ -175,12 +175,14 @@ fun Route.StoryRoutes(
                 call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "Missing Fields.."))
                 return@post
             }
+
+
             try {
                 val username = call.principal<User>()!!.userName
                 storyService.setStoryAsFavorite(username, setFavorite.storyId)
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story is now as favorite!"))
             } catch (e: Exception) {
-                call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+                call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred setFavorite"))
             }
 
         }

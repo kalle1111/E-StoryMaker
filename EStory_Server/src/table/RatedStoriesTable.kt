@@ -18,7 +18,6 @@ object RatedStoriesTable : UUIDTable() {
     val ratingStoryValue = integer("ratingStoryValue")
     val ratingGrammarValue = integer("ratingGrammarValue")
     val ratingCharacterValue = integer("ratingCharacterValue")
-
 }
 
 class RatedStoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {

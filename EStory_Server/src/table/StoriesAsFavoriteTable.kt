@@ -10,7 +10,7 @@ import java.util.*
 
 object StoriesAsFavoriteTable : UUIDTable() {
     val userName = varchar("userName", 512).references(UsersTable.userName)
-    val storyId = reference("storyID", id)
+    val storyId = reference("storyID", StoriesTable.id)
 }
 
 class StoryAsFavoriteEntity(id: EntityID<UUID>) : UUIDEntity(id) {

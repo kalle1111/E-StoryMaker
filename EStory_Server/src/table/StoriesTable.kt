@@ -13,6 +13,7 @@ object StoriesTable : UUIDTable() {
     val storyTitle = text("storyTitle")
     val description = text("description")
     val createTime = varchar("createTime", 255)
+
     //   val img = binary("image", Int.MAX_VALUE)
 }
 

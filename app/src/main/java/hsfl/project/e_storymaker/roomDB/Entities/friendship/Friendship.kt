@@ -9,8 +9,8 @@ import hsfl.project.e_storymaker.roomDB.Entities.user.User
 @Entity
 data class Friendship(
     @PrimaryKey(autoGenerate = false) val uuid: String,
-    @Embedded val requester: User,
-    @Embedded val target: User,
+    @Embedded(prefix = "requester_") val requester: User,
+    @Embedded(prefix = "target_") val target: User,
     @ColumnInfo(name = "isAccepted") val isAccepted: Boolean,
     @ColumnInfo(name = "requestTime") val requestTime: String
 )

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/ProfileFragment">
+
+    <fragment
+        android:id="@+id/ProfileFragment"
+        android:name="hsfl.project.e_storymaker.views.fragments.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/profile_fragment"/>
+    <fragment
+        android:id="@+id/LibraryFragment"
+        android:name="hsfl.project.e_storymaker.views.fragments.LibraryFragment"
+        android:label="Library"
+        tools:layout="@layout/library_fragment"/>
+    <fragment
+        android:id="@+id/StoryFinderFragment"
+        android:name="hsfl.project.e_storymaker.views.fragments.StoryFinderFragment"
+        android:label="Story Finder"
+        tools:layout="@layout/story_finder_fragment"/>
+</navigation>

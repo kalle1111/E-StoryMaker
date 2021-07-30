@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/container"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.activities.AuthActivity">
-    <include layout="@layout/content_auth" />
+    tools:context=".views.activities.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.EStoryMaker.AppBarOverlay">
+        android:theme="@style/Theme.EStoryMaker.AppBarOverlay"
+        >
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/authToolbar"
+            android:id="@+id/mainToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -22,5 +21,4 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-</FrameLayout>
-
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,14 +2,12 @@ package hsfl.project.e_storymaker.views.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import hsfl.project.e_storymaker.R
 import hsfl.project.e_storymaker.databinding.AuthActivityBinding
-import hsfl.project.e_storymaker.views.fragments.LoginFragment
 
 class AuthActivity : AppCompatActivity() {
 
@@ -22,9 +20,9 @@ class AuthActivity : AppCompatActivity() {
         binding = AuthActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.authToolbar)
 
-        //TextView textView = (TextView)binding.toolbar.findViewById(R.id.too)
+        //TextView textView = (TextView)binding.authToolbar.findViewById(R.id.too)
 
         val navController = findNavController(R.id.nav_host_fragment_content_auth)
         appBarConfiguration = AppBarConfiguration(navController.graph)

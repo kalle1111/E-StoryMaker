@@ -60,7 +60,7 @@
 
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/loginButton"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="250dp"
         android:layout_height="60dp"
@@ -94,7 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:fontFamily="sans-serif-thin"
-        android:text="E-Story\n Maker"
+        android:text="E-Story\nMaker"
         android:textAlignment="center"
         android:textColor="#0A25B8"
         android:textSize="48sp"
@@ -102,5 +102,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/wrongCredsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Email or Password invalid"
+        android:textColor="#F44336"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

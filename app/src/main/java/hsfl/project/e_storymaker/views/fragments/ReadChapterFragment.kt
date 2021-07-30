@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import hsfl.project.e_storymaker.viewModels.ReadingVM
 import hsfl.project.e_storymaker.R
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.ReadChapterFragVM
 
@@ -22,7 +21,7 @@ class ReadChapterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.reading_chapter_fragment, container, false)
+        return inflater.inflate(R.layout.read_chapter_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

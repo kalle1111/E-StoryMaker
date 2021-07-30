@@ -4,4 +4,13 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.activities.ReadingActivity" />
+    tools:context=".views.activities.ReadingActivity" >
+
+    <include layout="@layout/content_read"/>
+
+
+
+
+
+
+</FrameLayout>

@@ -1,5 +1,6 @@
 package hsfl.project.e_storymaker.views.fragments
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,9 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import hsfl.project.e_storymaker.viewModels.MainVM
 import hsfl.project.e_storymaker.R
+import hsfl.project.e_storymaker.databinding.ProfileFragmentBinding
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.ProfileFragVM
+import hsfl.project.e_storymaker.views.activities.MainActivity
+import hsfl.project.e_storymaker.views.activities.ReadingActivity
 
 class ProfileFragment : Fragment() {
+
+    private var _binding: ProfileFragmentBinding? = null
+
+    private val binding get() = _binding!!
 
     companion object {
         fun newInstance() = ProfileFragment()
@@ -22,9 +30,18 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.profile_fragment, container, false)
+        _binding = ProfileFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.button.setOnClickListener{
+            val intent = Intent((requireActivity() as MainActivity), ReadingActivity::class.java)
+            startActivity(intent)
+        }
+    }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ProfileFragVM::class.java)

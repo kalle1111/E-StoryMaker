@@ -15,7 +15,6 @@ import hsfl.project.e_storymaker.roomDB.Entities.transitives.StoryHasTag
 import hsfl.project.e_storymaker.roomDB.Entities.transitives.UserFavorsStory
 import hsfl.project.e_storymaker.roomDB.Entities.transitives.UserRatesStory
 import hsfl.project.e_storymaker.roomDB.Entities.transitives.UserReadsStory
-import hsfl.project.e_storymaker.roomDB.Entities.transitives.UserSubscribesUser
 
 import hsfl.project.e_storymaker.roomDB.Entities.user.User
 import hsfl.project.e_storymaker.roomDB.Entities.user.UserDao

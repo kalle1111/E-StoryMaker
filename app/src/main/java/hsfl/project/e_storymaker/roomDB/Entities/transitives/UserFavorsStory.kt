@@ -10,7 +10,7 @@ import hsfl.project.e_storymaker.roomDB.Entities.user.User
 @Entity
 data class UserFavorsStory (
     @PrimaryKey(autoGenerate = false) val UserFavorsStory_uuid: String,
-    @Embedded val UserFavorsStory_user: User,
-    @Embedded val UserFavorsStory_story: Story,
+    @Embedded(prefix = "user_") val UserFavorsStory_user: User,
+    @Embedded(prefix = "story_") val UserFavorsStory_story: Story,
     @ColumnInfo(name = "isFavoring") val isFavoring: Boolean
 )

@@ -18,15 +18,15 @@ interface FriendshipDao {
             "JOIN user AS req ON friendship.requester = req.uuid" +
             "JOIN user AS tar ON friendship.target = tar.uuid" +
             "WHERE !friendship.isAccepted" +
-            "AND tar.name = :userName")
-    fun getRequestsToMe(userName: String): List<Friendship>
+            "AND tar.name = :myUserName")
+    fun getRequestsToMe(myUserName: String): List<Friendship>
 
     @Query("SELECT tar.* FROM friendship" +
             "JOIN user AS req ON friendship.requester = req.uuid" +
             "JOIN user AS tar ON friendship.target = tar.uuid" +
             "WHERE NOT friendship.isAccepted" +
-            "AND req.name = :userName")
-    fun getMyRequests(UserName: String): List<Friendship>
+            "AND req.name = :myUserName")
+    fun getMyRequests(myUserName: String): List<Friendship>
 
     @Query("UPDATE friendship" +
             "JOIN user AS req ON friendship.requester = req.uuid" +

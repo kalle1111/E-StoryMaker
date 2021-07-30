@@ -8,14 +8,12 @@ import hsfl.project.e_storymaker.roomDB.Entities.user.User
 
 @Dao
 interface StoryDao {
-    @Query("SELECT * FROM story")
-    fun getAll(): List<Story>
 
     @Delete
     fun delete(story: Story)
 
     @Query("SELECT * FROM story ORDER BY uuid ASC")
-    fun getAllStories(): LiveData<List<Story>>
+    fun getAllStories(): List<Story>
 
     @Query("SELECT * FROM story WHERE storyTitle LIKE :title LIMIT 1")
     fun getStory(title: String): Story

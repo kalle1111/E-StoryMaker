@@ -5,9 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import hsfl.project.e_storymaker.roomDB.Entities.friendship.Friendship
+import hsfl.project.e_storymaker.roomDB.Entities.rating.Rating
 import hsfl.project.e_storymaker.roomDB.Entities.story.Story
-import hsfl.project.e_storymaker.roomDB.Entities.transitives.UserRatesStory
 import hsfl.project.e_storymaker.roomDB.Entities.user.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,8 +22,12 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
         val userDao = database.userDao()
         val storyDao = database.storyDao()
         val friendshipDao = database.friendshipDao()
+        val chapterProgressDao = database.chapterProgressDao()
+        val favoringDao = database.favoringDao()
+        val ratingDao = database.ratingDao()
 
-        repository = AppRepository(userDao, storyDao, friendshipDao)
+        repository = AppRepository(userDao, storyDao, friendshipDao,
+            chapterProgressDao, favoringDao, ratingDao)
     }
 
     // User
@@ -79,10 +82,12 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
         return result
     }
 
-    fun getStoryChapter(userName: String, storyTitle: String): LiveData<Int>{
+    fun getStoryChapter(user_uuid
+                        : String, storyTitle: String): LiveData<Int>{
         val result = MutableLiveData<Int>()
         viewModelScope.launch(Dispatchers.IO) {
-            result.value = repository.getStoryChapter(userName, storyTitle)
+            result.value = repository.getStoryChapter(user_uuid
+                , storyTitle)
         }
         return result
     }
@@ -93,102 +98,99 @@ class AppViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    fun changeStoryChapter(userName: String, storyTitle: String, newChapter: Int){
+    fun changeStoryChapter(user_uuid
+                           : String, storyTitle: String, newChapter: Int){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.changeStoryChapter(userName, storyTitle, newChapter)
+            repository.changeStoryChapter(user_uuid
+                , storyTitle, newChapter)
         }
     }
 
-    fun getStoryReviews(storyTitle: String): LiveData<List<UserRatesStory>>{
-        val result = MutableLiveData<List<UserRatesStory>>()
+    fun getStoryReviews(storyTitle: String): LiveData<List<Rating>>{
+        val result = MutableLiveData<List<Rating>>()
         viewModelScope.launch(Dispatchers.IO) {
             result.value = repository.getStoryReviews(storyTitle)
         }
         return result
     }
 
-    fun changeStoryReview(userName: String, storyTitle: String, newRating: Int){
+    fun changeStoryReview(user_uuid: String, storyTitle: String, newRating: Int){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.changeStoryReview(userName, storyTitle, newRating)
+            repository.changeStoryReview(user_uuid, storyTitle, newRating)
         }
     }
 
-    fun deleteReview(userName: String, storyTitle: String){
+    fun deleteReview(user_uuid: String, storyTitle: String){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteReview(userName, storyTitle)
+            repository.deleteReview(user_uuid, storyTitle)
         }
     }
 
     // Friendships
 
-    fun getFriendshipsByUserName(myUserName: String): LiveData<List<Friendship>>{
-        val result = MutableLiveData<List<Friendship>>()
-        viewModelScope.launch(Dispatchers.IO) {
-            result.value = repository.getFriendshipsByUserName(myUserName)
-        }
-        return result
-    }
-
-    fun getRequestsToMe(myUserName: String): LiveData<List<Friendship>>{
-        val result = MutableLiveData<List<Friendship>>()
-        viewModelScope.launch(Dispatchers.IO) {
-            result.value = repository.getRequestsToMe(myUserName)
-        }
-        return result
-    }
-
-    fun getMyRequests(myUserName: String): LiveData<List<Friendship>>{
-        val result = MutableLiveData<List<Friendship>>()
-        viewModelScope.launch(Dispatchers.IO) {
-            result.value = repository.getMyRequests(myUserName)
-        }
-        return result
-    }
-
-    fun acceptRequest(myUserName: String, friendUserName: String){
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.acceptRequest(myUserName, friendUserName)
-        }
-    }
-
-    fun rejectRequest(myUserName: String, friendUserName: String){
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.rejectRequest(myUserName, friendUserName)
-        }
-    }
-
-    fun cancelRequest(myUserName: String, friendUserName: String){
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.cancelRequest(myUserName, friendUserName)
-        }
-    }
-
-    fun deleteFriendship(myUserName: String, friendUserName: String){
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteFriendship(myUserName, friendUserName)
-        }
-    }
-
-    fun getFriendsAsRequester(userName: String): LiveData<List<User>>{
+    fun getRequestsToMe(user_uuid: String): LiveData<List<User>>{
         val result = MutableLiveData<List<User>>()
         viewModelScope.launch(Dispatchers.IO) {
-            result.value = repository.getFriendsAsRequester(userName)
+            result.value = repository.getRequestsToMe(user_uuid)
         }
         return result
     }
 
-    fun getFriendsAsTarget(userName: String): LiveData<List<User>>{
+    fun getMyRequests(user_uuid: String): LiveData<List<User>>{
         val result = MutableLiveData<List<User>>()
         viewModelScope.launch(Dispatchers.IO) {
-            result.value = repository.getFriendsAsTarget(userName)
+            result.value = repository.getMyRequests(user_uuid)
         }
         return result
     }
 
-    fun getFriends(userName: String): LiveData<List<User>>{
+    fun acceptRequest(user_uuid: String, friend_uuid: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.acceptRequest(user_uuid, friend_uuid)
+        }
+    }
+
+    fun rejectRequest(user_uuid: String, friend_uuid: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.rejectRequest(user_uuid, friend_uuid)
+        }
+    }
+
+    fun cancelRequest(user_uuid: String, friend_uuid: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.cancelRequest(user_uuid, friend_uuid)
+        }
+    }
+
+    fun deleteFriendship(user_uuid: String, friend_uuid: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteFriendship(user_uuid, friend_uuid)
+        }
+    }
+
+    fun getFriendsAsRequester(user_uuid
+                              : String): LiveData<List<User>>{
         val result = MutableLiveData<List<User>>()
         viewModelScope.launch(Dispatchers.IO) {
-            result.value = repository.getFriends(userName)
+            result.value = repository.getFriendsAsRequester(user_uuid)
+        }
+        return result
+    }
+
+    fun getFriendsAsTarget(user_uuid
+                           : String): LiveData<List<User>>{
+        val result = MutableLiveData<List<User>>()
+        viewModelScope.launch(Dispatchers.IO) {
+            result.value = repository.getFriendsAsTarget(user_uuid)
+        }
+        return result
+    }
+
+    fun getFriends(user_uuid
+                   : String): LiveData<List<User>>{
+        val result = MutableLiveData<List<User>>()
+        viewModelScope.launch(Dispatchers.IO) {
+            result.value = repository.getFriends(user_uuid)
         }
         return result
     }

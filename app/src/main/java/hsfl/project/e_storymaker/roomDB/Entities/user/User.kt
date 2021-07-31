@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Entity
 @Serializable
+@SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
 data class User(
     @PrimaryKey(autoGenerate = false) val user_uuid: String,
     @ColumnInfo(name = "firstname") val firstname: String,

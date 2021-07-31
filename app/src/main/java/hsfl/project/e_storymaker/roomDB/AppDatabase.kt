@@ -4,17 +4,19 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import hsfl.project.e_storymaker.roomDB.Entities.chapterProgress.ChapterProgress
+import hsfl.project.e_storymaker.roomDB.Entities.chapterProgress.ChapterProgressDao
+import hsfl.project.e_storymaker.roomDB.Entities.favoring.Favoring
+import hsfl.project.e_storymaker.roomDB.Entities.favoring.FavoringDao
 
 import hsfl.project.e_storymaker.roomDB.Entities.friendship.Friendship
 import hsfl.project.e_storymaker.roomDB.Entities.friendship.FriendshipDao
+import hsfl.project.e_storymaker.roomDB.Entities.rating.Rating
+import hsfl.project.e_storymaker.roomDB.Entities.rating.RatingDao
 
 import hsfl.project.e_storymaker.roomDB.Entities.story.Story
-import hsfl.project.e_storymaker.roomDB.Entities.story.Tag
+import hsfl.project.e_storymaker.roomDB.Entities.tag.Tag
 import hsfl.project.e_storymaker.roomDB.Entities.story.StoryDao
-import hsfl.project.e_storymaker.roomDB.Entities.transitives.StoryHasTag
-import hsfl.project.e_storymaker.roomDB.Entities.transitives.UserFavorsStory
-import hsfl.project.e_storymaker.roomDB.Entities.transitives.UserRatesStory
-import hsfl.project.e_storymaker.roomDB.Entities.transitives.UserReadsStory
 
 import hsfl.project.e_storymaker.roomDB.Entities.user.User
 import hsfl.project.e_storymaker.roomDB.Entities.user.UserDao
@@ -23,9 +25,8 @@ import hsfl.project.e_storymaker.roomDB.Entities.user.UserDao
 
 @Database(
     entities = [User::class, Story::class, Friendship::class,
-        Tag::class, StoryHasTag::class, UserFavorsStory::class,
-        UserRatesStory::class, UserReadsStory::class,
-        UserSubscribesUser::class],
+        Tag::class, ChapterProgress::class, Favoring::class,
+        Rating::class],
     version = 1,
     exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
@@ -33,6 +34,9 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun storyDao(): StoryDao
     abstract fun friendshipDao(): FriendshipDao
+    abstract fun chapterProgressDao(): ChapterProgressDao
+    abstract fun favoringDao(): FavoringDao
+    abstract fun ratingDao(): RatingDao
 
     companion object {
         @Volatile

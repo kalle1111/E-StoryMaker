@@ -18,6 +18,6 @@ interface UserDao {
 
     @Query("SELECT * FROM user " +
             "WHERE firstname LIKE :firstname " +
-            "AND lastname LIKE lastname LIMIT 1")
+            "AND lastname LIKE :lastname LIMIT 1 ")
     fun getUserByName(firstname: String, lastname: String): User
 }

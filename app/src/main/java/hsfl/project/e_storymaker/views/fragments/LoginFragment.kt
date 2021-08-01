@@ -18,6 +18,7 @@ import hsfl.project.e_storymaker.databinding.LoginFragmentBinding
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.LoginFragVM
 import hsfl.project.e_storymaker.views.activities.AuthActivity
 import hsfl.project.e_storymaker.views.activities.MainActivity
+import io.ktor.client.features.auth.*
 
 class LoginFragment : Fragment() {
 
@@ -71,7 +72,7 @@ class LoginFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(LoginFragVM::class.java)
-
+        viewModel.setApplicationContext((requireActivity() as AuthActivity).application)
         loginAndSwitchToMain(viewModel.autoLogin(), INVISIBLE)
 
     // TODO: Use the ViewModel

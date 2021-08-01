@@ -49,7 +49,7 @@ class WriteDetailsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(WriteDetailsFragVM::class.java)
-
+        viewModel.setApplicationContext((requireActivity() as WritingActivity).application)
     }
 
 

@@ -10,8 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import hsfl.project.e_storymaker.viewModels.AuthVM
 import hsfl.project.e_storymaker.R
+import hsfl.project.e_storymaker.databinding.AuthActivityBinding
 import hsfl.project.e_storymaker.databinding.RegisterFragmentBinding
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.RegisterFragVM
+import hsfl.project.e_storymaker.views.activities.AuthActivity
+import io.ktor.client.features.auth.*
 
 class RegisterFragment : Fragment() {
 
@@ -37,11 +40,15 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.button2.setOnClickListener {
+            viewModel.register(binding.registerUsername.text.toString(), binding.registerMail.text.toString(), binding.registerPassword.text.toString(), binding.registerPassword.text.toString())
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(RegisterFragVM::class.java)
+        viewModel.setApplicationContext((requireActivity() as AuthActivity).application)
         // TODO: Use the ViewModel
     }
 

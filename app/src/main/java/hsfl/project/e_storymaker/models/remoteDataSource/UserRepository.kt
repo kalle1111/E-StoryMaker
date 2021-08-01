@@ -13,6 +13,7 @@ import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import kotlinx.coroutines.runBlocking
 
 
 class UserRepository(application: Application) {
@@ -36,9 +37,10 @@ class UserRepository(application: Application) {
     }
 
     /*********User Related Functions*********/
-    suspend fun registerRequest(registerRequest: RegisterRequest): Boolean {
+    fun registerRequest(registerRequest: RegisterRequest): Boolean = runBlocking {
+        Log.d(TAG, "REGISTERLAUNCHED()")
         val client = getHttpClient()
-        return try {
+        return@runBlocking try {
             val response: HttpResponse = client.post(REGISTER_REQUEST){
                 contentType(ContentType.Application.Json)
                 body = registerRequest
@@ -49,10 +51,10 @@ class UserRepository(application: Application) {
             val webResponse = gson.fromJson(stringBody, WebResponse::class.java)
             //jwt Token
             Log.d(TAG, webResponse.message)
-            return webResponse.success
+            return@runBlocking webResponse.success
         } catch (e: Exception){
             client.close()
-            return false
+            return@runBlocking false
         }
     }
 
@@ -221,15 +223,15 @@ class UserRepository(application: Application) {
 
     companion object {
         @Volatile
-        private var INSTANCE: StoryRepository? = null
+        private var INSTANCE: UserRepository? = null
 
-        fun getStoryRepository(application: Application): StoryRepository? {
+        fun getStoryRepository(application: Application): UserRepository? {
             val instance = INSTANCE
             if (instance != null){
                 return instance
             }
 
-            INSTANCE = StoryRepository(application)
+            INSTANCE = UserRepository(application)
             return INSTANCE
         }
     }

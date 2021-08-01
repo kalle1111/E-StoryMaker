@@ -42,7 +42,7 @@ class ReadOverviewFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ReadOverviewFragVM::class.java)
-        // TODO: Use the ViewModel
+        binding.viewmodel = viewModel
     }
 
 }

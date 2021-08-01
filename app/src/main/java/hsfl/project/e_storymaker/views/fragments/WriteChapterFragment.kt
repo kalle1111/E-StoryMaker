@@ -36,14 +36,19 @@ class WriteChapterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.button9.setOnClickListener {
-            (requireActivity() as WritingActivity).finish()
+
+            if (viewModel.createChapter(binding.writeChapterTitle.text.toString(), binding.writeChapterContent.text.toString())){
+                (requireActivity() as WritingActivity).finish()
+            }else{
+                //TODO("SHOW THE USER AN ERROR MESSAGE")
+            }
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(WriteChapterFragVM::class.java)
-        // TODO: Use the ViewModel
+        binding.viewmodel = viewModel
     }
 
 }

@@ -5,5 +5,8 @@ import hsfl.project.e_storymaker.viewModels.AuthVM
 import hsfl.project.e_storymaker.viewModels.MainVM
 
 class ProfileFragVM : MainVM() {
-    // TODO: Implement the ViewModel
+    val username = "/Username/"
+
+    val description = "/DESCR/\n...\n\n\n\n\n\n/END DESCR/"
+
 }

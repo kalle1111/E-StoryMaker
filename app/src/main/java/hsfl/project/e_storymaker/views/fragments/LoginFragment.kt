@@ -62,6 +62,7 @@ class LoginFragment : Fragment() {
         if (proceed){
             val intent = Intent((requireActivity() as AuthActivity), MainActivity::class.java)
             startActivity(intent)
+            (requireActivity() as AuthActivity).finish()
         }else{
             binding.wrongCredsText.visibility = showWrongCreds
         }

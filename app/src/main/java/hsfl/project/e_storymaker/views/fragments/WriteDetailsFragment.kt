@@ -36,7 +36,12 @@ class WriteDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.button8.setOnClickListener {
-            findNavController().navigate(R.id.action_WriteOverview_to_WriteChapter)
+
+            if (viewModel.createStory(null, binding.writeDetailsTitle.text.toString(),binding.writeDetailsDescription.text.toString())){
+                findNavController().navigate(R.id.action_WriteOverview_to_WriteChapter)
+            }else{
+                //TODO("SHOW THE USER AN ERROR MESSAGE")
+            }
         }
 
     }
@@ -44,7 +49,7 @@ class WriteDetailsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(WriteDetailsFragVM::class.java)
-        // TODO: Use the ViewModel
+
     }
 
 

@@ -26,11 +26,13 @@ class ProfileFragment : Fragment() {
 
     private lateinit var viewModel: ProfileFragVM
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = ProfileFragmentBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -45,7 +47,7 @@ class ProfileFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ProfileFragVM::class.java)
-        // TODO: Use the ViewModel
+        binding.viewmodel = viewModel
     }
 
 }

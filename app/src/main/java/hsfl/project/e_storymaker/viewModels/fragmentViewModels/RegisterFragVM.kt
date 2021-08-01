@@ -7,7 +7,7 @@ import hsfl.project.e_storymaker.viewModels.AuthVM
 
 class RegisterFragVM : AuthVM() {
 
-    private var model: ColorSpace.Model? = null
+
 
     fun register(username: String, email: String, password: String, passwordConf: String): Boolean{
         Log.d("Main", "username: " + username + " email: " + email + " password: " + password + "passwordCONF: " + passwordConf)

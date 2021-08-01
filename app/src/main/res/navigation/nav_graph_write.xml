@@ -9,17 +9,17 @@
         android:id="@+id/WriteOverview"
         android:name="hsfl.project.e_storymaker.views.fragments.WriteDetailsFragment"
         android:label="Story Overview"
-        tools:layout="@layout/writing_details_fragment">
+        tools:layout="@layout/write_details_fragment">
 
         <action
             android:id="@+id/action_WriteOverview_to_WriteChapter"
-            app:destination="@id/ReadChapter" />
+            app:destination="@id/WriteChapter" />
     </fragment>
     <fragment
         android:id="@+id/WriteChapter"
         android:name="hsfl.project.e_storymaker.views.fragments.WriteChapterFragment"
         android:label="Write Chapter"
-        tools:layout="@layout/writing_chapter_fragment">
+        tools:layout="@layout/write_chapter_fragment">
 
     </fragment>
 </navigation>

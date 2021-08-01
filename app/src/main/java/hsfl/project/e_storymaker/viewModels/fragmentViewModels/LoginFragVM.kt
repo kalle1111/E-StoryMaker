@@ -7,10 +7,11 @@ import hsfl.project.e_storymaker.viewModels.AuthVM
 
 class LoginFragVM : AuthVM() {
 
-    private var model: ColorSpace.Model? = null //replace Dummy with ACTUAL Model
+
 
 
     fun autoLogin(): Boolean{
+        //TODO("CONNECT TO MODEL")
         /*
         if (model.getStoredJWTKey != null){
             return true
@@ -23,11 +24,13 @@ class LoginFragVM : AuthVM() {
 
     fun login(username: String, password: String): Boolean{
         Log.d("Main","username: " + username + " password: " + password)
+        //TODO("CONNECT TO MODEL")
         //return model.login(username, password)?
         return true
     }
 
     fun forgotPassword(){
+        //TODO("NOT IMPLEMENTED!")
         //send resetPasswordRequest
     }
 }

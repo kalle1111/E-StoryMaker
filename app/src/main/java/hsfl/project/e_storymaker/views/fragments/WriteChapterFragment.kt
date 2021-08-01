@@ -6,11 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import hsfl.project.e_storymaker.viewModels.WritingVM
 import hsfl.project.e_storymaker.R
+import hsfl.project.e_storymaker.databinding.WriteChapterFragmentBinding
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.WriteChapterFragVM
+import hsfl.project.e_storymaker.views.activities.WritingActivity
 
 class WriteChapterFragment : Fragment() {
+
+
+    private var _binding: WriteChapterFragmentBinding? = null
+    private val binding get() = _binding!!
+
 
     companion object {
         fun newInstance() = WriteChapterFragment()
@@ -22,7 +28,16 @@ class WriteChapterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.writing_chapter_fragment, container, false)
+        _binding = WriteChapterFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.button9.setOnClickListener {
+            (requireActivity() as WritingActivity).finish()
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

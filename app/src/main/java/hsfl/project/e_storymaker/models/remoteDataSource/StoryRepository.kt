@@ -11,6 +11,7 @@ import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import kotlinx.coroutines.runBlocking
 
 class StoryRepository(application: Application){
 
@@ -32,7 +33,7 @@ class StoryRepository(application: Application){
     }
 
     /*********Story Related Functions*********/
-    suspend fun getAllStories(authToken: String):List<hsfl.project.e_storymaker.roomDB.Entities.story.Story>{
+    fun getAllStories(authToken: String):List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
         val client = getAuthHttpClient(authToken)
         val response: HttpResponse = client.get(STORIES)
         val jsonString: String = response.receive()
@@ -42,10 +43,10 @@ class StoryRepository(application: Application){
             convertWebserviceStoryToDbStory(it)
         }
         cacheDataStories(dbStories)
-        return dbStories
+        dbStories
     }
 
-    suspend fun getMyStories(authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story>{
+    fun getMyStories(authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
         val client = getAuthHttpClient(authToken)
         val response: HttpResponse = client.get(MY_STORIES)
         val jsonString: String = response.receive()
@@ -55,12 +56,12 @@ class StoryRepository(application: Application){
             convertWebserviceStoryToDbStory(it)
         }
         cacheDataStories(myDbStories)
-        return myDbStories
+        myDbStories
     }
 
-    suspend fun createStory(authToken: String, storyRequest: StoryRequest): Boolean {
+    fun createStory(authToken: String, storyRequest: StoryRequest): Boolean = runBlocking {
         val client = getAuthHttpClient(authToken)
-        return try {
+        try {
             val response: HttpResponse = client.post(CREATE_STORIES){
                 contentType(ContentType.Application.Json)
                 body = storyRequest
@@ -68,16 +69,16 @@ class StoryRepository(application: Application){
             val stringBody: String = response.receive()
             client.close()
             val webResponse: WebResponse = Gson().fromJson(stringBody, WebResponse::class.java)
-            return webResponse.success
+            webResponse.success
         } catch (e: Exception){
             client.close()
-            return false
+            false
         }
     }
 
-    suspend fun updateStory(authToken: String, updatedStory: Story): Boolean {
+    fun updateStory(authToken: String, updatedStory: Story): Boolean = runBlocking {
         val client = getAuthHttpClient(authToken)
-        return try {
+        try {
             val response: HttpResponse = client.post(UPDATE_STORIES){
                 contentType(ContentType.Application.Json)
                 body = updatedStory
@@ -85,33 +86,33 @@ class StoryRepository(application: Application){
             val stringBody: String = response.receive()
             client.close()
             val webResponse:WebResponse = Gson().fromJson(stringBody, WebResponse::class.java)
-            return webResponse.success
+            webResponse.success
         } catch (e: Exception){
             client.close()
-            return false
+            false
         }
     }
 
-    suspend fun deleteStory(authToken: String, deletedStory: Story): Boolean {
+    fun deleteStory(authToken: String, deletedStory: Story): Boolean = runBlocking {
         val client = getAuthHttpClient(authToken)
-        return try {
+        try {
             val response: HttpResponse = client.delete(DELETE_STORIES){
                 parameter("id", deletedStory.uuid)
             }
             val stringBody: String = response.receive()
             client.close()
             val webResponse: WebResponse = Gson().fromJson(stringBody, WebResponse::class.java)
-            return webResponse.success
+            webResponse.success
         }catch (e: Exception){
             client.close()
-            return false
+            false
         }
     }
 
     /*********Rate Story Related Functions*********/
-    suspend fun rateStory(authToken: String, rateStoryRequest: RateStoryRequest): Boolean {
+    fun rateStory(authToken: String, rateStoryRequest: RateStoryRequest): Boolean = runBlocking {
         val client = getAuthHttpClient(authToken)
-        return try {
+        try {
             val response: HttpResponse = client.post(RATE_STORIES){
                 contentType(ContentType.Application.Json)
                 body = rateStoryRequest
@@ -119,16 +120,16 @@ class StoryRepository(application: Application){
             val stringBody: String = response.receive()
             client.close()
             val webResponse: WebResponse = Gson().fromJson(stringBody, WebResponse::class.java)
-            return webResponse.success
+            webResponse.success
         } catch (e: Exception){
             client.close()
-            return false
+            false
         }
     }
 
-    suspend fun updateRateStory(authToken: String, rateStoryRequest: RateStoryRequest): Boolean {
+    fun updateRateStory(authToken: String, rateStoryRequest: RateStoryRequest): Boolean = runBlocking {
         val client = getAuthHttpClient(authToken)
-        return try {
+        try {
             val response: HttpResponse = client.post(UPDATE_RATED_STORIES){
                 contentType(ContentType.Application.Json)
                 body = rateStoryRequest
@@ -136,14 +137,14 @@ class StoryRepository(application: Application){
             val stringBody: String = response.receive()
             client.close()
             val webResponse: WebResponse =Gson().fromJson(stringBody, WebResponse::class.java)
-            return webResponse.success
+            webResponse.success
         }  catch (e: Exception){
             client.close()
-            return false
+            false
         }
     }
 
-    suspend fun getAllRatedStories(authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating>{
+    fun getAllRatedStories(authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = runBlocking {
         val client = getAuthHttpClient(authToken)
         val response: HttpResponse = client.get(RATED_STORIES)
         val jsonString: String = response.receive()
@@ -152,10 +153,10 @@ class StoryRepository(application: Application){
         val dbRatedStories = ratedStories.map {
             convertWebserviceRatedStoryToDbRatedStory(it)
         }
-        return dbRatedStories
+        dbRatedStories
     }
 
-    suspend fun getMyRatedStories(authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating>{
+    fun getMyRatedStories(authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = runBlocking {
         val client = getAuthHttpClient(authToken)
         val response: HttpResponse = client.get(FROM_ME_RATED_STORIES)
         val jsonString: String = response.receive()
@@ -164,11 +165,11 @@ class StoryRepository(application: Application){
         val myDbRatedStories = myRatedStories.map {
             convertWebserviceRatedStoryToDbRatedStory(it)
         }
-        return myDbRatedStories
+        myDbRatedStories
     }
 
     /*********Favorite Story Related Functions*********/
-    suspend fun getMyFavoriteStories(authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.favoring.Favoring>{
+    fun getMyFavoriteStories(authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.favoring.Favoring> = runBlocking {
         val client = getAuthHttpClient(authToken)
         val response: HttpResponse = client.get(MY_FAVORITE_STORIES)
         val jsonString: String = response.receive()
@@ -177,12 +178,12 @@ class StoryRepository(application: Application){
         val myDbFavoriteStories = myFavoriteStories.map {
             convertWebserviceFavoriteToDbFavorite(it)
         }
-        return myDbFavoriteStories
+        myDbFavoriteStories
     }
 
-    suspend fun setStoryAsFavorite(authToken: String, storyAsFavoriteRequest: StoryAsFavoriteRequest): Boolean {
+    fun setStoryAsFavorite(authToken: String, storyAsFavoriteRequest: StoryAsFavoriteRequest): Boolean = runBlocking {
         val client = getAuthHttpClient(authToken)
-        return try {
+        try {
             val response: HttpResponse = client.post(SET_FAVORITE_STORIES){
                 contentType(ContentType.Application.Json)
                 body = storyAsFavoriteRequest
@@ -190,16 +191,16 @@ class StoryRepository(application: Application){
             val stringBody: String = response.receive()
             client.close()
             val webResponse = Gson().fromJson(stringBody, WebResponse::class.java)
-            return webResponse.success
+            webResponse.success
         } catch (e: Exception){
             client.close()
-            return false
+            false
         }
     }
 
-    suspend fun setStoryAsNotFavorite(authToken: String, storyAsFavoriteRequest: StoryAsFavoriteRequest): Boolean {
+    fun setStoryAsNotFavorite(authToken: String, storyAsFavoriteRequest: StoryAsFavoriteRequest): Boolean = runBlocking {
         val client = getAuthHttpClient(authToken)
-        return try {
+        try {
             val response: HttpResponse = client.post(SET_AS_NOT_FAVORITE_STORIES){
                 contentType(ContentType.Application.Json)
                 body = storyAsFavoriteRequest
@@ -207,13 +208,15 @@ class StoryRepository(application: Application){
             val stringBody: String = response.receive()
             client.close()
             val webResponse = Gson().fromJson(stringBody, WebResponse::class.java)
-            return webResponse.success
+            webResponse.success
         } catch (e: Exception){
             client.close()
-            return false
+            false
         }
     }
 
+    //getStoryOverview
+    ///getStoryChapter
 
     fun cacheDataStories(stories: List<hsfl.project.e_storymaker.roomDB.Entities.story.Story>) {
         //repository.addStories(stories)

@@ -6,5 +6,6 @@ import androidx.room.*
 @SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
 data class Tag (
     @PrimaryKey(autoGenerate = false) val tag_uuid: String,
-    @ColumnInfo(name = "tagName") val tagName: String
+    val tagName: String,
+    val cachedTime: Long
 )

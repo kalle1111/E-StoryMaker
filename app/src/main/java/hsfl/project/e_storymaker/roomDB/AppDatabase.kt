@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import hsfl.project.e_storymaker.roomDB.Entities.chapterProgress.ChapterProgress
 import hsfl.project.e_storymaker.roomDB.Entities.chapterProgress.ChapterProgressDao
 import hsfl.project.e_storymaker.roomDB.Entities.favoring.Favoring
@@ -29,6 +30,7 @@ import hsfl.project.e_storymaker.roomDB.Entities.user.UserDao
         Rating::class],
     version = 1,
     exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao

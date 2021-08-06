@@ -7,11 +7,14 @@ import hsfl.project.e_storymaker.roomDB.Entities.user.User
 @SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
 data class Story(
     @PrimaryKey(autoGenerate = false) val story_uuid: String,
-    @ColumnInfo(name = "author_uuid") val author_uuid: String,
-    @ColumnInfo(name = "storyTitle") val storyTitle: String,
-    @ColumnInfo(name = "releaseDate") val releaseDate: String,
-    @ColumnInfo(name = "ageRestriction") val ageRestriction: Int,
-    @ColumnInfo(name = "storyDescription") val storyDescription: String,
-    @ColumnInfo(name = "storyUrl") val storyUrl: String,
-    @ColumnInfo(name = "coverUrl") val coverUrl: String
+    val author_uuid: String,
+    val storyTitle: String,
+    val description: String,
+    val releaseDate: String,
+    val ageRestriction: Int,
+    val story: List<String>,
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB) val cover: ByteArray,
+    val avgRating: Double,
+    val cachedTime: Long
 )
+

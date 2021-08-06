@@ -8,11 +8,12 @@ import kotlinx.serialization.Serializable
 @SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
 data class User(
     @PrimaryKey(autoGenerate = false) val user_uuid: String,
-    @ColumnInfo(name = "firstname") val firstname: String,
-    @ColumnInfo(name = "lastname") val lastname: String,
-    @ColumnInfo(name = "userName") val userName: String,
-    @ColumnInfo(name = "user_description") val user_description: String,
-    @ColumnInfo(name = "birthday") val birthday: String,
-    @ColumnInfo(name = "hashPassword") val hashPassword: String
+    val firstname: String,
+    val lastname: String,
+    val userName: String,
+    val user_description: String,
+    val birthday: String,
+    val hashPassword: String,
+    var cachedTime: Long
 )
 

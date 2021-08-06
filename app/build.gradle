@@ -93,14 +93,15 @@ dependencies {
     implementation "io.ktor:ktor-auth:$ktor_version"
     implementation "io.ktor:ktor-auth-jwt:$ktor_version"
     implementation "io.ktor:ktor-locations:$ktor_version"
-
+    implementation "io.ktor:ktor-client-core:1.6.1"
+    implementation "io.ktor:ktor-client-cio:1.6.1"
+    implementation "io.ktor:ktor-client-gson:1.6.1"
+    implementation "io.ktor:ktor-client-auth:1.6.1"
 
     // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     implementation("io.ktor:ktor-serialization:1.4.2")
 
-    implementation "io.ktor:ktor-client-core:1.6.1"
-    implementation "io.ktor:ktor-client-cio:1.6.1"
-    implementation "io.ktor:ktor-client-gson:1.6.1"
-    implementation "io.ktor:ktor-client-auth:1.6.1"
+    // GSON
+    implementation 'com.google.code.gson:gson:2.8.5'
 }

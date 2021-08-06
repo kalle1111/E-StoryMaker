@@ -8,5 +8,6 @@ data class Favoring (
     @PrimaryKey val favoring_uuid: String,
     val isFavoring: Boolean,
     val user_uuid: String,
-    val story_uuid: String
+    val story_uuid: String,
+    val cachedTime: Long
 )

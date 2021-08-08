@@ -7,8 +7,10 @@ import com.eStory.table.DatabaseFactory
 import authentication.hash
 import com.eStory.route.FriendshipRoutes
 import com.eStory.route.StoryRoutes
+import com.eStory.route.TagRoutes
 import com.eStory.route.UserRoutes
 import com.eStory.service.FriendshipService
+import com.eStory.service.TagService
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -29,6 +31,7 @@ fun Application.module(testing: Boolean = false) {
     val userService = UserService()
     val storyService = StoryService()
     val friendshipService = FriendshipService()
+    val tagService = TagService()
     val jwtService = JwtService()
     val hashFunction = { s: String -> hash(s) }
 
@@ -64,6 +67,7 @@ fun Application.module(testing: Boolean = false) {
         UserRoutes(userService, jwtService, hashFunction)
         StoryRoutes(storyService)
         FriendshipRoutes(friendshipService)
+        TagRoutes(tagService)
 
         get("/session/increment") {
             val session = call.sessions.get<MySession>() ?: MySession()

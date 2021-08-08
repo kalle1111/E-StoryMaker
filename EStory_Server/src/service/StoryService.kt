@@ -2,7 +2,7 @@ package com.eStory.service
 
 import com.eStory.model.story.RatedStory
 import com.eStory.model.story.StoryAsFavorite
-import com.eStory.models.story.Story
+import com.eStory.model.story.Story
 import com.eStory.table.*
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -34,7 +34,8 @@ class StoryService {
     fun insert(
         userName: String,
         storyTitle: String,
-        description: String
+        description: String,
+        storyChapters: String
     ): Story =
         transaction {
             StoryEntity.new {
@@ -42,10 +43,17 @@ class StoryService {
                 this.description = description
                 this.storyTitle = storyTitle
                 this.createTime = getDate()
+                this.storyChapters = storyChapters
+                this.averageRating = 0.0
             }.toDTO()
         }
 
-    fun updateByUUID(uuid: String, storyTitle: String? = null, description: String? = null) {
+    fun updateByUUID(
+        uuid: String,
+        storyTitle: String? = null,
+        description: String? = null,
+        storyChapters: String? = null
+    ) {
         transaction {
             StoriesTable.update(
                 where = {
@@ -58,6 +66,9 @@ class StoryService {
 
                 if (description != null) {
                     st[this.description] = description
+                }
+                if (storyChapters != null) {
+                    st[this.storyChapters] = storyChapters
                 }
 
             }
@@ -72,8 +83,8 @@ class StoryService {
         ratingStoryValue: Int,
         ratingGrammarValue: Int,
         ratingCharacterValue: Int
-    ): RatedStory =
-        transaction {
+    ): RatedStory {
+        val ratedStory = transaction {
             RatedStoryEntity.new {
                 this.userEntity = UserEntity.find { UsersTable.userName eq userName }.first()
                 this.storyEntity = StoryEntity[UUID.fromString(storyId)]
@@ -82,8 +93,25 @@ class StoryService {
                 this.ratingStoryValue = ratingStoryValue
                 this.ratingGrammarValue = ratingGrammarValue
                 this.ratingCharacterValue = ratingCharacterValue
-            }.toDTO()
+            }
+        }.toDTO()
+        updateAverageRatingToStory(storyId)
+        return ratedStory
+    }
+
+    private fun updateAverageRatingToStory(storyId: String) {
+        var r = 0
+        val ratings = getAllRatedStories().filter { it.uuid == storyId }
+        ratings.forEach { r += it.ratingOverallValue }
+        val averageValue = r.toDouble() / ratings.size.toDouble()
+        transaction {
+            StoriesTable.update(
+                where = {
+                    StoriesTable.id.eq(UUID.fromString(storyId))
+                }
+            ) { rs -> rs[this.averageRating] = averageValue }
         }
+    }
 
     fun updateRatedStory(
         userName: String, storyId: String,

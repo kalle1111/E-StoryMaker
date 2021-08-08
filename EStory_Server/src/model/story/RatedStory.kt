@@ -1,6 +1,5 @@
 package com.eStory.model.story
 
-import com.eStory.models.story.Story
 import com.eStory.model.user.User
 
 class RatedStory(

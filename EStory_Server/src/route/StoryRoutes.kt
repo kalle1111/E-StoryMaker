@@ -78,7 +78,7 @@ fun Route.StoryRoutes(
             }
             try {
                 val username = call.principal<User>()!!.userName
-                storyService.insert(username, story.storyTitle, story.description)
+                storyService.insert(username, story.storyTitle, story.description, story.storyChapters)
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story created Successfully!"))
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
@@ -120,7 +120,7 @@ fun Route.StoryRoutes(
                 return@post
             }
             try {
-                storyService.updateByUUID(story.uuid, story.storyTitle, story.description)
+                storyService.updateByUUID(story.uuid, story.storyTitle, story.description, story.storyChapters)
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story updated Successfully!"))
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
@@ -146,14 +146,14 @@ fun Route.StoryRoutes(
         }
         /****************Serching by title ************/
         get<StorySearchByTitleRoute> {
-            val storyTilte = try {
+            val storyTitle = try {
                 call.request.queryParameters["title"]!!
             } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:tilte ist not present"))
-                return@delete
+                call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:title is not present"))
+                return@get
             }
             try {
-                val story = storyService.getStoryByTitle(storyTilte)
+                val story = storyService.getStoryByTitle(storyTitle)
                 call.respond(HttpStatusCode.OK, story)
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))

@@ -1,13 +1,10 @@
 package com.eStory.table
 
-import com.eStory.model.friendship.Friendship
 import com.eStory.model.story.RatedStory
-import com.eStory.models.story.Story
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.UUIDTable
-import org.jetbrains.exposed.sql.max
 import java.util.*
 
 object RatedStoriesTable : UUIDTable() {

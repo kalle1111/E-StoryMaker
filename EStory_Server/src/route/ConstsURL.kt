@@ -1,7 +1,9 @@
 package com.eStory.route
 
+import io.ktor.locations.*
+
 /**
-Beim Login bekommt man den Access-Token als message vom dem Server.
+Beim Login bekommt man den Access-Token als message von dem Server.
 dies wird gespeichert, und immer beim Anfrafen so anhängen:
 
 val authHeaderValue = "Bearer " + message;
@@ -25,7 +27,13 @@ const val CREAT_STORIES = "$STORIES/create"
 const val UPDATE_STORIES = "$STORIES/update"
 const val DELETE_STORIES = "$STORIES/delete"
 
-const val SEARCH_BY_TITLE_STORIES = "$STORIES/searchByTilte"
+const val SEARCH_BY_TITLE_STORIES = "$STORIES/searchByTitle"
+
+const val Tags = "$API_VERSION/tags"
+const val GET_TAGGED_STORIES = "$Tags/getTaggedStories"
+const val SEARCH_BY_Tag_STORIES = "$Tags/searchByTag"
+const val MAP_Story_To_Tag = "$Tags/mapStoryToTag"
+const val GET_ALL_TAGS_TO_STORY = "$Tags/getTagsToStory"
 
 const val RATE_STORIES = "$STORIES/rateStory"
 const val UPDATE_RATED_STORIES = "$STORIES/updateRatedStory"

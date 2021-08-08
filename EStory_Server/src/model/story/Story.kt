@@ -1,4 +1,4 @@
-package com.eStory.models.story
+package com.eStory.model.story
 
 import com.eStory.model.user.User
 import kotlinx.serialization.Serializable
@@ -9,5 +9,7 @@ class Story(
     val user: User,
     val storyTitle: String,
     val description: String,
-    val createTime: String
+    val createTime: String,
+    val storyChapters: String,
+    val averageRating:Double
 )

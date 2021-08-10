@@ -13,5 +13,7 @@ class User(
     val userName: String,
     val description:String,
     val birthday: String,
-    val hashPassword: String
+    val hashPassword: String,
+    val image : ByteArray,
+    val lastUpdate: String
 ) : Principal

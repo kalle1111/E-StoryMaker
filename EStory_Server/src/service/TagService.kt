@@ -13,7 +13,7 @@ import java.util.*
 class TagService {
 
 
-    private val tags = listOf<String>(
+    private val tags = listOf(
         "adventure",
         "Tragedy",
         "Comedy",

@@ -4,6 +4,8 @@ import authentication.JwtService
 import com.eStory.model.user.LoginRequest
 import com.eStory.model.user.RegisterRequest
 import com.eStory.model.SimpleResponse
+import com.eStory.model.story.UpdateStoryRequest
+import com.eStory.model.user.UpdateProfile
 import com.eStory.model.user.User
 import com.eStory.service.UserService
 import io.ktor.application.*
@@ -27,6 +29,15 @@ class UserLoginRoute
 @Location(GET_PROFILE)
 class UserGetProfile
 
+@Location (UPDATE_PROFILE)
+class UpdateProfileRoute
+
+@Location (USER_GET_BY_ID_LAST_UPDATE)
+class UserGetLastUpdateRoute
+
+@Location(USERS_GET_LAST_UPDATE_VALUES)
+class UsersGetLastUpdateRouteValuesRoute
+
 fun Route.UserRoutes(
     userService: UserService,
     jwtService: JwtService,
@@ -41,6 +52,24 @@ fun Route.UserRoutes(
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
 
+            }
+        }
+
+        post<UpdateProfileRoute> {
+            // val uuid = call.parameters["uuid"]!!
+            val user = try {
+                call.receive<UpdateProfile>()
+
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "Missing Fields.."))
+                return@post
+            }
+            try {
+                val username = call.principal<User>()!!.userName
+                userService.updateByUserName(username, user.firstname, user.lastname, user.description, user.birthday, user.image)
+                call.respond(HttpStatusCode.OK, SimpleResponse(true, "Users profile updated Successfully!"))
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
             }
         }
     }
@@ -62,15 +91,14 @@ fun Route.UserRoutes(
             return@post
         }
         try {
-            /* val user = User(registerRequest.email, hashFunction(registerRequest.password), registerRequest.name)
-             db.addUser(user)*/
             val user = userService.insert(
                 registerRequest.firstname,
                 registerRequest.lastname,
                 registerRequest.userName,
                 registerRequest.birthday,
                 registerRequest.description,
-                hashFunction(registerRequest.password)
+                hashFunction(registerRequest.password),
+                registerRequest.image
             )
             call.respond(HttpStatusCode.OK, SimpleResponse(true, jwtService.generateToken(user)))
         } catch (e: Exception) {
@@ -79,6 +107,12 @@ fun Route.UserRoutes(
         }
 
     }
+
+
+
+
+
+
 
     post<UserLoginRoute> {
         val loginRequest = try {
@@ -104,6 +138,47 @@ fun Route.UserRoutes(
             call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "some Problems Occurred.."))
         }
     }
+
+
+
+
+
+
+    get<UserGetLastUpdateRoute> {
+        val uuid = try {
+            call.request.queryParameters["uuid"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:uuid is not present"))
+            return@get
+        }
+        try {
+            val lastUpdate = userService.getLastUpdateByUUID(uuid)!!
+            call.respond(HttpStatusCode.OK, lastUpdate)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+        }
+    }
+
+
+
+
+
+    get<UsersGetLastUpdateRouteValuesRoute> {
+        try {
+            val lastUpdateValues = userService.getAllLastUpdateValues()
+            call.respond(HttpStatusCode.OK, lastUpdateValues)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
+
+        }
+    }
+
+
+
+
+
+
+
 
 
 }

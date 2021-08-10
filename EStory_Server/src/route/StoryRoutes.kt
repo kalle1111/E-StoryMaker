@@ -59,6 +59,19 @@ class SetAsNotFavoriteStoryRoute
 @Location(SEARCH_BY_TITLE_STORIES)
 class StorySearchByTitleRoute
 
+@Location(STORY_GET_BY_ID_LAST_UPDATE)
+class StoryGetLastUpdateRoute
+
+@Location(STORIES_GET_LAST_UPDATE_VALUES)
+class StoriesGetLastUpdateValuesRoute
+
+
+@Location(RATED_STORY_GET_BY_ID_LAST_UPDATE)
+class RatedStoryGetLastUpdateRoute
+
+@Location(RATED_STORIES_GET_LAST_UPDATE_VALUES)
+class RatedStoriesGetLastUpdateValuesRoute
+
 fun Route.StoryRoutes(
     storyService: StoryService
 ) {
@@ -78,7 +91,7 @@ fun Route.StoryRoutes(
             }
             try {
                 val username = call.principal<User>()!!.userName
-                storyService.insert(username, story.storyTitle, story.description, story.storyChapters)
+                storyService.insert(username, story.storyTitle, story.description, story.storyChapters, story.cover)
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story created Successfully!"))
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
@@ -120,15 +133,18 @@ fun Route.StoryRoutes(
                 return@post
             }
             try {
-                storyService.updateByUUID(story.uuid, story.storyTitle, story.description, story.storyChapters)
+                storyService.updateByUUID(
+                    story.uuid,
+                    story.storyTitle,
+                    story.description,
+                    story.storyChapters,
+                    story.cover
+                )
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story updated Successfully!"))
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
             }
         }
-
-
-
 
         delete<StoryDeleteRoute> {
             val storyId = try {
@@ -144,7 +160,7 @@ fun Route.StoryRoutes(
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
             }
         }
-        /****************Serching by title ************/
+        /****************Searching by title ************/
         get<StorySearchByTitleRoute> {
             val storyTitle = try {
                 call.request.queryParameters["title"]!!
@@ -199,7 +215,10 @@ fun Route.StoryRoutes(
                 storyService.setStoryAsFavorite(username, setFavorite.storyId)
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story is now as favorite!"))
             } catch (e: Exception) {
-                call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred setFavorite"))
+                call.respond(
+                    HttpStatusCode.Conflict,
+                    SimpleResponse(false, e.message ?: "Some Problems occurred setFavorite")
+                )
             }
 
         }
@@ -300,7 +319,61 @@ fun Route.StoryRoutes(
             }
 
         }
-
-
     }
+
+    get<StoryGetLastUpdateRoute> {
+        val uuid = try {
+            call.request.queryParameters["uuid"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:uuid is not present"))
+            return@get
+        }
+        try {
+            val lastUpdate = storyService.getLastUpdateByUUID(uuid)!!
+            call.respond(HttpStatusCode.OK, lastUpdate)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+        }
+    }
+
+
+
+
+
+    get<StoriesGetLastUpdateValuesRoute> {
+        try {
+            val lastUpdateValues = storyService.getAllLastUpdateValues()
+            call.respond(HttpStatusCode.OK, lastUpdateValues)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
+
+        }
+    }
+
+    get<RatedStoryGetLastUpdateRoute> {
+        val uuid = try {
+            call.request.queryParameters["uuid"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:uuid is not present"))
+            return@get
+        }
+        try {
+            val lastUpdate = storyService.ratedStory_getLastUpdateByUUID(uuid)!!
+            call.respond(HttpStatusCode.OK, lastUpdate)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+        }
+    }
+
+    get<RatedStoriesGetLastUpdateValuesRoute> {
+        try {
+            val lastUpdateValues = storyService.ratedStory_getAllLastUpdateValues()
+            call.respond(HttpStatusCode.OK, lastUpdateValues)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
+
+        }
+    }
+
+
 }

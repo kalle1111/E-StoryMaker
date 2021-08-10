@@ -10,6 +10,8 @@ class Story(
     val storyTitle: String,
     val description: String,
     val createTime: String,
+    val lastUpdate: String,
     val storyChapters: String,
-    val averageRating:Double
+    val averageRating:Double,
+    val cover : ByteArray
 )

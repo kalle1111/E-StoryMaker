@@ -5,10 +5,7 @@ import com.eStory.service.StoryService
 import com.eStory.service.UserService
 import com.eStory.table.DatabaseFactory
 import authentication.hash
-import com.eStory.route.FriendshipRoutes
-import com.eStory.route.StoryRoutes
-import com.eStory.route.TagRoutes
-import com.eStory.route.UserRoutes
+import com.eStory.route.*
 import com.eStory.service.FriendshipService
 import com.eStory.service.TagService
 import io.ktor.application.*
@@ -17,10 +14,13 @@ import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.gson.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.locations.*
+import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
+import java.io.File
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -68,6 +68,7 @@ fun Application.module(testing: Boolean = false) {
         StoryRoutes(storyService)
         FriendshipRoutes(friendshipService)
         TagRoutes(tagService)
+        UploadRoutes()
 
         get("/session/increment") {
             val session = call.sessions.get<MySession>() ?: MySession()
@@ -78,6 +79,22 @@ fun Application.module(testing: Boolean = false) {
         get("/json/gson") {
             call.respond(mapOf("hello" to "world"))
         }
+    }
+
+
+
+
+        routing {
+            get("/download") {
+                val file = File("uploads/ktor_logo.png")
+                call.response.header(
+                    HttpHeaders.ContentDisposition,
+                    ContentDisposition.Attachment.withParameter(ContentDisposition.Parameters.FileName, "ktor_logo.png")
+                        .toString()
+                )
+                call.respondFile(file)
+            }
+
     }
 }
 

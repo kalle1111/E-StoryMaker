@@ -15,6 +15,7 @@ object RatedStoriesTable : UUIDTable() {
     val ratingStoryValue = integer("ratingStoryValue")
     val ratingGrammarValue = integer("ratingGrammarValue")
     val ratingCharacterValue = integer("ratingCharacterValue")
+    val lastUpdate = varchar("lastUpdate", 255)
 }
 
 class RatedStoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {
@@ -27,7 +28,7 @@ class RatedStoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var ratingStoryValue by RatedStoriesTable.ratingStoryValue
     var ratingGrammarValue by RatedStoriesTable.ratingGrammarValue
     var ratingCharacterValue by RatedStoriesTable.ratingCharacterValue
-
+    var lastUpdate by RatedStoriesTable.lastUpdate
 
     fun toDTO(): RatedStory = RatedStory(
         this.id.toString(),
@@ -37,7 +38,8 @@ class RatedStoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {
         ratingStyleValue,
         ratingStoryValue,
         ratingGrammarValue,
-        ratingCharacterValue
+        ratingCharacterValue,
+        lastUpdate
     )
 
 }

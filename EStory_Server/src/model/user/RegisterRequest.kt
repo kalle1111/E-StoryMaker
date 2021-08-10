@@ -6,5 +6,6 @@ data class RegisterRequest(
     val userName: String,
     val birthday: String,
     val password: String,
-    val description: String
+    val description: String,
+    val image : ByteArray
 )

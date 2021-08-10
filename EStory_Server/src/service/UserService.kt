@@ -1,11 +1,16 @@
 package com.eStory.service
 
 import com.eStory.model.user.User
+import com.eStory.table.StoriesTable
+import com.eStory.table.StoryEntity
 import com.eStory.table.UserEntity
 import com.eStory.table.UsersTable
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import java.text.SimpleDateFormat
 import java.util.*
 
 class UserService {
@@ -49,7 +54,8 @@ class UserService {
         userName: String,
         birthday: String,
         description: String,
-        password: String
+        password: String,
+        image: ByteArray
     ): User =
         transaction {
             UserEntity.new {
@@ -59,6 +65,8 @@ class UserService {
                 this.userName = userName
                 this.description = description
                 this.birthday = birthday
+                this.image = image
+                this.lastUpdate = getDate()
 
             }.toDTO()
         }
@@ -74,4 +82,54 @@ class UserService {
             }
         }
     }
+
+    fun updateByUserName(
+        username: String,
+        firstname: String? = null,
+        lastname: String? = null,
+        description: String? = null,
+        birthday: String? = null,
+        image: ByteArray? = null
+    ) {
+        transaction {
+            UsersTable.update(
+                where = {
+                    UsersTable.userName.eq(username)
+                }
+            ) { ut ->
+                if (firstname != null) {
+                    ut[this.firstname] = firstname
+                }
+                if (lastname != null) {
+                    ut[this.lastname] = lastname
+                }
+                if (description != null) {
+                    ut[this.description] = description
+                }
+                if (birthday != null) {
+                    ut[this.birthday] = birthday
+                }
+                if (image != null) {
+                    ut[this.image] = image
+                }
+                ut[this.lastUpdate] = getDate()
+
+            }
+        }
+
+
+    }
+
+    /*****************get Date ***************/
+    private fun getDate(): String {
+        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+        return sdf.format(Date())
+    }
+
+    fun getLastUpdateByUUID(uuid: String): String? =
+        transaction { UserEntity.findById(UUID.fromString(uuid))?.lastUpdate }
+
+    fun getAllLastUpdateValues(): List<String> = transaction { UserEntity.all().map { it.lastUpdate } }
+
+
 }

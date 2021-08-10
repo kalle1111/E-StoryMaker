@@ -10,5 +10,6 @@ class RatedStory(
     val ratingStyleValue: Int,
     val ratingStoryValue: Int,
     val ratingGrammarValue: Int,
-    val ratingCharacterValue: Int
+    val ratingCharacterValue: Int,
+    val lastUpdate: String
 )

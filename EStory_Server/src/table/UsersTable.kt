@@ -15,6 +15,8 @@ object UsersTable:UUIDTable() {
     val birthday = varchar("birthday", 512)
     val description = text("description")
     val hashPassword= varchar("hashPassword", 512)
+    val image = binary("image", Int.MAX_VALUE)
+    val lastUpdate = varchar("lastUpdate", 255)
     override val primaryKey: PrimaryKey = PrimaryKey(userName)
 }
 
@@ -27,6 +29,8 @@ class UserEntity(id:EntityID<UUID>):UUIDEntity(id){
     var birthday by UsersTable.birthday
     var description by UsersTable.description
     var hashPassword by UsersTable.hashPassword
+    var image by UsersTable.image
+    var lastUpdate by UsersTable.lastUpdate
 
-    fun toDTO(): User = User(this.id.toString(),firstname, lastname, userName, description, birthday, hashPassword)
+    fun toDTO(): User = User(this.id.toString(),firstname, lastname, userName, description, birthday, hashPassword, image, lastUpdate)
 }

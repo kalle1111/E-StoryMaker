@@ -16,9 +16,15 @@ class StoryService {
 
     fun getByUUID(uuid: String): Story? = transaction { StoryEntity.findById(UUID.fromString(uuid))?.toDTO() }
 
+    fun getLastUpdateByUUID(uuid: String): String? =
+        transaction { StoryEntity.findById(UUID.fromString(uuid))?.lastUpdate }
+
+    fun getAllLastUpdateValues(): List<String> = transaction { StoryEntity.all().map { it.lastUpdate } }
+
     fun getAllByUserName(userName: String): List<Story> = getAll().filter { it.user.userName == userName }
 
     fun getStoryByTitle(title: String): List<Story> = getAll().filter { it.storyTitle == title }
+
 
     //private val users = listOf(testUser).associateBy(User::id)
     fun deleteByUUID(uuid: String): Story? {
@@ -35,7 +41,8 @@ class StoryService {
         userName: String,
         storyTitle: String,
         description: String,
-        storyChapters: String
+        storyChapters: String,
+        cover: ByteArray
     ): Story =
         transaction {
             StoryEntity.new {
@@ -45,6 +52,8 @@ class StoryService {
                 this.createTime = getDate()
                 this.storyChapters = storyChapters
                 this.averageRating = 0.0
+                this.cover = cover
+                this.lastUpdate = getDate()
             }.toDTO()
         }
 
@@ -52,7 +61,8 @@ class StoryService {
         uuid: String,
         storyTitle: String? = null,
         description: String? = null,
-        storyChapters: String? = null
+        storyChapters: String? = null,
+        cover: ByteArray
     ) {
         transaction {
             StoriesTable.update(
@@ -70,12 +80,20 @@ class StoryService {
                 if (storyChapters != null) {
                     st[this.storyChapters] = storyChapters
                 }
+                st[this.cover] = cover
 
+                st[this.lastUpdate] = getDate()
             }
         }
     }
 
     /****************RATING_STORY****************/
+
+
+
+
+
+
     fun rateStory(
         userName: String, storyId: String,
         ratingOverallValue: Int,
@@ -93,6 +111,8 @@ class StoryService {
                 this.ratingStoryValue = ratingStoryValue
                 this.ratingGrammarValue = ratingGrammarValue
                 this.ratingCharacterValue = ratingCharacterValue
+                this.lastUpdate = getDate()
+
             }
         }.toDTO()
         updateAverageRatingToStory(storyId)
@@ -144,6 +164,7 @@ class StoryService {
                 if (ratingCharacterValue != null) {
                     rs[this.ratingCharacterValue] = ratingCharacterValue
                 }
+                rs[this.lastUpdate] = getDate()
 
             }
         }
@@ -154,7 +175,13 @@ class StoryService {
     fun getFromMeRatedStories(userName: String): List<RatedStory> =
         getAllRatedStories().filter { it.user.userName == userName }
 
-    //fun getTopRatedStory(): List<RatedStory> =  transaction { RatedStoryEntity.all(). }
+    fun ratedStory_getLastUpdateByUUID(uuid: String): String? =
+        transaction { RatedStoryEntity.findById(UUID.fromString(uuid))?.lastUpdate }
+
+    fun ratedStory_getAllLastUpdateValues(): List<String> = transaction { RatedStoryEntity.all().map { it.lastUpdate } }
+
+
+
 
     /******************Story as Favorite *****************/
     fun setStoryAsFavorite(userName: String, storyId: String) {
@@ -186,7 +213,7 @@ class StoryService {
             }.first().delete()
         }
 
-        return storyAsFavorite;
+        return storyAsFavorite
 
     }
 

@@ -10,5 +10,5 @@ data class Friendship(
     val target_uuid: String,
     val isAccepted: Boolean,
     val requestTime: String,
-    val cachedTime: Long
+    var cachedTime: Long
 )

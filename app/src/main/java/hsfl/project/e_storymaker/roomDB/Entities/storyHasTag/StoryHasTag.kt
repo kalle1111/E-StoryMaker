@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class StoryHasTag (
     @PrimaryKey val storyHasTag_uuid: String,
     val tag_uuid: String,
-    val story_uuid: String
+    val story_uuid: String,
+    var cachedTime: Long
     )

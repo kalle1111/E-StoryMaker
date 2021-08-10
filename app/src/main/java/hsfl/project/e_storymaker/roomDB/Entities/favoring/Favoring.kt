@@ -9,5 +9,5 @@ data class Favoring (
     val isFavoring: Boolean,
     val user_uuid: String,
     val story_uuid: String,
-    val cachedTime: Long
+    var cachedTime: Long
 )

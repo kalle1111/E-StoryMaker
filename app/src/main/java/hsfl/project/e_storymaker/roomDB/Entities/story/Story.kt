@@ -12,9 +12,8 @@ data class Story(
     val description: String,
     val releaseDate: String,
     val ageRestriction: Int,
-    val story: List<String>,
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB) val cover: ByteArray,
     val avgRating: Double,
-    val cachedTime: Long
+    var cachedTime: Long
 )
 

@@ -8,5 +8,6 @@ data class ChapterProgress (
     @PrimaryKey val chapterProgress_uuid: String,
     val chapter: Int,
     val user_uuid: String,
-    val story_uuid: String
+    val story_uuid: String,
+    var cachedTime: Long
 )

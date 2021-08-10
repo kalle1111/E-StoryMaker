@@ -7,5 +7,5 @@ import androidx.room.*
 data class Tag (
     @PrimaryKey(autoGenerate = false) val tag_uuid: String,
     val tagName: String,
-    val cachedTime: Long
+    var cachedTime: Long
 )

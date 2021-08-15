@@ -16,7 +16,7 @@ object UsersTable:UUIDTable() {
     val description = text("description")
     val hashPassword= varchar("hashPassword", 512)
     val image = binary("image", Int.MAX_VALUE)
-    val lastUpdate = varchar("lastUpdate", 255)
+    val lastUpdate = long("lastUpdate")
     override val primaryKey: PrimaryKey = PrimaryKey(userName)
 }
 

@@ -15,7 +15,7 @@ object RatedStoriesTable : UUIDTable() {
     val ratingStoryValue = integer("ratingStoryValue")
     val ratingGrammarValue = integer("ratingGrammarValue")
     val ratingCharacterValue = integer("ratingCharacterValue")
-    val lastUpdate = varchar("lastUpdate", 255)
+    val lastUpdate = long("lastUpdate")//varchar(, 255)
 }
 
 class RatedStoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {

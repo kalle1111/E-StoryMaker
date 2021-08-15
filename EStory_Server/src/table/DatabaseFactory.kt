@@ -19,6 +19,8 @@ object DatabaseFactory {
             SchemaUtils.create(TagsTable)
             SchemaUtils.create(TaggedStoriesTable)
             SchemaUtils.create(FilesTable)
+            SchemaUtils.create(ReadChaptersTable)
+
 /*
             UsersTable.deleteAll()
             StoriesTable.deleteAll()

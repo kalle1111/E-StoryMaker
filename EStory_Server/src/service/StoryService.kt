@@ -16,10 +16,10 @@ class StoryService {
 
     fun getByUUID(uuid: String): Story? = transaction { StoryEntity.findById(UUID.fromString(uuid))?.toDTO() }
 
-    fun getLastUpdateByUUID(uuid: String): String? =
+    fun getLastUpdateByUUID(uuid: String): Long? =
         transaction { StoryEntity.findById(UUID.fromString(uuid))?.lastUpdate }
 
-    fun getAllLastUpdateValues(): List<String> = transaction { StoryEntity.all().map { it.lastUpdate } }
+    fun getAllLastUpdateValues(): List<Pair<String,Long>> = transaction { StoryEntity.all().map { Pair(it.id.toString(), it.lastUpdate) } }
 
     fun getAllByUserName(userName: String): List<Story> = getAll().filter { it.user.userName == userName }
 
@@ -42,18 +42,20 @@ class StoryService {
         storyTitle: String,
         description: String,
         storyChapters: String,
-        cover: ByteArray
+        cover: ByteArray?
     ): Story =
         transaction {
             StoryEntity.new {
                 this.userEntity = UserEntity.find { UsersTable.userName eq userName }.first()
                 this.description = description
                 this.storyTitle = storyTitle
-                this.createTime = getDate()
+                this.createTime = Date().time
                 this.storyChapters = storyChapters
                 this.averageRating = 0.0
-                this.cover = cover
-                this.lastUpdate = getDate()
+                if (cover != null) {
+                    this.cover = cover
+                }
+                this.lastUpdate = Date().time
             }.toDTO()
         }
 
@@ -82,7 +84,7 @@ class StoryService {
                 }
                 st[this.cover] = cover
 
-                st[this.lastUpdate] = getDate()
+                st[this.lastUpdate] =Date().time
             }
         }
     }
@@ -111,7 +113,7 @@ class StoryService {
                 this.ratingStoryValue = ratingStoryValue
                 this.ratingGrammarValue = ratingGrammarValue
                 this.ratingCharacterValue = ratingCharacterValue
-                this.lastUpdate = getDate()
+                this.lastUpdate = Date().time
 
             }
         }.toDTO()
@@ -164,7 +166,7 @@ class StoryService {
                 if (ratingCharacterValue != null) {
                     rs[this.ratingCharacterValue] = ratingCharacterValue
                 }
-                rs[this.lastUpdate] = getDate()
+                rs[this.lastUpdate] = Date().time
 
             }
         }
@@ -175,10 +177,10 @@ class StoryService {
     fun getFromMeRatedStories(userName: String): List<RatedStory> =
         getAllRatedStories().filter { it.user.userName == userName }
 
-    fun ratedStory_getLastUpdateByUUID(uuid: String): String? =
+    fun ratedStory_getLastUpdateByUUID(uuid: String): Long? =
         transaction { RatedStoryEntity.findById(UUID.fromString(uuid))?.lastUpdate }
 
-    fun ratedStory_getAllLastUpdateValues(): List<String> = transaction { RatedStoryEntity.all().map { it.lastUpdate } }
+    fun ratedStory_getAllLastUpdateValues(): List<Pair<String,Long>> = transaction { RatedStoryEntity.all().map { Pair(it.id.toString(),it.lastUpdate) } }
 
 
 
@@ -217,9 +219,4 @@ class StoryService {
 
     }
 
-    /*****************get Date ***************/
-    private fun getDate(): String {
-        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-        return sdf.format(Date())
-    }
 }

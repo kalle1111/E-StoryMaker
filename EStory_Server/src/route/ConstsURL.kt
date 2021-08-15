@@ -34,6 +34,9 @@ const val STORIES_GET_LAST_UPDATE_VALUES = "$STORIES/getLastUpdates"
 
 const val SEARCH_BY_TITLE_STORIES = "$STORIES/searchByTitle"
 
+const val READ_CHAPTERS = "$API_VERSION/ReadChapters"
+const val UPDATE_READ_CHAPTER = "$READ_CHAPTERS/updateReadChapter"
+
 const val Tags = "$API_VERSION/tags"
 const val GET_TAGGED_STORIES = "$Tags/getTaggedStories"
 const val SEARCH_BY_Tag_STORIES = "$Tags/searchByTag"
@@ -61,7 +64,6 @@ const val REJECT_FRIENDSHIPS = "$FRIENDSHIPS/reject"
 const val ACCEPT_FRIENDSHIPS = "$FRIENDSHIPS/accept"
 const val CANCEL_FRIENDSHIPS = "$FRIENDSHIPS/cancel"
 const val DELETE_FRIENDSHIPS = "$FRIENDSHIPS/delete"
-
 
 const val UPLOAD_FILE_POST = "$API_VERSION/upload"
 const val DOWNLOAD_FILE_POST = "$API_VERSION/download"

@@ -1,13 +1,10 @@
 package com.eStory
 
 import authentication.JwtService
-import com.eStory.service.StoryService
-import com.eStory.service.UserService
 import com.eStory.table.DatabaseFactory
 import authentication.hash
 import com.eStory.route.*
-import com.eStory.service.FriendshipService
-import com.eStory.service.TagService
+import com.eStory.service.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -30,6 +27,7 @@ fun Application.module(testing: Boolean = false) {
     DatabaseFactory.init()
     val userService = UserService()
     val storyService = StoryService()
+    val readChapterService = ReadChapterService()
     val friendshipService = FriendshipService()
     val tagService = TagService()
     val jwtService = JwtService()
@@ -68,6 +66,7 @@ fun Application.module(testing: Boolean = false) {
         StoryRoutes(storyService)
         FriendshipRoutes(friendshipService)
         TagRoutes(tagService)
+        ReadChapterRoutes(readChapterService)
         UploadRoutes()
 
         get("/session/increment") {

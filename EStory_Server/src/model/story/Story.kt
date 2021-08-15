@@ -9,9 +9,9 @@ class Story(
     val user: User,
     val storyTitle: String,
     val description: String,
-    val createTime: String,
-    val lastUpdate: String,
+    val createTime: Long,
+    val lastUpdate: Long,
     val storyChapters: String,
     val averageRating:Double,
-    val cover : ByteArray
+    val cover : ByteArray?
 )

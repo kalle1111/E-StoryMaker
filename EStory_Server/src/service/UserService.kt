@@ -1,16 +1,13 @@
 package com.eStory.service
 
 import com.eStory.model.user.User
-import com.eStory.table.StoriesTable
-import com.eStory.table.StoryEntity
+
 import com.eStory.table.UserEntity
 import com.eStory.table.UsersTable
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import java.text.SimpleDateFormat
 import java.util.*
 
 class UserService {
@@ -18,6 +15,7 @@ class UserService {
     fun getAll(): List<User> = transaction { UserEntity.all().map { it.toDTO() } }
     fun getByUUID(uuid: String): User? = transaction { UserEntity.findById(UUID.fromString(uuid))?.toDTO() }
     fun getByUserName(userName: String): User = transaction {
+        val m = byteArrayOf(1, 3, 4, 5)
         UserEntity.find { UsersTable.userName eq userName }.first().toDTO()
     }
 
@@ -55,7 +53,7 @@ class UserService {
         birthday: String,
         description: String,
         password: String,
-        image: ByteArray
+        image: ByteArray?
     ): User =
         transaction {
             UserEntity.new {
@@ -65,8 +63,10 @@ class UserService {
                 this.userName = userName
                 this.description = description
                 this.birthday = birthday
-                this.image = image
-                this.lastUpdate = getDate()
+                if (image != null) {
+                    this.image = image
+                }
+                this.lastUpdate = Date().time
 
             }.toDTO()
         }
@@ -112,7 +112,7 @@ class UserService {
                 if (image != null) {
                     ut[this.image] = image
                 }
-                ut[this.lastUpdate] = getDate()
+                ut[this.lastUpdate] = Date().time
 
             }
         }
@@ -121,15 +121,10 @@ class UserService {
     }
 
     /*****************get Date ***************/
-    private fun getDate(): String {
-        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-        return sdf.format(Date())
-    }
 
-    fun getLastUpdateByUUID(uuid: String): String? =
+    fun getLastUpdateByUUID(uuid: String): Long? =
         transaction { UserEntity.findById(UUID.fromString(uuid))?.lastUpdate }
 
-    fun getAllLastUpdateValues(): List<String> = transaction { UserEntity.all().map { it.lastUpdate } }
-
-
+    fun getAllLastUpdateValues(): List<Pair<String, Long>> =
+        transaction { UserEntity.all().map { Pair(it.userName, it.lastUpdate) } }
 }

@@ -32,7 +32,7 @@ class FriendshipService {
                 this.requesterUserEntity = UserEntity.find { UsersTable.userName eq requesterUserName }.first()
                 this.friendEntity = UserEntity.find { UsersTable.userName eq friendUserName }.first()
                 this.isAccepted = false
-                this.requestTime = getDate()
+                this.requestTime =  Date().time
             }.toDTO()
         }
 
@@ -102,9 +102,4 @@ class FriendshipService {
         return friendship
     }
 
-
-    private fun getDate(): String {
-        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-        return sdf.format(Date())
-    }
 }

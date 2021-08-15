@@ -12,7 +12,7 @@ object FriendshipsTable : UUIDTable() {
     val requesterUserName = varchar("userName", 512).references(UsersTable.userName)
     val friendName = varchar("friendName", 512).references(UsersTable.userName)
     val isAccepted = bool("isAccepted")
-    val requestTime = varchar("createTime", 255)
+    val requestTime = long("createTime")//varchar("createTime", 255)
 }
 
 class FriendshipEntity(id: EntityID<UUID>) : UUIDEntity(id) {

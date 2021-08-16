@@ -47,7 +47,10 @@ class ProfileFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ProfileFragVM::class.java)
+        viewModel.setApplicationContext((requireActivity() as MainActivity).application)
         binding.viewmodel = viewModel
+
+
     }
 
 }

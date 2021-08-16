@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import hsfl.project.e_storymaker.R
 import hsfl.project.e_storymaker.databinding.ReadOverviewFragmentBinding
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.ReadOverviewFragVM
+import hsfl.project.e_storymaker.views.activities.ReadingActivity
 
 class ReadOverviewFragment : Fragment() {
 
@@ -42,6 +43,7 @@ class ReadOverviewFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ReadOverviewFragVM::class.java)
+        viewModel.setApplicationContext((requireActivity() as ReadingActivity).application)
         binding.viewmodel = viewModel
     }
 

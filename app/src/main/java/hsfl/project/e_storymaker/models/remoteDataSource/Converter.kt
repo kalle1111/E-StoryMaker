@@ -8,7 +8,7 @@ fun convertWebserviceUserToDBUser(user: User): hsfl.project.e_storymaker.roomDB.
 
 //TODO: Parameter und Storyklasse anpassen
 fun convertWebserviceStoryToDbStory(story: Story): hsfl.project.e_storymaker.roomDB.Entities.story.Story{
-    return hsfl.project.e_storymaker.roomDB.Entities.story.Story(story.uuid,story.user.uuid,story.storyTitle,story.description, story.createTime,0,listOf<String>(), ByteArray(0),0.0,0.toLong())
+    return hsfl.project.e_storymaker.roomDB.Entities.story.Story(story.uuid,story.user.uuid,story.storyTitle,story.description, story.createTime,0,ByteArray(0), 0.0, 0)
 }
 
 //fun convertDbStoryToWebserviceStory (story:  hsfl.project.e_storymaker.roomDB.Entities.story.Story, user: User): Story {
@@ -16,7 +16,7 @@ fun convertWebserviceStoryToDbStory(story: Story): hsfl.project.e_storymaker.roo
 //}
 
 fun convertWebserviceRatedStoryToDbRatedStory(ratedStory: RatedStory): hsfl.project.e_storymaker.roomDB.Entities.rating.Rating{
-    return hsfl.project.e_storymaker.roomDB.Entities.rating.Rating(ratedStory.uuid, ratedStory.ratingOverallValue,ratedStory.ratingStyleValue, ratedStory.ratingStoryValue, ratedStory.ratingGrammarValue, ratedStory.ratingCharacterValue, ratedStory.user.uuid, ratedStory.story.uuid)
+    return hsfl.project.e_storymaker.roomDB.Entities.rating.Rating(ratedStory.uuid, ratedStory.ratingOverallValue,ratedStory.ratingStyleValue, ratedStory.ratingStoryValue, ratedStory.ratingGrammarValue, ratedStory.ratingCharacterValue, ratedStory.user.uuid, ratedStory.story.uuid, 0)
 }
 
 fun convertWebserviceFavoriteToDbFavorite(storyAsFavorite: StoryAsFavorite): hsfl.project.e_storymaker.roomDB.Entities.favoring.Favoring{

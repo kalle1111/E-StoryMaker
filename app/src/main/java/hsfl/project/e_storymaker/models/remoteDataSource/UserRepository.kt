@@ -66,11 +66,16 @@ class UserRepository(application: Application) {
             client.close()
             return@runBlocking webResponse.success
         } catch (e: Exception){
+            Log.d(TAG, "HTTP Post failed: $e")
+
             client.close()
             return@runBlocking false
         }
     }
 
+    public fun test(): String{
+        return "TEST_USER_GG"
+    }
     fun loginRequest(loginRequest: LoginRequest): Boolean = runBlocking {
         val client = getHttpClient()
         try {

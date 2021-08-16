@@ -13,21 +13,21 @@ class RegisterFragVM : AuthVM() {
 
     private var application: Application? = null
     private var userRep: UserRepository? = null
+    val TAG: String = "RegisterVM"
 
     fun setApplicationContext(application: Application){
         this.application = application
-        userRep = application?.let { UserRepository.getStoryRepository(it) }!!
+        userRep = application.let { UserRepository.getStoryRepository(it) }!!
     }
 
     fun register(username: String, email: String, password: String, passwordConf: String): Boolean{
-        Log.d("Main", "username: " + username + " email: " + email + " password: " + password + "passwordCONF: " + passwordConf)
-        //return model.register(username, email, password, passwordConf)
-        viewModelScope.async {
-            val test:Boolean? = userRep?.registerRequest(RegisterRequest("a", "b",username, "", "22.18.20323", password))
-            Log.d("RegisterVM", test.toString())
-        }
-        Log.d("RegisterVM", "REPOSITORY QUERRIED!")
+        Log.d(TAG, "username: " + username + " email: " + email + " password: " + password + "passwordCONF: " + passwordConf)
 
-        return false
+        val test:Boolean? = userRep?.registerRequest(RegisterRequest("a", "b",username, "", "22.18.20323", password))
+        Log.d(TAG, test.toString())
+
+        Log.d(TAG, "REPOSITORY QUERRIED!")
+
+        return (test != null)
     }
 }

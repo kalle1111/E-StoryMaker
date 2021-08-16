@@ -3,15 +3,11 @@ package hsfl.project.e_storymaker.viewModels.fragmentViewModels
 
 
 import android.app.Application
-import android.content.Context
 import android.util.Log
 import androidx.annotation.UiThread
 import hsfl.project.e_storymaker.models.remoteDataSource.StoryRepository
 import hsfl.project.e_storymaker.repository.webserviceModels.StoryRequest
-import hsfl.project.e_storymaker.viewModels.MainVM
 import hsfl.project.e_storymaker.viewModels.WritingVM
-import kotlinx.coroutines.coroutineScope
-import kotlin.coroutines.coroutineContext
 
 class WriteDetailsFragVM() : WritingVM() {
 

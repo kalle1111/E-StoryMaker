@@ -6,9 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import hsfl.project.e_storymaker.R
 import hsfl.project.e_storymaker.databinding.ReadChapterFragmentBinding
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.ReadChapterFragVM
+import hsfl.project.e_storymaker.views.activities.ReadingActivity
 
 class ReadChapterFragment : Fragment() {
 
@@ -37,6 +37,8 @@ class ReadChapterFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ReadChapterFragVM::class.java)
+        viewModel.setApplicationContext((requireActivity() as ReadingActivity).application)
+
         binding.viewmodel = viewModel
     }
 

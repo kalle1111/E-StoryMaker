@@ -34,13 +34,8 @@ class LoginFragVM : AuthVM() {
 
     fun login(username: String, password: String): Boolean{
         Log.d("Main","username: " + username + " password: " + password)
-
-        suspend{
-            userRep?.loginRequest(LoginRequest(username, password))
-        }
-
-        //return model.login(username, password)?
-        return true
+        val authorized = userRep?.loginRequest(LoginRequest(username, password))
+        return (authorized != null)
     }
 
     fun forgotPassword(){

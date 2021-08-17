@@ -48,6 +48,7 @@ class WriteChapterFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(WriteChapterFragVM::class.java)
+        viewModel.setApplicationContext((requireActivity() as WritingActivity).application)
         binding.viewmodel = viewModel
     }
 

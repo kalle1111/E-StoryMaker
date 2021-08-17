@@ -45,6 +45,7 @@ class LibraryFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(LibraryFragVM::class.java)
+        viewModel.setApplicationContext((requireActivity() as MainActivity).application)
         binding.viewmodel = viewModel
     }
 

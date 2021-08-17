@@ -20,13 +20,12 @@ class WriteDetailsFragVM() : WritingVM() {
         storyRep = application?.let { StoryRepository.getStoryRepository(it) }!!
     }
 
-    @UiThread
+
     fun createStory(image: ByteArray?, title: String, desciption: String): Boolean {
         Log.d("WriteDetails", "title: " + title + " ; " + "descr: " + desciption)
-        suspend {
-            storyRep?.createStory("a", StoryRequest(title, desciption))
-            Log.d("WriteDetails", "MODEL REQUEST SENT")
-        }
+        storyRep?.createStory("a", StoryRequest(title, desciption))
+        Log.d("WriteDetails", "MODEL REQUEST SENT")
+
         return true
     }
 }

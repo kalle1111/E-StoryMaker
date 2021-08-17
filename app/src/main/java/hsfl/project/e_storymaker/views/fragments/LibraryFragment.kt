@@ -4,13 +4,14 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.TextView
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import hsfl.project.e_storymaker.viewModels.MainVM
 import hsfl.project.e_storymaker.R
@@ -47,6 +48,19 @@ class LibraryFragment : Fragment(), AdapterView.OnItemSelectedListener {
         storylist.forEach {
             val cardLayout: View = layoutInflater.inflate(R.layout.story_overview_card, null, false)
             cardLayout.findViewById<TextView>(R.id.storyCard_title).text = it.storyTitle
+            cardLayout.findViewById<TextView>(R.id.storyCard_descr).text = it.description
+            cardLayout.findViewById<ImageButton>(R.id.arrow_button).setOnClickListener {
+                //Log.d("LibraryFrag", "CLICKED EXP_L")
+                var expL: ConstraintLayout = cardLayout.findViewById(R.id.expandable_layout)
+                if (expL.visibility == GONE){
+                    expL.visibility = VISIBLE
+                    //Log.d("LibraryFrag", "Toggled VIS ON")
+                }else{
+                    expL.visibility = GONE
+                    //Log.d("LibraryFrag", "Toggled VIS OFF")
+                }
+            }
+
             binding.mainLibraryStoryCont.addView(cardLayout)
         }
     }

@@ -23,7 +23,7 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#D8D8D8"
+            android:background="#AEB9F6"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -54,6 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="Story_Title"
+                    android:textColor="#000000"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView20"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -64,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:text="Tags"
+                    android:textColor="#000000"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView20"
                     app:layout_constraintTop_toBottomOf="@+id/storyCard_title" />
@@ -73,6 +75,7 @@
                     android:layout_width="100dp"
                     android:layout_height="40dp"
                     android:layout_marginBottom="5dp"
+                    android:background="#0A25B8"
                     android:src="@android:drawable/arrow_down_float"
                     app:layout_constraintBottom_toBottomOf="@id/fixed_layout"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +84,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/expandable_layout"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -90,58 +93,16 @@
 
 
                 <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/storyCard_descr"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="Tag1"
+                    android:text="Story_Descr"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/button6"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="15dp"
-                    android:text="+"
-                    android:textColor="#4CAF50"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toEndOf="@id/textView7"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/button7"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="15dp"
-                    android:text="-"
-                    android:textColor="#F44336"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toEndOf="@id/button6"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:text="Tag2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:text="..."
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textView8" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

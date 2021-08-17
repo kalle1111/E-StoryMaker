@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sort_spinner_arr">
+        <item>Sort by: Name</item>
+        <item>Sort by: Author</item>
+    </string-array>
+</resources>

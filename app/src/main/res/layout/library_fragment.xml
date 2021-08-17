@@ -44,36 +44,70 @@
             app:layout_constraintTop_toBottomOf="@+id/textView5">
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/main_library_originalB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:text="Original" />
+                android:text="Original"
+                android:textColor="#FFFFFF" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/main_library_favoriteB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:text="Favorite" />
+
+            <Button
+                android:id="@+id/main_library_reviewedB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:text="Reviewed" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
+        <Spinner
+            android:id="@+id/main_library_spinner"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="Nothing to see here! Your library is empty.\nEither write a story\nor\nfavorite one\nto populate this page"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:textStyle="italic"
+            android:layout_marginTop="5dp"
+            android:textAlignment="textEnd"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/button12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_library_spinner">
+
+            <LinearLayout
+                android:id="@+id/main_library_storyCont"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/main_Library_emptyText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nothing to see here! Your library is empty.\nEither write a story\nor\nfavorite one\nto populate this page"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
+            </LinearLayout>
+        </ScrollView>
 
         <Button
             android:id="@+id/button12"

@@ -8,6 +8,8 @@
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/content_write.xml" value="0.33152173913043476" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/library_fragment.xml" value="0.33695652173913043" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/login_fragment.xml" value="0.20208333333333334" />
+        <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/main_activity.xml" value="0.33" />
+        <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/main_app_bar.xml" value="0.38697916666666665" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/profile_fragment.xml" value="0.33" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/read_chapter_fragment.xml" value="0.33152173913043476" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/read_overview_fragment.xml" value="0.33152173913043476" />
@@ -15,11 +17,14 @@
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/reading_activity.xml" value="0.33" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/register_fragment.xml" value="0.23229166666666667" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/story_finder_fragment.xml" value="0.33695652173913043" />
+        <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/story_overview_card.xml" value="0.33" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/write_chapter_fragment.xml" value="0.203125" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/write_details_fragment.xml" value="0.203125" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/writing_activity.xml" value="0.33152173913043476" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/writing_chapter_fragment.xml" value="0.21770833333333334" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/writing_details_fragment.xml" value="0.33152173913043476" />
+        <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/menu/main_drawer_menu.xml" value="0.32587719298245615" />
+        <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/menu/menu_main.xml" value="0.32587719298245615" />
       </map>
     </option>
   </component>

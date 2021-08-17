@@ -12,7 +12,7 @@
         android:theme="@style/Theme.EStoryMaker">
         <activity
             android:name=".views.activities.MainActivity"
-            android:theme="@style/Theme.EStoryMaker.NoActionBar"></activity>
+            android:theme="@style/Theme.EStoryMaker.NoActionBar" />
         <activity android:name=".views.activities.ReadingActivity" />
         <activity android:name=".views.activities.WritingActivity" />
         <activity

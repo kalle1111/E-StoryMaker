@@ -32,6 +32,7 @@ const val UPDATE_STORIES = "$STORIES/update"
 const val DELETE_STORIES = "$STORIES/delete"
 const val STORY_GET_BY_ID_LAST_UPDATE = "$STORIES/getLastUpdateById"
 const val STORIES_GET_LAST_UPDATE_VALUES = "$STORIES/getLastUpdates"
+const val MY_STORIES_GET_LAST_UPDATE_VALUES = "$MY_STORIES/getLastUpdates" // username als Query parameter eingeben
 
 const val SEARCH_BY_TITLE_STORIES = "$STORIES/searchByTitle"
 

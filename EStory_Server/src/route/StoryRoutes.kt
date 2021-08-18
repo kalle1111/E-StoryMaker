@@ -72,6 +72,9 @@ class RatedStoryGetLastUpdateRoute
 @Location(RATED_STORIES_GET_LAST_UPDATE_VALUES)
 class RatedStoriesGetLastUpdateValuesRoute
 
+@Location(MY_STORIES_GET_LAST_UPDATE_VALUES)
+class GetLastUpdatesMyStoriesRoute
+
 fun Route.StoryRoutes(
     storyService: StoryService
 ) {
@@ -156,6 +159,23 @@ fun Route.StoryRoutes(
             try {
                 storyService.deleteByUUID(storyId)
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story deleted Successfully!"))
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+            }
+        }
+        get<GetLastUpdatesMyStoriesRoute> {
+            val username = try {
+                call.request.queryParameters["username"]!!
+            } catch (e: Exception) {
+                call.respond(
+                    HttpStatusCode.BadRequest,
+                    SimpleResponse(false, "QueryParameter:username ist not present")
+                )
+                return@get
+            }
+            try {
+                val myLastUpdates = storyService.getLastUpdatesMyStories(username)
+                call.respond(HttpStatusCode.OK, myLastUpdates)
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
             }
@@ -319,6 +339,8 @@ fun Route.StoryRoutes(
             }
 
         }
+
+
     }
 
     get<StoryGetLastUpdateRoute> {

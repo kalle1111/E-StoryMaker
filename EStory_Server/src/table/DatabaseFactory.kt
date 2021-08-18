@@ -28,7 +28,7 @@ object DatabaseFactory {
             RatedStoriesTable.deleteAll()*/
         }
 
-      //  TagService().insertAllTags()
+        //  TagService().insertAllTags()
 
     }
 

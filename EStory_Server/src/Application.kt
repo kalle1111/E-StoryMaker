@@ -83,16 +83,16 @@ fun Application.module(testing: Boolean = false) {
 
 
 
-        routing {
-            get("/download") {
-                val file = File("uploads/ktor_logo.png")
-                call.response.header(
-                    HttpHeaders.ContentDisposition,
-                    ContentDisposition.Attachment.withParameter(ContentDisposition.Parameters.FileName, "ktor_logo.png")
-                        .toString()
-                )
-                call.respondFile(file)
-            }
+    routing {
+        get("/download") {
+            val file = File("uploads/ktor_logo.png")
+            call.response.header(
+                HttpHeaders.ContentDisposition,
+                ContentDisposition.Attachment.withParameter(ContentDisposition.Parameters.FileName, "ktor_logo.png")
+                    .toString()
+            )
+            call.respondFile(file)
+        }
 
     }
 }

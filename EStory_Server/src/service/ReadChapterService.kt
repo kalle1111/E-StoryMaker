@@ -14,7 +14,8 @@ class ReadChapterService {
         transaction { ReadChapterEntity.findById(UUID.fromString(uuid))?.toDTO() }
 
     fun updateReadChapter(userName: String, storyId: String, chapterNumber: Int): ReadChapter? = transaction {
-        val readChapterEntity = ReadChapterEntity.find { ReadChaptersTable.storyId.eq(UUID.fromString(storyId)) }.singleOrNull()
+        val readChapterEntity =
+            ReadChapterEntity.find { ReadChaptersTable.storyId.eq(UUID.fromString(storyId)) }.singleOrNull()
         if (readChapterEntity == null) {
             return@transaction ReadChapterEntity.new {
                 this.userEntity = UserEntity.find { UsersTable.userName eq userName }.first()
@@ -33,7 +34,8 @@ class ReadChapterService {
                 rc[this.chapterNumber] = chapterNumber
             }
 
-            return@transaction ReadChapterEntity.find { ReadChaptersTable.storyId.eq(UUID.fromString(storyId)) }.singleOrNull()?.toDTO()
+            return@transaction ReadChapterEntity.find { ReadChaptersTable.storyId.eq(UUID.fromString(storyId)) }
+                .singleOrNull()?.toDTO()
         }
     }
 

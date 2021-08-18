@@ -29,14 +29,17 @@ class UserLoginRoute
 @Location(GET_PROFILE)
 class UserGetProfile
 
-@Location (UPDATE_PROFILE)
+@Location(UPDATE_PROFILE)
 class UpdateProfileRoute
 
-@Location (USER_GET_BY_ID_LAST_UPDATE)
+@Location(USER_GET_BY_ID_LAST_UPDATE)
 class UserGetLastUpdateRoute
 
 @Location(USERS_GET_LAST_UPDATE_VALUES)
 class UsersGetLastUpdateRouteValuesRoute
+
+@Location(GET_USER_BY_USERNAME)
+class GetUserByUsernameRoute
 
 fun Route.UserRoutes(
     userService: UserService,
@@ -55,6 +58,7 @@ fun Route.UserRoutes(
             }
         }
 
+
         post<UpdateProfileRoute> {
             // val uuid = call.parameters["uuid"]!!
             val user = try {
@@ -66,7 +70,14 @@ fun Route.UserRoutes(
             }
             try {
                 val username = call.principal<User>()!!.userName
-                userService.updateByUserName(username, user.firstname, user.lastname, user.description, user.birthday, user.image)
+                userService.updateByUserName(
+                    username,
+                    user.firstname,
+                    user.lastname,
+                    user.description,
+                    user.birthday,
+                    user.image
+                )
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Users profile updated Successfully!"))
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
@@ -107,12 +118,6 @@ fun Route.UserRoutes(
         }
 
     }
-
-
-
-
-
-
 
     post<UserLoginRoute> {
         val loginRequest = try {
@@ -173,12 +178,19 @@ fun Route.UserRoutes(
         }
     }
 
-
-
-
-
-
-
-
+    get<GetUserByUsernameRoute> {
+        val username = try {
+            call.request.queryParameters["username"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:username is not present"))
+            return@get
+        }
+        try {
+            val user = userService.getByUserName(username)
+            call.respond(HttpStatusCode.OK, user)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+        }
+    }
 
 }

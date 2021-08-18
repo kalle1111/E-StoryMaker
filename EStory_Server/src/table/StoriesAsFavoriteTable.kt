@@ -23,4 +23,4 @@ class StoryAsFavoriteEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     fun toDTO(): StoryAsFavorite =
         StoryAsFavorite(this.id.toString(), userEntity.toDTO(), storyEntity.toDTO())
 
- }
+}

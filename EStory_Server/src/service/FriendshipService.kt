@@ -32,7 +32,7 @@ class FriendshipService {
                 this.requesterUserEntity = UserEntity.find { UsersTable.userName eq requesterUserName }.first()
                 this.friendEntity = UserEntity.find { UsersTable.userName eq friendUserName }.first()
                 this.isAccepted = false
-                this.requestTime =  Date().time
+                this.requestTime = Date().time
             }.toDTO()
         }
 

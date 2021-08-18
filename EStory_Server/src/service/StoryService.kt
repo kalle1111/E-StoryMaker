@@ -19,7 +19,8 @@ class StoryService {
     fun getLastUpdateByUUID(uuid: String): Long? =
         transaction { StoryEntity.findById(UUID.fromString(uuid))?.lastUpdate }
 
-    fun getAllLastUpdateValues(): List<Pair<String,Long>> = transaction { StoryEntity.all().map { Pair(it.id.toString(), it.lastUpdate) } }
+    fun getAllLastUpdateValues(): List<Pair<String, Long>> =
+        transaction { StoryEntity.all().map { Pair(it.id.toString(), it.lastUpdate) } }
 
     fun getAllByUserName(userName: String): List<Story> = getAll().filter { it.user.userName == userName }
 
@@ -84,16 +85,12 @@ class StoryService {
                 }
                 st[this.cover] = cover
 
-                st[this.lastUpdate] =Date().time
+                st[this.lastUpdate] = Date().time
             }
         }
     }
 
     /****************RATING_STORY****************/
-
-
-
-
 
 
     fun rateStory(
@@ -180,9 +177,8 @@ class StoryService {
     fun ratedStory_getLastUpdateByUUID(uuid: String): Long? =
         transaction { RatedStoryEntity.findById(UUID.fromString(uuid))?.lastUpdate }
 
-    fun ratedStory_getAllLastUpdateValues(): List<Pair<String,Long>> = transaction { RatedStoryEntity.all().map { Pair(it.id.toString(),it.lastUpdate) } }
-
-
+    fun ratedStory_getAllLastUpdateValues(): List<Pair<String, Long>> =
+        transaction { RatedStoryEntity.all().map { Pair(it.id.toString(), it.lastUpdate) } }
 
 
     /******************Story as Favorite *****************/

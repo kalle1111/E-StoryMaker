@@ -15,7 +15,6 @@ class UserService {
     fun getAll(): List<User> = transaction { UserEntity.all().map { it.toDTO() } }
     fun getByUUID(uuid: String): User? = transaction { UserEntity.findById(UUID.fromString(uuid))?.toDTO() }
     fun getByUserName(userName: String): User = transaction {
-        val m = byteArrayOf(1, 3, 4, 5)
         UserEntity.find { UsersTable.userName eq userName }.first().toDTO()
     }
 

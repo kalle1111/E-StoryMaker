@@ -24,7 +24,7 @@ class GetAllTagsRoute
 @Location(MAP_Story_To_Tag)
 class MapStoryToTagRoute
 
-@Location (GET_ALL_TAGS_TO_STORY)
+@Location(GET_ALL_TAGS_TO_STORY)
 class GetAllTagsToStoryRoute
 
 
@@ -90,7 +90,7 @@ fun Route.TagRoutes(
         get<GetAllTagsRoute> {
             try {
                 val allTags = tagService.getAllTags()
-           //     call.respond(bytes)
+                //     call.respond(bytes)
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
 
@@ -121,8 +121,6 @@ fun Route.TagRoutes(
             }
 
         }
-
-
 
 
     }

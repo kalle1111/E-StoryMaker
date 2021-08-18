@@ -23,6 +23,7 @@ const val GET_PROFILE = "$USERS/getMyProfile"
 const val UPDATE_PROFILE = "$USERS/updateProfile"
 const val USER_GET_BY_ID_LAST_UPDATE = "$USERS/getLastUpdateById"
 const val USERS_GET_LAST_UPDATE_VALUES = "$USERS/getLastUpdates"
+const val GET_USER_BY_USERNAME = "$USERS/getByUsername" // username als Query parameter eingeben
 
 const val STORIES = "$API_VERSION/stories"
 const val MY_STORIES = "$STORIES/myStories"

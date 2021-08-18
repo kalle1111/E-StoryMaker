@@ -12,6 +12,6 @@ class Story(
     val createTime: Long,
     val lastUpdate: Long,
     val storyChapters: String,
-    val averageRating:Double,
-    val cover : ByteArray?
+    val averageRating: Double,
+    val cover: ByteArray?
 )

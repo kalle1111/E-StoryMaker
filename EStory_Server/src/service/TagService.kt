@@ -45,7 +45,8 @@ class TagService {
     fun getAllTaggedStories(): List<TaggedStory> = transaction { TaggedStoriesEntity.all().map { it.toDTO() } }
 
     fun findStoriesByTag(tagName: String): List<TaggedStory> = getAllTaggedStories().filter { it.tag.name == tagName }
-    fun getAllTagsToStory(storyId: String): List<Tag> = getAllTaggedStories().filter { it.story.uuid == storyId }.map { it.tag }
+    fun getAllTagsToStory(storyId: String): List<Tag> =
+        getAllTaggedStories().filter { it.story.uuid == storyId }.map { it.tag }
 
 
 }

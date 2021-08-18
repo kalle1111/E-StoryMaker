@@ -31,6 +31,16 @@ class StoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var averageRating by StoriesTable.averageRating
     var cover by StoriesTable.cover
     fun toDTO(): Story =
-        Story(this.id.toString(), userEntity.toDTO(), storyTitle, description, createTime, lastUpdate , storyChapters, averageRating, cover)
+        Story(
+            this.id.toString(),
+            userEntity.toDTO(),
+            storyTitle,
+            description,
+            createTime,
+            lastUpdate,
+            storyChapters,
+            averageRating,
+            cover
+        )
 
 }

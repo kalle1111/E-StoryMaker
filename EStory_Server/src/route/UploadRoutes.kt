@@ -17,41 +17,42 @@ class UploadFile
 
 @Location(DOWNLOAD_FILE_POST)
 class DownloadFile
+
 @OptIn(KtorExperimentalLocationsAPI::class)
 fun Route.UploadRoutes() {
     var fileDescription = ""
     var fileName = ""
-   // authenticate("jwt") {
-        post<UploadFile> {
-            val multipartData = call.receiveMultipart()
+    // authenticate("jwt") {
+    post<UploadFile> {
+        val multipartData = call.receiveMultipart()
 
-            multipartData.forEachPart { part ->
-                when (part) {
-                    is PartData.FormItem -> {
-                        fileDescription = part.value
-                    }
-                    is PartData.FileItem -> {
-                        fileName = part.originalFileName as String
-                        var fileBytes = part.streamProvider().readBytes()
-                        File("uploads/$fileName").writeBytes(fileBytes)
+        multipartData.forEachPart { part ->
+            when (part) {
+                is PartData.FormItem -> {
+                    fileDescription = part.value
+                }
+                is PartData.FileItem -> {
+                    fileName = part.originalFileName as String
+                    var fileBytes = part.streamProvider().readBytes()
+                    File("uploads/$fileName").writeBytes(fileBytes)
 
-                        transaction {
-                            FileEntity.new {
-                                this.binaryFile = fileBytes
-                            }
+                    transaction {
+                        FileEntity.new {
+                            this.binaryFile = fileBytes
                         }
                     }
                 }
             }
-
-            call.respondText("$fileDescription is uploaded to 'uploads/$fileName'")
         }
 
+        call.respondText("$fileDescription is uploaded to 'uploads/$fileName'")
+    }
 
-        get<DownloadFile>{
-           val arrabyte =  transaction {  FileEntity.all().first().binaryFile}
 
-            call.respondBytes(arrabyte)
-        }
-   // }
+    get<DownloadFile> {
+        val arrabyte = transaction { FileEntity.all().first().binaryFile }
+
+        call.respondBytes(arrabyte)
+    }
+    // }
 }

@@ -6,16 +6,16 @@ import hsfl.project.e_storymaker.roomDB.Entities.story.Story
 import hsfl.project.e_storymaker.roomDB.Entities.tag.Tag
 
 @Dao
-interface FavoringDao {
+abstract class FavoringDao {
 
     @Query("SELECT * FROM favoring WHERE favoring.user_uuid LIKE :user_uuid")
-    fun getFavoritesOfUser(user_uuid: String): LiveData<List<Favoring>>
+    abstract fun getFavoritesOfUser(user_uuid: String): LiveData<List<Favoring>>
 
     @Query("SELECT * FROM favoring WHERE favoring_uuid LIKE :favorite_uuid")
     abstract fun getFavoritesByUuid(favorite_uuid : String): Favoring
 
     @Transaction
-    fun getFavoritesByUuids(favorite_uuids : List<String>): List<Favoring>{
+    open fun getFavoritesByUuids(favorite_uuids : List<String>): List<Favoring>{
 
         val favoritesList = mutableListOf<Favoring>()
 

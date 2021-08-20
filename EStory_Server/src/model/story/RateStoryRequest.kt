@@ -2,6 +2,8 @@ package com.eStory.model.story
 
 data class RateStoryRequest(
     val storyId: String,
+    val ratingTitle:String,
+    val ratingDescription:String,
     val ratingOverallValue: Int,
     val ratingStyleValue: Int,
     val ratingStoryValue: Int,

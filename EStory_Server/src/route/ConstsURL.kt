@@ -54,6 +54,7 @@ const val FROM_ME_RATED_STORIES = "$STORIES/fromMeRatedStories"
 const val RATED_STORY_GET_BY_ID_LAST_UPDATE = "$STORIES/ratedStoryGetLastUpdateById"
 const val RATED_STORIES_GET_LAST_UPDATE_VALUES = "$STORIES/ratedStoriesGetLastUpdates"
 const val GET_RATED_STORY_BY_UUID = "$STORIES/getRatedStoryByUUID" // uuid als Query parameter eingeben
+const val GET_RATED_STORY_BY_STORY_ID = "$STORIES/getRatedStoryByStoryId"  // storyId als Query parameter eingeben
 
 const val FAVORITE_STORIES = "$STORIES/favoriteStories"
 const val MY_FAVORITE_STORIES = "$FAVORITE_STORIES/getMyFavoriteStories"

@@ -16,7 +16,6 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import java.lang.Exception
 
-
 @Location(CREAT_STORIES)
 class StoryCreateRoute
 
@@ -84,6 +83,9 @@ class GetFavoriteStoryByUUIDRoute
 @Location(GET_RATED_STORY_BY_UUID)
 class GetRatedStoryByUUIDRoute
 
+@Location(GET_RATED_STORY_BY_STORY_ID)
+class GetRatedStoryByStoryIdRoute
+
 fun Route.StoryRoutes(
     storyService: StoryService
 ) {
@@ -111,14 +113,27 @@ fun Route.StoryRoutes(
             return@get
         }
         try {
-            val reatedStory = storyService.getRatedStoryByUUID(uuid)!!
-            call.respond(HttpStatusCode.OK, reatedStory)
+            val ratedStory = storyService.getRatedStoryByUUID(uuid)!!
+            call.respond(HttpStatusCode.OK, ratedStory)
         } catch (e: Exception) {
             call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
         }
     }
 
-
+    get<GetRatedStoryByStoryIdRoute> {
+        val storyId = try {
+            call.request.queryParameters["storyId"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter: storyId is not present"))
+            return@get
+        }
+        try {
+            val ratedStory = storyService.getRatedStoryByStoryId(storyId)!!
+            call.respond(HttpStatusCode.OK, ratedStory)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+        }
+    }
 
     get<GetFavoriteStoryByUUIDRoute> {
         val uuid = try {
@@ -134,13 +149,6 @@ fun Route.StoryRoutes(
             call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
         }
     }
-
-
-
-
-
-
-
 
 
     authenticate("jwt") {
@@ -342,6 +350,8 @@ fun Route.StoryRoutes(
                 val username = call.principal<User>()!!.userName
                 storyService.rateStory(
                     username, rateStory.storyId,
+                    rateStory.ratingTitle,
+                    rateStory.ratingDescription,
                     rateStory.ratingOverallValue,
                     rateStory.ratingStyleValue,
                     rateStory.ratingStoryValue,
@@ -369,6 +379,8 @@ fun Route.StoryRoutes(
                 storyService.updateRatedStory(
                     username,
                     ratedStory.storyId,
+                    ratedStory.ratingTitle,
+                    ratedStory.ratingDescription,
                     ratedStory.ratingOverallValue,
                     ratedStory.ratingStyleValue,
                     ratedStory.ratingStoryValue,

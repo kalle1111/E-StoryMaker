@@ -99,6 +99,8 @@ class StoryService {
 
     fun rateStory(
         userName: String, storyId: String,
+        ratingTitle: String,
+        ratingDescription: String,
         ratingOverallValue: Int,
         ratingStyleValue: Int,
         ratingStoryValue: Int,
@@ -109,6 +111,8 @@ class StoryService {
             RatedStoryEntity.new {
                 this.userEntity = UserEntity.find { UsersTable.userName eq userName }.first()
                 this.storyEntity = StoryEntity[UUID.fromString(storyId)]
+                this.ratingTitle = ratingTitle
+                this.ratingDescription = ratingDescription
                 this.ratingOverallValue = ratingOverallValue
                 this.ratingStyleValue = ratingStyleValue
                 this.ratingStoryValue = ratingStoryValue
@@ -138,6 +142,8 @@ class StoryService {
 
     fun updateRatedStory(
         userName: String, storyId: String,
+        ratingTitle: String?,
+        ratingDescription: String?,
         ratingOverallValue: Int?,
         ratingStyleValue: Int?,
         ratingStoryValue: Int?,
@@ -152,6 +158,13 @@ class StoryService {
                             RatedStoriesTable.userName.eq(userName)
                 }
             ) { rs ->
+                if (ratingTitle != null) {
+                    rs[this.ratingTitle] = ratingTitle
+                }
+                if (ratingDescription != null) {
+                    rs[this.ratingDescription] = ratingDescription
+                }
+
                 if (ratingOverallValue != null) {
                     rs[this.ratingOverallValue] = ratingOverallValue
                 }
@@ -175,6 +188,9 @@ class StoryService {
 
     fun getRatedStoryByUUID(uuid: String): RatedStory? =
         transaction { RatedStoryEntity.findById(UUID.fromString(uuid))?.toDTO() }
+
+    fun getRatedStoryByStoryId(storyId: String): RatedStory =
+        transaction { RatedStoryEntity.find { RatedStoriesTable.storyId eq UUID.fromString(storyId) }.first() }.toDTO()
 
     fun getAllRatedStories(): List<RatedStory> = transaction { RatedStoryEntity.all().map { it.toDTO() } }
 

@@ -10,12 +10,15 @@ import java.util.*
 object RatedStoriesTable : UUIDTable() {
     val userName = varchar("userName", 512).references(UsersTable.userName)
     val storyId = reference("storyID", StoriesTable.id)
+    val ratingTitle = varchar("ratingTitle", 512)
+    val ratingDescription = text("ratingDescription")
     val ratingOverallValue = integer("ratingOverallValue")
     val ratingStyleValue = integer("ratingStyleValue")
     val ratingStoryValue = integer("ratingStoryValue")
     val ratingGrammarValue = integer("ratingGrammarValue")
     val ratingCharacterValue = integer("ratingCharacterValue")
-    val lastUpdate = long("lastUpdate")//varchar(, 255)
+    val lastUpdate = long("lastUpdate")
+
 }
 
 class RatedStoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {
@@ -23,6 +26,8 @@ class RatedStoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {
 
     var userEntity by UserEntity referencedOn RatedStoriesTable.userName
     var storyEntity by StoryEntity referencedOn RatedStoriesTable.storyId
+    var ratingTitle by RatedStoriesTable.ratingTitle
+    var ratingDescription by RatedStoriesTable.ratingDescription
     var ratingOverallValue by RatedStoriesTable.ratingOverallValue
     var ratingStyleValue by RatedStoriesTable.ratingStyleValue
     var ratingStoryValue by RatedStoriesTable.ratingStoryValue
@@ -34,6 +39,8 @@ class RatedStoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {
         this.id.toString(),
         userEntity.toDTO(),
         storyEntity.toDTO(),
+        ratingTitle,
+        ratingDescription,
         ratingOverallValue,
         ratingStyleValue,
         ratingStoryValue,

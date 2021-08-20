@@ -7,8 +7,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -19,7 +18,7 @@ import hsfl.project.e_storymaker.viewModels.fragmentViewModels.ReviewReadFragVM
 import hsfl.project.e_storymaker.views.activities.ReviewActivity
 
 
-class ReviewReadFragment : Fragment() {
+class ReviewReadFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var _binding: ReviewReadFragmentBinding? = null
     private val binding get() = _binding!!
@@ -67,6 +66,16 @@ class ReviewReadFragment : Fragment() {
             findNavController().navigate(R.id.action_ReviewRead_to_ReviewWrite)
         }
 
+        ArrayAdapter.createFromResource(
+            (requireActivity() as ReviewActivity),
+            R.array.sort_spinner_arr,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.reviewReviewReadSpinner.adapter = adapter
+        }
+        binding.reviewReviewReadSpinner.onItemSelectedListener = this
+
 
     }
 
@@ -82,5 +91,13 @@ class ReviewReadFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        //TODO("Not yet implemented")
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+        //TODO("Not yet implemented")
     }
 }

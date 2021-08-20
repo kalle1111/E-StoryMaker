@@ -8,13 +8,13 @@ import androidx.room.Query
 import hsfl.project.e_storymaker.roomDB.Entities.tag.Tag
 
 @Dao
-interface ChapterProgressDao {
+abstract class ChapterProgressDao {
 
     @Query("SELECT chapter FROM chapterprogress WHERE chapterprogress.user_uuid LIKE :user_uuid AND chapterProgress.story_uuid LIKE :story_uuid ")
-    fun getChapter(user_uuid: String, story_uuid: String): LiveData<Int>
+    abstract fun getChapter(user_uuid: String, story_uuid: String): LiveData<Int>
 
     @Query("UPDATE chapterprogress SET chapter = :newChapter WHERE chapterprogress.user_uuid LIKE :user_uuid AND chapterProgress.story_uuid LIKE :story_uuid ")
-    fun changeChapter(user_uuid: String, story_uuid: String, newChapter: Int)
+    abstract fun changeChapter(user_uuid: String, story_uuid: String, newChapter: Int)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertChapterProgress(progress: ChapterProgress)

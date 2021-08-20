@@ -22,10 +22,29 @@ class UpdateReadChapterRoute
 @Location(READ_CHAPTERS)
 class GetALlReadChapterRoute
 
+@Location(GET_READ_CHAPTER_BY_UUID)
+class GetReadChapterByUUIDRoute
 
 fun Route.ReadChapterRoutes(
     readChapterService: ReadChapterService
 ) {
+
+    get<GetReadChapterByUUIDRoute> {
+        val uuid = try {
+            call.request.queryParameters["uuid"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:uuid is not present"))
+            return@get
+        }
+        try {
+            val friendship = readChapterService.getByUUID(uuid)!!
+            call.respond(HttpStatusCode.OK, friendship)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+        }
+    }
+
+
     authenticate("jwt") {
 
         post<UpdateReadChapterRoute> {

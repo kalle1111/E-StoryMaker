@@ -1,6 +1,7 @@
 package com.eStory.service
 
 import com.eStory.model.friendship.Friendship
+import com.eStory.model.story.Story
 import com.eStory.table.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -22,6 +23,7 @@ class FriendshipService {
      * 8. User deletes a friendship with a friend ==> deleteAFriendship()
      */
 
+    fun getByUUID(uuid: String): Friendship? = transaction { FriendshipEntity.findById(UUID.fromString(uuid))?.toDTO() }
     private fun getAll(): List<Friendship> = transaction { FriendshipEntity.all().map { it.toDTO() } }
     fun insertRequest(
         requesterUserName: String,

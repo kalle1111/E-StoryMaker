@@ -1,5 +1,6 @@
 package com.eStory.service
 
+import com.eStory.model.story.Story
 import com.eStory.model.tag.Tag
 import com.eStory.model.tag.TaggedStory
 import com.eStory.table.StoryEntity
@@ -26,6 +27,7 @@ class TagService {
         "political"
     )
 
+    fun getByUUID(uuid: String): Tag? = transaction { TagEntity.findById(UUID.fromString(uuid))?.toDTO() }
     fun getAllTags(): List<Tag> = transaction { TagEntity.all().map { it.toDTO() } }
 
     private fun insertTag(name: String): Tag = transaction { TagEntity.new { this.name = name }.toDTO() }

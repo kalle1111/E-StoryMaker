@@ -18,7 +18,7 @@ class GetTaggedStoriesRoute
 @Location(SEARCH_BY_Tag_STORIES)
 class GetStoriesByTag
 
-@Location(Tags)
+@Location(TAGS)
 class GetAllTagsRoute
 
 @Location(MAP_Story_To_Tag)
@@ -27,10 +27,28 @@ class MapStoryToTagRoute
 @Location(GET_ALL_TAGS_TO_STORY)
 class GetAllTagsToStoryRoute
 
+@Location(GET_TAG_BY_UUID)
+class GetTagByUUIDRoute
 
 fun Route.TagRoutes(
     tagService: TagService,
 ) {
+    get<GetTagByUUIDRoute> {
+        val uuid = try {
+            call.request.queryParameters["uuid"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:uuid is not present"))
+            return@get
+        }
+        try {
+            val tag = tagService.getByUUID(uuid)!!
+            call.respond(HttpStatusCode.OK, tag)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+        }
+    }
+
+
     authenticate("jwt") {
 
         get<GetTaggedStoriesRoute> {

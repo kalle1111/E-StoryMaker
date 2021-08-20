@@ -75,9 +75,74 @@ class RatedStoriesGetLastUpdateValuesRoute
 @Location(MY_STORIES_GET_LAST_UPDATE_VALUES)
 class GetLastUpdatesMyStoriesRoute
 
+@Location(GET_STORY_BY_UUID)
+class GetStoryByUUIDRoute
+
+@Location(GET_FAVORITE_STORY_BY_UUID)
+class GetFavoriteStoryByUUIDRoute
+
+@Location(GET_RATED_STORY_BY_UUID)
+class GetRatedStoryByUUIDRoute
+
 fun Route.StoryRoutes(
     storyService: StoryService
 ) {
+    get<GetStoryByUUIDRoute> {
+        val uuid = try {
+            call.request.queryParameters["uuid"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:uuid is not present"))
+            return@get
+        }
+        try {
+            val story = storyService.getByUUID(uuid)!!
+            call.respond(HttpStatusCode.OK, story)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+        }
+    }
+
+
+    get<GetRatedStoryByUUIDRoute> {
+        val uuid = try {
+            call.request.queryParameters["uuid"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:uuid is not present"))
+            return@get
+        }
+        try {
+            val reatedStory = storyService.getRatedStoryByUUID(uuid)!!
+            call.respond(HttpStatusCode.OK, reatedStory)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+        }
+    }
+
+
+
+    get<GetFavoriteStoryByUUIDRoute> {
+        val uuid = try {
+            call.request.queryParameters["uuid"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:uuid is not present"))
+            return@get
+        }
+        try {
+            val favoriteStory = storyService.getFavoriteStoryByUUID(uuid)!!
+            call.respond(HttpStatusCode.OK, favoriteStory)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+        }
+    }
+
+
+
+
+
+
+
+
+
     authenticate("jwt") {
 
         post<StoryCreateRoute> {

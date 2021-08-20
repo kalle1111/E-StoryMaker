@@ -41,11 +41,31 @@ class UsersGetLastUpdateRouteValuesRoute
 @Location(GET_USER_BY_USERNAME)
 class GetUserByUsernameRoute
 
+@Location(GET_USER_BY_UUID)
+class GetUserByUUIDRoute
+
 fun Route.UserRoutes(
     userService: UserService,
     jwtService: JwtService,
     hashFunction: (String) -> String
 ) {
+
+    get<GetUserByUUIDRoute> {
+        val uuid = try {
+            call.request.queryParameters["uuid"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:uuid is not present"))
+            return@get
+        }
+        try {
+            val user = userService.getByUUID(uuid)!!
+            call.respond(HttpStatusCode.OK, user)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+        }
+    }
+
+
     authenticate("jwt") {
         get<UserGetProfile> {
             try {

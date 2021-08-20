@@ -173,6 +173,9 @@ class StoryService {
         }
     }
 
+    fun getRatedStoryByUUID(uuid: String): RatedStory? =
+        transaction { RatedStoryEntity.findById(UUID.fromString(uuid))?.toDTO() }
+
     fun getAllRatedStories(): List<RatedStory> = transaction { RatedStoryEntity.all().map { it.toDTO() } }
 
     fun getFromMeRatedStories(userName: String): List<RatedStory> =
@@ -196,6 +199,9 @@ class StoryService {
             }.toDTO()
         }
     }
+
+    fun getFavoriteStoryByUUID(uuid: String): StoryAsFavorite? =
+        transaction { StoryAsFavoriteEntity.findById(UUID.fromString(uuid))?.toDTO() }
 
     fun getAllStoriesAsFavorite(): List<StoryAsFavorite> =
         transaction { StoryAsFavoriteEntity.all().map { it.toDTO() } }

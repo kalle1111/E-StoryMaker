@@ -54,10 +54,26 @@ class FriendshipCancelRequestRoute
 @Location(DELETE_FRIENDSHIPS)
 class FriendshipDeleteRoute
 
+@Location(GET_FRIENDSHIP_BY_UUID)
+class GetFriendshipByUUIDRoute
 
 fun Route.FriendshipRoutes(
     friendshipService: FriendshipService
 ) {
+    get<GetFriendshipByUUIDRoute> {
+        val uuid = try {
+            call.request.queryParameters["uuid"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:uuid is not present"))
+            return@get
+        }
+        try {
+            val friendship = friendshipService.getByUUID(uuid)!!
+            call.respond(HttpStatusCode.OK, friendship)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
+        }
+    }
     authenticate("jwt") {
 
         post<FriendshipRequestRoute> {

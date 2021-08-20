@@ -12,7 +12,7 @@ class ReadOverviewFragVM : ReadingVM() {
     private var storyRep: StoryRepository? = null
 
 
-    private var currentStory: Story = Story("0", "0", "Story_Title", "/Description/ \n\n\n /End Description/", "1.1.0000", 0, ByteArray(0), 4.0, 0)
+    private var currentStory: Story = Story("0", "0", "Story_Title", "/Description/ \n\n\n /End Description/", "1.1.0000", 0, ByteArray(0), 3.2, 0)
 
     fun setApplicationContext(application: Application){
         this.application = application
@@ -22,11 +22,16 @@ class ReadOverviewFragVM : ReadingVM() {
 
     private fun getStory(){
         if (storyRep != null && false){
-        //currentStory = storyRep.getOveriew()
+        //currentStory = storyRep.getOverview()
         TODO("WHERE IS THE ACCESS FUNCTION!???")
         }else{
             //THROW ERROR
         }
+    }
+
+    fun author(): String{
+        return "by " + "Max_Mustermann"
+        TODO("Get actual author: either through uuid...... or better yet, through direkt username as primary_key")
     }
 
     fun title(): String{
@@ -42,8 +47,12 @@ class ReadOverviewFragVM : ReadingVM() {
         return currentStory.description
     }
 
-    fun rating(): String{
-        return currentStory.avgRating.toString()
+    fun rating(): Float{
+        return currentStory.avgRating.toFloat()
+    }
+
+    fun ratingLabel(): String{
+        return rating().toString()
     }
 
 }

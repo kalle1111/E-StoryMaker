@@ -7,7 +7,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import hsfl.project.e_storymaker.R
-import hsfl.project.e_storymaker.databinding.MainActivityBinding
 import hsfl.project.e_storymaker.databinding.ReadingActivityBinding
 import hsfl.project.e_storymaker.views.fragments.ReadOverviewFragment
 

@@ -21,6 +21,7 @@
             android:text="@{viewmodel.title}"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -35,19 +36,34 @@
             app:layout_constraintTop_toBottomOf="@+id/textView10"
             app:srcCompat="@android:drawable/ic_delete" />
 
+        <Button
+            android:id="@+id/readOverviewAuthorB"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@{viewmodel.author}"
+            android:textAllCaps="false"
+            android:textColor="#4A86E8"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
         <TextView
             android:id="@+id/textView11"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="25dp"
             android:layout_marginEnd="25dp"
             android:background="#D6D6D6"
             android:text="@{viewmodel.tagList}"
             android:textAlignment="center"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+            app:layout_constraintTop_toBottomOf="@+id/readOverviewAuthorB" />
 
         <TextView
             android:id="@+id/textView12"
@@ -59,6 +75,7 @@
             android:background="#D6D6D6"
             android:text="@{viewmodel.description}"
             android:textAlignment="center"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView11" />
@@ -66,76 +83,44 @@
         <LinearLayout
             android:id="@+id/linearLayout3"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="45dp"
-            android:layout_marginEnd="25dp"
-            android:background="#D6D6D6"
+            android:layout_height="50dp"
+            android:layout_marginTop="50dp"
+            android:background="#0A25B8"
             android:orientation="horizontal"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView12">
 
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:background="#00FFFFFF"
-                android:padding="5dp"
-                android:src="@android:drawable/btn_star_big_off" />
-
-            <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:background="#00FFFFFF"
-                android:padding="5dp"
-                android:src="@android:drawable/btn_star_big_off" />
-
-            <ImageButton
-                android:id="@+id/imageButton3"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:background="#00FFFFFF"
-                android:padding="5dp"
-                android:src="@android:drawable/btn_star_big_off" />
-
-            <ImageButton
-                android:id="@+id/imageButton4"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:background="#00FFFFFF"
-                android:padding="5dp"
-                android:src="@android:drawable/btn_star_big_off" />
-
-            <ImageButton
-                android:id="@+id/imageButton5"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:background="#00FFFFFF"
-                android:padding="5dp"
-                android:src="@android:drawable/btn_star_big_off" />
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:numStars="5"
+                android:progressBackgroundTint="#9F9E9E"
+                android:progressTint="#E8FF00"
+                android:rating="@{viewmodel.rating}"
+                android:secondaryProgressTint="#E7F376"
+                android:stepSize="0.1" />
 
             <TextView
-                android:id="@+id/textView13"
-                android:layout_width="wrap_content"
+                android:id="@+id/readOverviewReviewLabel"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="15dp"
-                android:layout_weight="1"
-                android:text="@{viewmodel.rating}"
-                android:textAlignment="center" />
+                android:gravity="center_horizontal|fill_vertical"
+                android:text="@{viewmodel.ratingLabel()}"
 
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/read_Overview_ReviewsB"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+        <Button
+            android:id="@+id/button4"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout3"
             app:layout_constraintStart_toStartOf="@+id/linearLayout3"
@@ -153,5 +138,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

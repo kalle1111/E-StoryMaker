@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/ReviewRead">
+
+    <fragment
+        android:id="@+id/ReviewRead"
+        android:name="hsfl.project.e_storymaker.views.fragments.ReviewReadFragment"
+        android:label="Reviews Read"
+        tools:layout="@layout/review_read_fragment">
+
+        <action
+            android:id="@+id/action_ReviewRead_to_ReviewWrite"
+            app:destination="@id/ReviewWrite" />
+    </fragment>
+    <fragment
+        android:id="@+id/ReviewWrite"
+        android:name="hsfl.project.e_storymaker.views.fragments.ReviewWriteFragment"
+        android:label="Reviews Write"
+        tools:layout="@layout/review_write_fragment">
+
+        <action
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/ReviewRead" />
+    </fragment>
+</navigation>

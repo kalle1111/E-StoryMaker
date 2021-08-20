@@ -3,9 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/auth_activity.xml" value="0.1" />
+        <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/content_auth.xml" value="0.1" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/content_main.xml" value="0.18819655521783182" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/content_read.xml" value="0.33152173913043476" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/content_write.xml" value="0.33152173913043476" />
+        <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/fragment_first.xml" value="0.1591688089117395" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/library_fragment.xml" value="0.33695652173913043" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/login_fragment.xml" value="0.20208333333333334" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/main_activity.xml" value="0.33" />
@@ -16,6 +19,10 @@
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/read_review_fragment.xml" value="0.33152173913043476" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/reading_activity.xml" value="0.33" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/register_fragment.xml" value="0.23229166666666667" />
+        <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/review_activity.xml" value="0.25" />
+        <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/review_card.xml" value="0.5" />
+        <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/review_read_fragment.xml" value="0.32587719298245615" />
+        <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/review_write_fragment.xml" value="0.32587719298245615" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/story_finder_fragment.xml" value="0.33695652173913043" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/story_overview_card.xml" value="0.33" />
         <entry key="..\:/FH/Projekt/E-StoryMaker/app/src/main/res/layout/write_chapter_fragment.xml" value="0.203125" />

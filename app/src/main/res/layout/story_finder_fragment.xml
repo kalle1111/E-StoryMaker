@@ -43,10 +43,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginEnd="5dp"
                     android:textAlignment="center"
                     app:boxBackgroundColor="#00FFFFFF"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/storyFinder_searchB"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -63,11 +63,24 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageButton
+                    android:id="@+id/storyFinder_searchB"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:backgroundTint="#0A25B8"
+                    android:foregroundTint="#FFFFFF"
+                    android:src="?android:attr/actionModeWebSearchDrawable"
+                    android:tint="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textInputLayout" />
+
+                <ImageButton
                     android:id="@+id/arrow_button"
                     android:layout_width="100dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
+                    android:backgroundTint="#0A25B8"
                     android:src="@android:drawable/arrow_down_float"
                     app:layout_constraintBottom_toBottomOf="@id/fixed_layout"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -146,6 +159,22 @@
 
 
     </androidx.cardview.widget.CardView>
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView">
+
+        <LinearLayout
+            android:id="@+id/main_storyFinder_storyCont"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

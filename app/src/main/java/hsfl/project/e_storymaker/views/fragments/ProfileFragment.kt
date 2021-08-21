@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import hsfl.project.e_storymaker.viewModels.MainVM
 import hsfl.project.e_storymaker.R
 import hsfl.project.e_storymaker.databinding.ProfileFragmentBinding
@@ -49,7 +50,9 @@ class ProfileFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ProfileFragVM::class.java)
         viewModel.setApplicationContext((requireActivity() as MainActivity).application)
         binding.viewmodel = viewModel
-        (requireActivity() as MainActivity).supportActionBar!!.title = viewModel.username()
+
+        (requireActivity() as MainActivity).findViewById<TextView>(R.id.mToolbarTitle).setText(viewModel.username())
+    //(requireActivity() as MainActivity).supportActionBar!! .title = viewModel.username()
 
 
     }

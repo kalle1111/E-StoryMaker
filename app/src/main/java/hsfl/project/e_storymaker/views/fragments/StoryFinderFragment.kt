@@ -64,6 +64,8 @@ class StoryFinderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+
         binding.arrowButton.setOnClickListener{
             if (binding.expandableLayout.visibility == GONE){
                 binding.expandableLayout.visibility = VISIBLE
@@ -86,6 +88,7 @@ class StoryFinderFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(StoryFinderFragVM::class.java)
         viewModel.setApplicationContext((requireActivity() as MainActivity).application)
+        (requireActivity() as MainActivity).findViewById<TextView>(R.id.mToolbarTitle).setText("Story Finder")
         // TODO: Use the ViewModel
     }
 

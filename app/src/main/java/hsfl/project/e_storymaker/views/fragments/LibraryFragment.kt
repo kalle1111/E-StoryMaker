@@ -101,6 +101,8 @@ class LibraryFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (requireActivity() as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+
         binding.mainLibraryOriginalB.setOnClickListener{
             if (viewModel.libraryMode == 1){
                 viewModel.libraryMode = 0
@@ -156,6 +158,8 @@ class LibraryFragment : Fragment(), AdapterView.OnItemSelectedListener {
         viewModel = ViewModelProvider(this).get(LibraryFragVM::class.java)
         viewModel.setApplicationContext((requireActivity() as MainActivity).application)
         binding.viewmodel = viewModel
+
+        (requireActivity() as MainActivity).findViewById<TextView>(R.id.mToolbarTitle).setText(viewModel.username())
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {

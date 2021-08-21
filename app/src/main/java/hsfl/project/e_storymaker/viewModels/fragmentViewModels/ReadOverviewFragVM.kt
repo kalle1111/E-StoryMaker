@@ -23,6 +23,7 @@ class ReadOverviewFragVM : ReadingVM() {
     private fun getStory(){
         if (storyRep != null && false){
         //currentStory = storyRep.getOverview()
+            currentStory = //storyRep?.get
         TODO("WHERE IS THE ACCESS FUNCTION!???")
         }else{
             //THROW ERROR

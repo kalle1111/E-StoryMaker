@@ -1,19 +1,22 @@
 package hsfl.project.e_storymaker.views.fragments
 
+import android.media.Rating
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RatingBar
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import hsfl.project.e_storymaker.R
 import hsfl.project.e_storymaker.databinding.ReviewWriteFragmentBinding
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.ProfileFragVM
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.ReviewWriteFragVM
+import hsfl.project.e_storymaker.views.activities.ReviewActivity
 
 
-class ReviewWriteFragment : Fragment() {
+class ReviewWriteFragment : Fragment(), RatingBar.OnRatingBarChangeListener {
 
     private var _binding: ReviewWriteFragmentBinding? = null
 
@@ -46,12 +49,16 @@ class ReviewWriteFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ReviewWriteFragVM::class.java)
-        //viewmodel. set Context
+        viewModel.setApplicationContext((requireActivity() as ReviewActivity).application)
         //binding.viewmodel = viewmodel
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onRatingChanged(p0: RatingBar?, p1: Float, p2: Boolean) {
+        TODO("Not yet implemented")
     }
 }

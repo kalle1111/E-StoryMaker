@@ -5,6 +5,7 @@ import android.app.Application
 import android.util.Log
 import hsfl.project.e_storymaker.models.remoteDataSource.StoryRepository
 import hsfl.project.e_storymaker.models.remoteDataSource.UserRepository
+import hsfl.project.e_storymaker.roomDB.Entities.favoring.Favoring
 import hsfl.project.e_storymaker.roomDB.Entities.story.Story
 import hsfl.project.e_storymaker.viewModels.MainVM
 import kotlin.reflect.jvm.internal.impl.renderer.KeywordStringsGenerated
@@ -44,7 +45,7 @@ class LibraryFragVM : MainVM() {
 
                 1 -> currentStoryList = storyRep?.getMyStories("WHY thIS HERE")
 
-                //2 -> currentStoryList = storyRep?.getMyFavoriteStories("WHY")
+                //2 -> currentStoryList = Favoring() storyRep?.getMyFavoriteStories("Why")
 
                //3 -> currentStoryList = storyRep?.getMyRatedStories("WHY")
                 else -> Log.d("LibraryFrag", "Lib Mode Error")
@@ -56,7 +57,7 @@ class LibraryFragVM : MainVM() {
 
     fun username(): String{
         if (userRep != null && false){
-            return userRep?.getMyProfile("WHY")?.userName!!
+            return userRep?.getMyProfile("WHY")?.username!!
         }else{
             return "MAX_MUSTERMANNS's Library"
         }

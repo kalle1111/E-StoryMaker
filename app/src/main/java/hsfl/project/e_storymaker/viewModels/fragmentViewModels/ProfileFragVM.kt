@@ -14,7 +14,7 @@ class ProfileFragVM : MainVM() {
     private var userRep: UserRepository? = null
 
     private var currentUser: User = User("0", "MAX", "Mustermann", "MAX_MUSTERMANN", "/DESCR/\n...\n\n\n\n\n\n/END DESCR/",
-        "1.1.0000", "1234567890", 2)
+        "1.1.0000", 2)
 
 
     fun setApplicationContext(application: Application){
@@ -34,7 +34,7 @@ class ProfileFragVM : MainVM() {
     }
 
     fun username(): String{
-        return currentUser.userName
+        return currentUser.username
     }
 
     fun description(): String{
@@ -42,6 +42,6 @@ class ProfileFragVM : MainVM() {
     }
 
     fun storyButtonDescr(): String {
-        return currentUser.userName + "'s stories"
+        return currentUser.username + "'s stories"
     }
 }

@@ -49,6 +49,7 @@ class ProfileFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ProfileFragVM::class.java)
         viewModel.setApplicationContext((requireActivity() as MainActivity).application)
         binding.viewmodel = viewModel
+        (requireActivity() as MainActivity).supportActionBar!!.title = viewModel.username()
 
 
     }

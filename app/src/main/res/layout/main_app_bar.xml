@@ -9,15 +9,27 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.EStoryMaker.AppBarOverlay"
-        >
+        android:theme="@style/Theme.EStoryMaker.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/mainToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.EStoryMaker.PopupOverlay" />
+            app:popupTheme="@style/Theme.EStoryMaker.PopupOverlay"
+            >
+
+            <TextView
+                android:id="@+id/mToolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="TextView"
+                android:textSize="20sp" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -25,9 +25,6 @@ abstract class UserDao {
     @Query("SELECT * FROM user WHERE username LIKE :username LIMIT 1 ")
     abstract fun getUserByUsername(username: String):LiveData<User>
 
-    @Query("SELECT * FROM user WHERE user_uuid LIKE :user_uuid LIMIT 1 ")
-    abstract fun getUserByUuid(user_uuid : String): LiveData<User>
-
     fun insertWithTimestamp(user:User) {
         insertUser(user.apply{
             cachedTime = System.currentTimeMillis()

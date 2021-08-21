@@ -23,7 +23,7 @@ abstract class StoryDao {
     @Query("SELECT * FROM story WHERE story_uuid LIKE :story_uuid ")
     abstract fun getStoryByUuid(story_uuid : String): Story
 
-    @Query("SELECT author_uuid FROM story WHERE story_uuid LIKE :story_uuid LIMIT 1 ")
+    @Query("SELECT author_username FROM story WHERE story_uuid LIKE :story_uuid LIMIT 1 ")
     abstract fun getAuthorUuidByStoryUuid(story_uuid: String): LiveData<String>
 
     @Transaction

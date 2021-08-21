@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class ChapterProgress (
     @PrimaryKey val chapterProgress_uuid: String,
     val chapter: Int,
-    val user_uuid: String,
+    val user_username: String,
     val story_uuid: String,
     var cachedTime: Long
 )

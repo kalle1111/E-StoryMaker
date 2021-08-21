@@ -5,45 +5,51 @@ import android.content.Context
 
 class sharedPreferences {
 
-    fun saveJWT(activity: Activity, jwtToken: String){
-        val sharedPreferences = activity?.getPreferences(Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("JWT_TOKEN", jwtToken)
-        editor.apply()
-    }
+    companion object
+    {
+        private val USERNAME = "USERNAME"
+        private val JWT_TOKEN = "JWT_TOKEN"
 
-    fun saveUser_uuid(activity: Activity, user_uuid: String){
-        val sharedPreferences = activity?.getPreferences(Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("USER_UUID", user_uuid)
-        editor.apply()
-    }
+        fun saveJWT(activity: Activity, jwtToken: String){
+            val sharedPreferences = activity?.getPreferences(Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putString(JWT_TOKEN, jwtToken)
+            editor.apply()
+        }
 
-    fun getJWT(activity: Activity): String?{
+        fun saveUsername(activity: Activity, user_uuid: String){
+            val sharedPreferences = activity?.getPreferences(Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putString(USERNAME, user_uuid)
+            editor.apply()
+        }
 
-        val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE)
-        val savedJWT = sharedPrefs.getString("JWT_TOKEN", null)
+        fun getJWT(activity: Activity): String?{
 
-        return savedJWT
-    }
+            val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE)
+            val savedJWT = sharedPrefs.getString(JWT_TOKEN, null)
 
-    fun getUser_uuid(activity: Activity): String?{
+            return savedJWT
+        }
 
-        val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE)
-        val savedUUID = sharedPrefs.getString("USER_UUID", null)
+        fun getUsername(activity: Activity): String?{
 
-        return savedUUID
-    }
+            val sharedPrefs = activity?.getPreferences(Context.MODE_PRIVATE)
+            val savedUUID = sharedPrefs.getString(USERNAME, null)
 
-    fun clearPrefs(activity: Activity){
+            return savedUUID
+        }
 
-        val sharedPreferences = activity?.getPreferences(Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
+        fun clearPrefs(activity: Activity){
 
-        editor.remove("JWT_TOKEN")
-        editor.remove("USER_UUID")
+            val sharedPreferences = activity?.getPreferences(Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
 
-        editor.apply()
+            editor.remove(JWT_TOKEN)
+            editor.remove(USERNAME)
 
+            editor.apply()
+
+        }
     }
 }

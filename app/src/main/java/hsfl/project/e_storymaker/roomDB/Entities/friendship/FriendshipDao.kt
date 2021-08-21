@@ -10,30 +10,31 @@ import hsfl.project.e_storymaker.roomDB.Entities.user.User
 @Dao
 abstract class FriendshipDao {
 
-    @Query("SELECT req.* FROM friendship JOIN user AS req ON requester_uuid = req.user_uuid WHERE NOT isAccepted AND target_uuid = :user_uuid ")
-    abstract fun getRequestsToMe(user_uuid: String): LiveData<List<User>>
+    @Query("SELECT requester_username FROM friendship WHERE NOT isAccepted AND target_username = :user_username ")
+    abstract fun getRequestsToMe(user_username: String): LiveData<List<String>>
 
-    @Query("SELECT tar.* FROM friendship JOIN user AS tar ON target_uuid = tar.user_uuid WHERE NOT isAccepted AND requester_uuid = :user_uuid ")
-    abstract fun getMyRequests(user_uuid: String): LiveData<List<User>>
+    @Query("SELECT target_username FROM friendship WHERE NOT isAccepted AND requester_username = :user_username ")
+    abstract fun getMyRequests(user_username: String): LiveData<List<String>>
 
-    @Query("UPDATE friendship SET isAccepted = 1 WHERE NOT isAccepted AND requester_uuid = :friend_uuid AND target_uuid = :user_uuid ")
-    abstract fun acceptRequest(user_uuid: String, friend_uuid: String)
+    @Query("UPDATE friendship SET isAccepted = 1 WHERE NOT isAccepted AND requester_username = :friend_username AND target_username = :user_username ")
+    abstract fun acceptRequest(user_username: String, friend_username: String)
 
-    @Query("DELETE FROM friendship WHERE NOT isAccepted AND requester_uuid = :friend_uuid AND target_uuid = :user_uuid ")
-    abstract fun rejectRequest(user_uuid: String, friend_uuid: String)
+    @Query("DELETE FROM friendship WHERE NOT isAccepted AND requester_username = :friend_username AND target_username = :user_username ")
+    abstract fun rejectRequest(user_username: String, friend_username: String)
 
-    @Query("DELETE FROM friendship WHERE NOT friendship.isAccepted AND requester_uuid = :user_uuid AND target_uuid = :friend_uuid")
-    abstract fun cancelRequest(user_uuid: String, friend_uuid: String)
+    @Query("DELETE FROM friendship WHERE NOT friendship.isAccepted AND requester_username = :user_username AND target_username = :friend_username")
+    abstract fun cancelRequest(user_username: String, friend_username: String)
 
-    @Query("DELETE FROM friendship WHERE friendship.isAccepted AND (requester_uuid = :user_uuid AND target_uuid = :friend_uuid) OR (requester_uuid = :friend_uuid AND target_uuid = :user_uuid)")
-    abstract fun deleteFriendship(user_uuid: String, friend_uuid: String)
+    @Query("DELETE FROM friendship WHERE friendship.isAccepted AND (requester_username = :user_username AND target_username = :friend_username) OR (requester_username = :friend_username AND target_username = :user_username)")
+    abstract fun deleteFriendship(user_username: String, friend_username: String)
 
-    @Query("SELECT tar.* FROM friendship JOIN user AS tar ON target_uuid = tar.user_uuid WHERE friendship.isAccepted AND requester_uuid = :user_uuid")
-    abstract fun getFriendsAsRequester(user_uuid: String): List<User>
+    @Query("SELECT target_username FROM friendship WHERE friendship.isAccepted AND requester_username = :user_username")
+    abstract fun getFriendsAsRequester(user_username: String): List<String>
 
-    @Query("SELECT req.* FROM friendship JOIN user AS req ON requester_uuid = req.user_uuid WHERE friendship.isAccepted AND target_uuid = :user_uuid")
-    abstract fun getFriendsAsTarget(user_uuid: String): List<User>
+    @Query("SELECT requester_username FROM friendship WHERE friendship.isAccepted AND target_username = :user_username")
+    abstract fun getFriendsAsTarget(user_username: String): List<String>
 
+    /*
     fun getFriends(user_uuid: String): Set<User>{
 
         val requesterList = getFriendsAsRequester(user_uuid)
@@ -42,6 +43,8 @@ abstract class FriendshipDao {
 
         return (requesterList+targetList).toSet()
     }
+    */
+
 
     @Query("SELECT * FROM friendship WHERE friendship_uuid LIKE :friendship_uuid")
     abstract fun getFriendshipByUuid(friendship_uuid : String): Friendship

@@ -1,4 +1,4 @@
-package hsfl.project.e_chaptermaker.roomDB.Entities.chapter
+package hsfl.project.e_storymaker.roomDB.Entities.chapter
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

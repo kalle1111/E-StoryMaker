@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class Favoring (
     @PrimaryKey val favoring_uuid: String,
     val isFavoring: Boolean,
-    val user_uuid: String,
+    val user_username: String,
     val story_uuid: String,
     var cachedTime: Long
 )

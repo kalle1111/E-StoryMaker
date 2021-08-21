@@ -203,9 +203,11 @@ class StoryService {
     fun ratedStory_getAllLastUpdateValues(): List<Pair<String, Long>> =
         transaction { RatedStoryEntity.all().map { Pair(it.id.toString(), it.lastUpdate) } }
 
-    /*fun getLastUpdatesFromMeRatedStories(userName: String): List<Pair<String, Long>> = transaction {
-        StoryEntity.all().filter { it.userEntity.userName == userName }.map { Pair(it.id.toString(), it.lastUpdate) }
-    }*/
+    fun getLastUpdatesFromMeRatedStories(userName: String): List<Pair<String, Long>> = transaction {
+        RatedStoryEntity.all().filter { it.userEntity.userName == userName }
+            .map { Pair(it.id.toString(), it.lastUpdate) }
+    }
+
     /******************Story as Favorite *****************/
     fun setStoryAsFavorite(userName: String, storyId: String) {
         transaction {

@@ -86,6 +86,9 @@ class GetRatedStoryByUUIDRoute
 @Location(GET_RATED_STORY_BY_STORY_ID)
 class GetRatedStoryByStoryIdRoute
 
+@Location(FROM_RATED_STORIES_GET_LAST_UPDATES)
+class GetLastUpdatesFromMeRatedStories
+
 fun Route.StoryRoutes(
     storyService: StoryService
 ) {
@@ -474,5 +477,19 @@ fun Route.StoryRoutes(
         }
     }
 
+    get<GetLastUpdatesFromMeRatedStories> {
+        val userName = try {
+            call.request.queryParameters["username"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter: username is not present"))
+            return@get
+        }
+        try {
+            val lastUpdateValues = storyService.getLastUpdatesFromMeRatedStories(userName)
+            call.respond(HttpStatusCode.OK, lastUpdateValues)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
 
+        }
+    }
 }

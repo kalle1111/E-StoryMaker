@@ -227,6 +227,8 @@ class StoryService {
     fun getMyFavoriteStories(userName: String): List<StoryAsFavorite> =
         getAllStoriesAsFavorite().filter { it.user.userName == userName }
 
+    fun getLastUpdatesFromMyFavoriteStories(username : String): List<Pair<String, Long>> = getMyFavoriteStories(username).map { Pair(it.story.uuid, it.story.lastUpdate)}
+
     fun setStoryAsNotFavorite(userName: String, storyId: String): StoryAsFavorite {
         val storyAsFavorite = getMyFavoriteStories(userName).first { it.story.uuid.toString() == storyId }
         transaction {

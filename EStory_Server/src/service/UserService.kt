@@ -121,8 +121,9 @@ class UserService {
 
     /*****************get Date ***************/
 
-    fun getLastUpdateByUUID(uuid: String): Long? =
-        transaction { UserEntity.findById(UUID.fromString(uuid))?.lastUpdate }
+
+    fun getLastUpdateByUserName(userName: String): Long =
+        transaction { UserEntity.find { UsersTable.userName eq userName }.first().lastUpdate }
 
     fun getAllLastUpdateValues(): List<Pair<String, Long>> =
         transaction { UserEntity.all().map { Pair(it.userName, it.lastUpdate) } }

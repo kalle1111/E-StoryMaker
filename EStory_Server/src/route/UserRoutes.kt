@@ -32,7 +32,7 @@ class UserGetProfile
 @Location(UPDATE_PROFILE)
 class UpdateProfileRoute
 
-@Location(USER_GET_BY_ID_LAST_UPDATE)
+@Location(USER_GET_BY_USERNAME_LAST_UPDATE)
 class UserGetLastUpdateRoute
 
 @Location(USERS_GET_LAST_UPDATE_VALUES)
@@ -166,18 +166,15 @@ fun Route.UserRoutes(
 
 
 
-
-
-
     get<UserGetLastUpdateRoute> {
-        val uuid = try {
-            call.request.queryParameters["uuid"]!!
+        val username = try {
+            call.request.queryParameters["username"]!!
         } catch (e: Exception) {
-            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:uuid is not present"))
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:username is not present"))
             return@get
         }
         try {
-            val lastUpdate = userService.getLastUpdateByUUID(uuid)!!
+            val lastUpdate = userService.getLastUpdateByUserName(username)!!
             call.respond(HttpStatusCode.OK, lastUpdate)
         } catch (e: Exception) {
             call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))

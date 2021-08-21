@@ -16,7 +16,6 @@ object StoriesTable : UUIDTable() {
     val storyChapters = text("story")
     val averageRating = double("averageRating")
     val cover = binary("cover", Int.MAX_VALUE)
-
 }
 
 class StoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {

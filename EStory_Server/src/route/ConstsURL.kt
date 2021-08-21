@@ -19,7 +19,7 @@ const val REGISTER_REQUEST = "$USERS/register"
 const val LOGIN_REQUEST = "$USERS/login"
 const val GET_PROFILE = "$USERS/getMyProfile"
 const val UPDATE_PROFILE = "$USERS/updateProfile"
-const val USER_GET_BY_ID_LAST_UPDATE = "$USERS/getLastUpdateById"
+const val USER_GET_BY_USERNAME_LAST_UPDATE = "$USERS/getLastUpdateByUserName"  // username als Query parameter eingeben
 const val USERS_GET_LAST_UPDATE_VALUES = "$USERS/getLastUpdates"
 const val GET_USER_BY_USERNAME = "$USERS/getByUsername" // username als Query parameter eingeben
 const val GET_USER_BY_UUID = "$USERS/getByUUID" // uuid als Query parameter eingeben
@@ -64,6 +64,8 @@ const val MY_FAVORITE_STORIES = "$FAVORITE_STORIES/getMyFavoriteStories"
 const val SET_FAVORITE_STORIES = "$FAVORITE_STORIES/setFavorite"
 const val SET_AS_NOT_FAVORITE_STORIES = "$FAVORITE_STORIES/setNotFavorite"
 const val GET_FAVORITE_STORY_BY_UUID = "$FAVORITE_STORIES/getByUUID"  // uuid als Query parameter eingeben
+const val MY_FAVORITE_STORIES_GET_LAST_UPDATES = "$MY_FAVORITE_STORIES/getLastUpdates" // username als Query parameter eingeben
+
 
 const val FRIENDSHIPS = "$API_VERSION/friendships"
 const val MY_FRIENDSHIPS = "$FRIENDSHIPS/myFriendships"

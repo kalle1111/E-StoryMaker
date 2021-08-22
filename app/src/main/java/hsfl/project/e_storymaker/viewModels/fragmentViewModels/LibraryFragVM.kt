@@ -22,6 +22,7 @@ class LibraryFragVM : MainVM() {
         this.application = application
         storyRep = application?.let { StoryRepository.getStoryRepository(it) }!!
         userRep = application?.let { UserRepository.getStoryRepository(it) }!!
+
     }
 
     fun CurrentStoryList(): List<Story>{
@@ -41,12 +42,18 @@ class LibraryFragVM : MainVM() {
     fun getStories(){
         if (storyRep != null && false){
             when(libraryMode){
-                0 -> currentStoryList = storyRep?.getAllStories("2")
+                0 -> currentStoryList = storyRep?.getAllStories()
 
-                1 -> currentStoryList = storyRep?.getMyStories("WHY thIS HERE")
+                1 -> currentStoryList = storyRep?.getMyStories()
 
                 //2 -> currentStoryList = Favoring() storyRep?.getMyFavoriteStories("Why")
+                /*
+                3 -> {
+                    storyRep?.getMyRatedStories("why")?.forEach {
+                        currentStoryList = mutableListOf()
 
+                    }
+                } currentStoryList = storyRep?.getMyRatedStories("why")[0].story_uuid*/
                //3 -> currentStoryList = storyRep?.getMyRatedStories("WHY")
                 else -> Log.d("LibraryFrag", "Lib Mode Error")
             }
@@ -57,7 +64,7 @@ class LibraryFragVM : MainVM() {
 
     fun username(): String{
         if (userRep != null && false){
-            return userRep?.getMyProfile("WHY")?.username!!
+            return userRep?.getMyProfile()?.username!!
         }else{
             return "MAX_MUSTERMANNS's Library"
         }

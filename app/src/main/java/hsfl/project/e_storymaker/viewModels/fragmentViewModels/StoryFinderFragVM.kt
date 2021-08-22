@@ -30,7 +30,7 @@ class StoryFinderFragVM : MainVM() {
     fun getStories(){
         if (storyRep != null && false){
             //when() to detect different kinds of search!
-            currentStoryList = storyRep?.getAllStories("...")
+            currentStoryList = storyRep?.getAllStories()
         }else{
             //Throw error
         }

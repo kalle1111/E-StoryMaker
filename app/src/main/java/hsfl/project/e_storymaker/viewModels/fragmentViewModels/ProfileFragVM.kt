@@ -26,7 +26,8 @@ class ProfileFragVM : MainVM() {
     private fun getUser(user: String?){
         if (userRep != null && false){
             if (user == null){
-                currentUser = userRep?.getMyProfile("MOVE THIS TO BACKED!")!!
+                currentUser = userRep?.getMyProfile()!!
+
             }else{
                 //currentUser = userRep?.GetUserByUsername(username)
             }

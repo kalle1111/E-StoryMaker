@@ -23,7 +23,7 @@ class WriteDetailsFragVM() : WritingVM() {
 
     fun createStory(image: ByteArray?, title: String, desciption: String): Boolean {
         Log.d("WriteDetails", "title: " + title + " ; " + "descr: " + desciption)
-        storyRep?.createStory("a", StoryRequest(title, desciption))
+        storyRep?.createStory(StoryRequest(title, desciption, "????", ByteArray(2)))
         Log.d("WriteDetails", "MODEL REQUEST SENT")
 
         return true

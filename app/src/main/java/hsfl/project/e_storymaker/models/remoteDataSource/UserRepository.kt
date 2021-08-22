@@ -32,7 +32,7 @@ class UserRepository(application: Application) {
 
     private final val TAG = "User Rep"
     private val repository: AppRepository
-
+    private val application: Application = application
 
     val userDao: UserDao
     val storyDao: StoryDao
@@ -60,7 +60,7 @@ class UserRepository(application: Application) {
     }
 
     /*********User Related Functions*********/
-    fun registerRequest(registerRequest: RegisterRequest, activity: Activity): Boolean = runBlocking {
+    fun registerRequest(registerRequest: RegisterRequest): Boolean = runBlocking {
         return@runBlocking withContext(Dispatchers.IO) {
             val client = getHttpClient()
             try {
@@ -73,8 +73,8 @@ class UserRepository(application: Application) {
                 val webResponse = Gson().fromJson(stringBody, WebResponse::class.java)
                 //jwt Token
                 if(webResponse.success){
-                    sharedPreferences.saveJWT(activity, webResponse.message)
-                    sharedPreferences.saveUsername(activity, registerRequest.userName)
+                    sharedPreferences.saveJWT(application, webResponse.message)
+                    sharedPreferences.saveUsername(application, registerRequest.userName)
                 }
                 client.close()
                 webResponse.success
@@ -87,7 +87,7 @@ class UserRepository(application: Application) {
     }
 
 
-    fun loginRequest(loginRequest: LoginRequest, activity: Activity): Boolean = runBlocking {
+    fun loginRequest(loginRequest: LoginRequest): Boolean = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
             val client = getHttpClient()
             try {
@@ -100,8 +100,8 @@ class UserRepository(application: Application) {
                 val webResponse = Gson().fromJson(stringBody, WebResponse::class.java)
                 //jwt Token
                 if(webResponse.success){
-                    sharedPreferences.saveJWT(activity, webResponse.message)
-                    sharedPreferences.saveUsername(activity, loginRequest.userName)
+                    sharedPreferences.saveJWT(application, webResponse.message)
+                    sharedPreferences.saveUsername(application, loginRequest.userName)
                 }
                 webResponse.success
             } catch (e: Exception){
@@ -187,17 +187,17 @@ class UserRepository(application: Application) {
     }
 
 
-    fun getMyProfile(activity: Activity): hsfl.project.e_storymaker.roomDB.Entities.user.User? = runBlocking {
+    fun getMyProfile(): hsfl.project.e_storymaker.roomDB.Entities.user.User? = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
             val username: String
             val authToken: String
-            if(sharedPreferences.getUsername(activity = activity) != null){
-                username = sharedPreferences.getUsername(activity)!!
+            if(sharedPreferences.getUsername(application) != null){
+                username = sharedPreferences.getUsername(application)!!
             } else {
                 return@withContext null
             }
-            if(sharedPreferences.getJWT(activity) != null){
-                authToken = sharedPreferences.getJWT(activity)!!
+            if(sharedPreferences.getJWT(application) != null){
+                authToken = sharedPreferences.getJWT(application)!!
             } else {
                 return@withContext null
             }

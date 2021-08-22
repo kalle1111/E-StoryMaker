@@ -24,6 +24,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.utils.io.concurrent.*
+import io.reactivex.internal.util.AppendOnlyLinkedArrayList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.withTestContext
@@ -35,6 +36,7 @@ class StoryRepository(application: Application){
     private final val TAG = "Story Rep"
 
     private val repository: AppRepository
+    private val application: Application = application
 
     val userDao: UserDao
     val storyDao: StoryDao
@@ -123,10 +125,10 @@ class StoryRepository(application: Application){
         }
     }
 
-    fun getMyStories(activity: Activity): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
+    fun getMyStories(): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO) {
-            val username = sharedPreferences.getUsername(activity)!!
-            val authToken = sharedPreferences.getJWT(activity)!!
+            val username = sharedPreferences.getUsername(application)!!
+            val authToken = sharedPreferences.getJWT(application)!!
             val storiesWithTimestamp = getMyStoriesTimestamp(username, authToken)
             val dbStories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.story.Story>()
             storiesWithTimestamp.map {
@@ -172,8 +174,8 @@ class StoryRepository(application: Application){
         }
     }
 
-    fun createStory(storyRequest: StoryRequest, activity: Activity): Boolean = runBlocking {
-        val authToken = sharedPreferences.getJWT(activity = activity)!!
+    fun createStory(storyRequest: StoryRequest): Boolean = runBlocking {
+        val authToken = sharedPreferences.getJWT(application)!!
         val client = getAuthHttpClient(authToken)
         try {
             val response: HttpResponse = client.post(CREATE_STORIES){
@@ -190,9 +192,9 @@ class StoryRepository(application: Application){
         }
     }
 
-    fun updateStory(updatedStory: UpdateStoryRequest, activity: Activity): Boolean = runBlocking {
+    fun updateStory(updatedStory: UpdateStoryRequest): Boolean = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
-            val authToken = sharedPreferences.getJWT(activity)!!
+            val authToken = sharedPreferences.getJWT(application)!!
             val client = getAuthHttpClient(authToken)
             try {
                 val response: HttpResponse = client.post(UPDATE_STORIES){
@@ -210,9 +212,9 @@ class StoryRepository(application: Application){
         }
     }
 
-    fun deleteStory(deletedStory: hsfl.project.e_storymaker.roomDB.Entities.story.Story, activity: Activity): Boolean = runBlocking {
+    fun deleteStory(deletedStory: hsfl.project.e_storymaker.roomDB.Entities.story.Story): Boolean = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
-            val authToken = sharedPreferences.getJWT(activity)!!
+            val authToken = sharedPreferences.getJWT(application)!!
             val client = getAuthHttpClient(authToken)
             try {
                 val response: HttpResponse = client.delete(DELETE_STORIES){
@@ -312,9 +314,9 @@ class StoryRepository(application: Application){
     }
 
     /*********Rate Story Related Functions*********/
-    fun rateStory(rateStoryRequest: RateStoryRequest, activity: Activity): Boolean = runBlocking {
+    fun rateStory(rateStoryRequest: RateStoryRequest): Boolean = runBlocking {
         withContext(Dispatchers.IO){
-            val authToken = sharedPreferences.getJWT(activity)!!
+            val authToken = sharedPreferences.getJWT(application)!!
             val client = getAuthHttpClient(authToken)
             try {
                 val response: HttpResponse = client.post(RATE_STORIES){
@@ -332,9 +334,9 @@ class StoryRepository(application: Application){
         }
     }
 
-    fun updateRateStory(rateStoryRequest: RateStoryRequest, activity: Activity): Boolean = runBlocking {
+    fun updateRateStory(rateStoryRequest: RateStoryRequest): Boolean = runBlocking {
         withContext(Dispatchers.IO){
-            val authToken = sharedPreferences.getJWT(activity)!!
+            val authToken = sharedPreferences.getJWT(application)!!
             val client = getAuthHttpClient(authToken)
             try {
                 val response: HttpResponse = client.post(UPDATE_RATED_STORIES){
@@ -416,10 +418,10 @@ class StoryRepository(application: Application){
         }
     }
 
-    fun getMyRatedStories(activity: Activity): List<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = runBlocking {
+    fun getMyRatedStories(): List<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
-            val authToken = sharedPreferences.getJWT(activity)!!
-            val username = sharedPreferences.getUsername(activity)!!
+            val authToken = sharedPreferences.getJWT(application)!!
+            val username = sharedPreferences.getUsername(application)!!
         val ratedStoriesTimestamp = getMyRatedStoriesTimestamp(authToken, username)
         val dbRatedStories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating>()
         ratedStoriesTimestamp.map {
@@ -467,10 +469,10 @@ class StoryRepository(application: Application){
     }
 
     /*********Favorite Story Related Functions*********/
-    fun getMyFavoriteStories(activity: Activity): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
+    fun getMyFavoriteStories(): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
-            val authToken = sharedPreferences.getJWT(activity)!!
-            val username = sharedPreferences.getUsername(activity)!!
+            val authToken = sharedPreferences.getJWT(application)!!
+            val username = sharedPreferences.getUsername(application)!!
             val favoriteStoriesTimestamp = getMyFavoriteStoriesTimestamp(authToken, username)
             compareStoriesWithTimestamp(favoriteStoriesTimestamp, authToken)
         }
@@ -507,8 +509,8 @@ class StoryRepository(application: Application){
         }
     }
 
-    fun setStoryAsNotFavorite(storyAsFavoriteRequest: StoryAsFavoriteRequest, activity: Activity): Boolean = runBlocking {
-        val authToken = sharedPreferences.getJWT(activity)!!
+    fun setStoryAsNotFavorite(storyAsFavoriteRequest: StoryAsFavoriteRequest): Boolean = runBlocking {
+        val authToken = sharedPreferences.getJWT(application)!!
         val client = getAuthHttpClient(authToken)
         try {
             val response: HttpResponse = client.post(SET_AS_NOT_FAVORITE_STORIES){

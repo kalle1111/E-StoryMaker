@@ -17,15 +17,19 @@ class ProfileFragVM : MainVM() {
         "1.1.0000", "why?", 2)
 
 
-    fun setApplicationContext(application: Application){
+    fun setApplicationContext(application: Application, user: String?){
         this.applicaion = applicaion
         userRep = application?.let { UserRepository.getStoryRepository(it) }!!
-        getUser()
+        getUser(user)
     }
 
-    private fun getUser(){
+    private fun getUser(user: String?){
         if (userRep != null && false){
-            currentUser = userRep?.getMyProfile("MOVE THIS TO BACKED!")!!
+            if (user == null){
+                currentUser = userRep?.getMyProfile("MOVE THIS TO BACKED!")!!
+            }else{
+                //currentUser = userRep?.GetUserByUsername(username)
+            }
             TODO(" Move this to backend!")
         }else{
             //THrow ERROR

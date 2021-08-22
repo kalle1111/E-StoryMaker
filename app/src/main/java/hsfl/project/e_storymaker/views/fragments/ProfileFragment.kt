@@ -3,6 +3,7 @@ package hsfl.project.e_storymaker.views.fragments
 import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,8 +48,11 @@ class ProfileFragment : Fragment() {
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        val userToView: String? = (requireActivity() as MainActivity).intent.extras?.getString("userToView")
+        Log.d("ProfileFrag", "Profile for user: " + userToView)
         viewModel = ViewModelProvider(this).get(ProfileFragVM::class.java)
-        viewModel.setApplicationContext((requireActivity() as MainActivity).application)
+        viewModel.setApplicationContext((requireActivity() as MainActivity).application, userToView)
         binding.viewmodel = viewModel
 
         (requireActivity() as MainActivity).findViewById<TextView>(R.id.mToolbarTitle).setText(viewModel.username())

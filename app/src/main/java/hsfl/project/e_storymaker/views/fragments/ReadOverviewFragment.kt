@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import hsfl.project.e_storymaker.R
 import hsfl.project.e_storymaker.databinding.ReadOverviewFragmentBinding
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.ReadOverviewFragVM
+import hsfl.project.e_storymaker.views.activities.MainActivity
 import hsfl.project.e_storymaker.views.activities.ReadingActivity
 import hsfl.project.e_storymaker.views.activities.ReviewActivity
 
@@ -48,12 +49,20 @@ class ReadOverviewFragment : Fragment(), RatingBar.OnRatingBarChangeListener {
             startActivity(intent)
         }
 
+        binding.readOverviewAuthorB.setOnClickListener {
+            val intent = Intent((requireActivity() as ReadingActivity), MainActivity::class.java)
+            intent.putExtra("userToView", viewModel.username())
+            startActivity(intent)
+            (requireActivity() as ReadingActivity).finish()
+        }
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ReadOverviewFragVM::class.java)
-        viewModel.setApplicationContext((requireActivity() as ReadingActivity).application)
+        val storyID: String? = (requireActivity() as ReadingActivity).intent.extras?.getString("storyID")
+        viewModel.setApplicationContext((requireActivity() as ReadingActivity).application, storyID)
         binding.viewmodel = viewModel
         (requireActivity() as ReadingActivity).supportActionBar!!.title = viewModel.title()
 

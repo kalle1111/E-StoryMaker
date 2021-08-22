@@ -19,6 +19,7 @@ import hsfl.project.e_storymaker.databinding.LibraryFragmentBinding
 import hsfl.project.e_storymaker.roomDB.Entities.story.Story
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.LibraryFragVM
 import hsfl.project.e_storymaker.views.activities.MainActivity
+import hsfl.project.e_storymaker.views.activities.ReadingActivity
 import hsfl.project.e_storymaker.views.activities.WritingActivity
 import java.util.zip.Inflater
 
@@ -59,6 +60,13 @@ class LibraryFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     expL.visibility = GONE
                     //Log.d("LibraryFrag", "Toggled VIS OFF")
                 }
+            }
+
+            val storyUUID: String = it.story_uuid
+            cardLayout.findViewById<Button>(R.id.storyCard_readB).setOnClickListener {
+                val intent = Intent((requireActivity() as MainActivity), ReadingActivity::class.java)
+                intent.putExtra("storyID", storyUUID)
+                startActivity(intent)
             }
 
             binding.mainLibraryStoryCont.addView(cardLayout)

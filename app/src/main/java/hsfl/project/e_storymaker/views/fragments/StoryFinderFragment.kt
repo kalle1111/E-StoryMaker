@@ -1,5 +1,6 @@
 package hsfl.project.e_storymaker.views.fragments
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -19,6 +21,7 @@ import hsfl.project.e_storymaker.databinding.StoryFinderFragmentBinding
 import hsfl.project.e_storymaker.roomDB.Entities.story.Story
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.StoryFinderFragVM
 import hsfl.project.e_storymaker.views.activities.MainActivity
+import hsfl.project.e_storymaker.views.activities.ReadingActivity
 
 class StoryFinderFragment : Fragment() {
 
@@ -55,6 +58,13 @@ class StoryFinderFragment : Fragment() {
                     expL.visibility = GONE
                     //Log.d("LibraryFrag", "Toggled VIS OFF")
                 }
+            }
+
+            val storyUUID: String = it.story_uuid
+            cardLayout.findViewById<Button>(R.id.storyCard_readB).setOnClickListener {
+                val intent = Intent((requireActivity() as MainActivity), ReadingActivity::class.java)
+                intent.putExtra("storyID", storyUUID)
+                startActivity(intent)
             }
 
             binding.mainStoryFinderStoryCont.addView(cardLayout)

@@ -12,16 +12,21 @@ class ReadOverviewFragVM : ReadingVM() {
     private var storyRep: StoryRepository? = null
 
 
-    private var currentStory: Story = Story("0", "0", "Story_Title", "/Description/ \n\n\n /End Description/", "1.1.0000", 0, ByteArray(0), 3.2, 0)
+    private var currentStory: Story = Story("0", "Max_Mustermann", "Story_Title", "/Description/ \n\n\n /End Description/", "1.1.0000", 0, ByteArray(0), 3.2, 0)
 
-    fun setApplicationContext(application: Application){
+    fun setApplicationContext(application: Application, storyID: String?){
         this.application = application
         storyRep = application?.let { StoryRepository.getStoryRepository(it) }!!
-        getStory()
+        getStory(storyID)
     }
 
-    private fun getStory(){
+    private fun getStory(storyID: String?){
         if (storyRep != null && false){
+            if (storyID != null){
+                //currentStory = storyRep?.getStory(uuid)
+            }else{
+                //Throw Error
+            }
         //currentStory = storyRep.getOverview()
             currentStory = //storyRep?.get
         TODO("WHERE IS THE ACCESS FUNCTION!???")
@@ -30,9 +35,12 @@ class ReadOverviewFragVM : ReadingVM() {
         }
     }
 
+    fun username(): String{
+        return currentStory.author_username
+    }
+
     fun author(): String{
-        return "by " + "Max_Mustermann"
-        TODO("Get actual author: either through uuid...... or better yet, through direkt username as primary_key")
+        return "by " + currentStory.author_username
     }
 
     fun title(): String{

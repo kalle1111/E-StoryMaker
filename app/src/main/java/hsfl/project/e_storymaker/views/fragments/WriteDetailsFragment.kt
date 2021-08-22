@@ -37,7 +37,7 @@ class WriteDetailsFragment : Fragment() {
 
         binding.button8.setOnClickListener {
 
-            if (viewModel.createStory(null, binding.writeDetailsTitle.text.toString(),binding.writeDetailsDescription.text.toString())){
+            if (viewModel.createStory(null, binding.writeDetailsTitle.text.toString(),binding.writeDetailsDescription.text.toString(), "")){
                 findNavController().navigate(R.id.action_WriteOverview_to_WriteChapter)
             }else{
                 //TODO("SHOW THE USER AN ERROR MESSAGE")

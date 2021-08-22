@@ -9,4 +9,6 @@ data class User(
     val userName: String,
     val description:String,
     val birthday: String,
-    val password: String)
+    val hashPassword: String,
+    val image: ByteArray,
+    val lastUpdate: String)

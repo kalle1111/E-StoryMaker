@@ -23,7 +23,13 @@ abstract class UserDao {
     abstract fun getUserByName(firstname: String, lastname: String): LiveData<User>
 
     @Query("SELECT * FROM user WHERE username LIKE :username LIMIT 1 ")
-    abstract fun getUserByUsername(username: String):LiveData<User>
+    abstract fun getUserByUsername(username: String): User
+
+    @Query("SELECT EXISTS(SELECT * FROM user WHERE username = :username)")
+    abstract fun rowExistByUsername(username : String) : Boolean
+
+//    @Query("SELECT EXISTS(SELECT * FROM user WHERE user_uuid = :uuid)")
+//    abstract fun rowExistByUUID(uuid : String) : Boolean
 
     fun insertWithTimestamp(user:User) {
         insertUser(user.apply{

@@ -10,13 +10,13 @@ import hsfl.project.e_storymaker.roomDB.Entities.tag.Tag
 abstract class RatingDao {
 
     @Query("SELECT * FROM rating WHERE rating.user_username LIKE :user_uuid ")
-    abstract fun getRatingsOfUser(user_uuid: String): LiveData<List<Rating>>
+    abstract fun getRatingsOfUser(user_uuid: String):List<Rating>
 
     @Query("SELECT * FROM rating WHERE rating.story_uuid LIKE :story_uuid ")
-    abstract fun getRatingsOfStory(story_uuid: String): LiveData<List<Rating>>
+    abstract fun getRatingsOfStory(story_uuid: String): List<Rating>
 
     @Query("SELECT * FROM rating WHERE rating.user_username LIKE :user_uuid AND rating.story_uuid LIKE :story_uuid ")
-    abstract fun getUsersRatingOfStory(user_uuid: String, story_uuid: String): LiveData<List<Rating>>
+    abstract fun getUsersRatingOfStory(user_uuid: String, story_uuid: String): List<Rating>
 
     @Query("UPDATE rating SET rating_overall = :newRating_overall, rating_style = :newRating_style, rating_story = :newRating_story, rating_grammar = :newRating_grammar , rating_character = :newRating_character  WHERE rating.user_username LIKE :user_uuid AND rating.story_uuid LIKE :story_uuid ")
     abstract fun changeRating(user_uuid: String, story_uuid: String, newRating_overall: Int, newRating_style: Int, newRating_story: Int, newRating_grammar: Int, newRating_character: Int)
@@ -26,6 +26,9 @@ abstract class RatingDao {
 
     @Query("SELECT * FROM rating WHERE rating_uuid LIKE :rating_uuid")
     abstract fun getRatingByUuid(rating_uuid : String): Rating
+
+    @Query("SELECT EXISTS(SELECT * FROM rating WHERE rating_uuid = :uuid)")
+    abstract fun rowExistByUUID(uuid : String) : Boolean
 
     @Transaction
     open fun getRatingsByUuids(rating_uuids : List<String>): List<Rating>{

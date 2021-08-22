@@ -9,7 +9,7 @@ import hsfl.project.e_storymaker.roomDB.Entities.tag.Tag
 abstract class FavoringDao {
 
     @Query("SELECT * FROM favoring WHERE favoring.user_username LIKE :user_username")
-    abstract fun getFavoritesOfUser(user_username: String): LiveData<List<Favoring>>
+    abstract fun getFavoritesOfUser(user_username: String): List<Favoring>
 
     @Query("SELECT * FROM favoring WHERE favoring_uuid LIKE :favorite_uuid")
     abstract fun getFavoritesByUuid(favorite_uuid : String): Favoring

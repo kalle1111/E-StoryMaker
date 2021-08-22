@@ -1,5 +1,6 @@
 package hsfl.project.e_storymaker.models.remoteDataSource
 
+import android.app.Activity
 import android.app.Application
 import android.util.Log
 import com.google.gson.Gson
@@ -12,6 +13,7 @@ import hsfl.project.e_storymaker.roomDB.Entities.friendship.FriendshipDao
 import hsfl.project.e_storymaker.roomDB.Entities.rating.RatingDao
 import hsfl.project.e_storymaker.roomDB.Entities.story.StoryDao
 import hsfl.project.e_storymaker.roomDB.Entities.user.UserDao
+import hsfl.project.e_storymaker.sharedPreferences
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
@@ -19,13 +21,18 @@ import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.utils.io.concurrent.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import java.util.*
 
 
 class UserRepository(application: Application) {
 
     private final val TAG = "User Rep"
-    private val repository:AppRepository
+    private val repository: AppRepository
+
 
     val userDao: UserDao
     val storyDao: StoryDao
@@ -46,78 +53,197 @@ class UserRepository(application: Application) {
         favoringDao = database.favoringDao()
         ratingDao = database.ratingDao()
 
-        repository = AppRepository(userDao, storyDao, friendshipDao,
-            chapterProgressDao, favoringDao, ratingDao)
+        repository = AppRepository(
+            userDao, storyDao, friendshipDao,
+            chapterProgressDao, favoringDao, ratingDao
+        )
     }
 
     /*********User Related Functions*********/
-    fun registerRequest(registerRequest: RegisterRequest): Boolean = runBlocking {
-        val client = getHttpClient()
-        try {
-            val response: HttpResponse = client.post(REGISTER_REQUEST){
-                contentType(ContentType.Application.Json)
-                body = registerRequest
+    fun registerRequest(registerRequest: RegisterRequest, activity: Activity): Boolean = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO) {
+            val client = getHttpClient()
+            try {
+                val response: HttpResponse = client.post(REGISTER_REQUEST) {
+                    contentType(ContentType.Application.Json)
+                    body = registerRequest
+                }
+                val stringBody: String = response.receive()
+                Log.d(TAG, ("RegisterResponse: " + stringBody))
+                val webResponse = Gson().fromJson(stringBody, WebResponse::class.java)
+                //jwt Token
+                if(webResponse.success){
+                    sharedPreferences.saveJWT(activity, webResponse.message)
+                    sharedPreferences.saveUsername(activity, registerRequest.userName)
+                }
+                client.close()
+                webResponse.success
+            } catch (e: Exception) {
+                client.close()
+                Log.d(TAG, e.toString());
+                false
             }
-            val stringBody: String = response.receive()
-            Log.d(TAG, ("RegisterResponse: " + stringBody))
-            val webResponse = Gson().fromJson(stringBody, WebResponse::class.java)
-            //jwt Token
-            Log.d(TAG, webResponse.message)
-            client.close()
-            return@runBlocking webResponse.success
-        } catch (e: Exception){
-            Log.d(TAG, "HTTP Post failed: $e")
-
-            client.close()
-            return@runBlocking false
         }
     }
 
-    public fun test(): String{
-        return "TEST_USER_GG"
-    }
-    fun loginRequest(loginRequest: LoginRequest): Boolean = runBlocking {
-        val client = getHttpClient()
-        try {
-            val response: HttpResponse = client.post(LOGIN_REQUEST){
-                contentType(ContentType.Application.Json)
-                body = loginRequest
+
+    fun loginRequest(loginRequest: LoginRequest, activity: Activity): Boolean = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val client = getHttpClient()
+            try {
+                val response: HttpResponse = client.post(LOGIN_REQUEST){
+                    contentType(ContentType.Application.Json)
+                    body = loginRequest
+                }
+                val stringBody: String = response.receive()
+                client.close()
+                val webResponse = Gson().fromJson(stringBody, WebResponse::class.java)
+                //jwt Token
+                if(webResponse.success){
+                    sharedPreferences.saveJWT(activity, webResponse.message)
+                    sharedPreferences.saveUsername(activity, loginRequest.userName)
+                }
+                webResponse.success
+            } catch (e: Exception){
+                client.close()
+                false
             }
-            val stringBody: String = response.receive()
-            client.close()
-            val webResponse = Gson().fromJson(stringBody, WebResponse::class.java)
-            //jwt Token
-            Log.d(TAG, webResponse.message)
-            return@runBlocking webResponse.success
-        } catch (e: Exception){
-            client.close()
-            return@runBlocking false
         }
     }
 
     fun getAllUsers(): List<hsfl.project.e_storymaker.roomDB.Entities.user.User> = runBlocking {
-        val client = HttpClient(CIO)
-        val response: HttpResponse = client.get(GET_ALL_USERS)
-        val jsonString: String = response.receive()
-        println(jsonString)
-        client.close()
-        val users = Gson().fromJson(jsonString, Array<User>::class.java).toList()
-        val dbUsers = users.map {
-            convertWebserviceUserToDBUser(it)
+        return@runBlocking withContext(Dispatchers.IO) {
+            val usersWithTimestamp = getAllUsersTimestamp()
+            val dbUsers: MutableList<hsfl.project.e_storymaker.roomDB.Entities.user.User> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.user.User>()
+            usersWithTimestamp.map{
+                if(!userDao.rowExistByUsername(it.first)){
+                    //Insert User
+                    val user = getUserByUserName(it.first)
+                    if (user != null) {
+                        userDao.insertWithTimestamp(user)
+                        dbUsers.add(userDao.getUserByUsername(user.username))
+                    } else {
+
+                    }
+                } else {
+                    if(userDao.getUserByUsername(it.first).cachedTime > it.second){
+                        //Den User anfordern und in der Datenbank speichern
+                        val user = getUserByUserName(it.first)
+                        if (user != null) {
+                            userDao.insertWithTimestamp(user)
+                            dbUsers.add(userDao.getUserByUsername(user.username))
+                        } else {
+
+                        }
+                    } else {
+                        dbUsers.add(userDao.getUserByUsername(it.first))
+                    }
+                }
+
+            }
+            dbUsers
         }
-        caheAllUsers(dbUsers);
-        return@runBlocking dbUsers
     }
 
-    fun getMyProfile(authToken: String): hsfl.project.e_storymaker.roomDB.Entities.user.User = runBlocking {
-        val client = getAuthHttpClient(authToken)
-        val response: HttpResponse = client.get(GET_PROFILE)
+    private fun getUserByUsernameTimestamp(username: String): String = runBlocking{
+        val client = HttpClient(CIO)
+        val response: HttpResponse = client.get(){
+            parameter("username", username)
+        }
         val jsonString: String = response.receive()
+        Log.d(TAG, "jsonString :" + jsonString)
         client.close()
-        val myProfile = Gson().fromJson(jsonString, User::class.java)
-        return@runBlocking convertWebserviceUserToDBUser(myProfile)
+        val usersLastUpdate = Gson().fromJson(jsonString, String::class.java).toList()
+        Log.d(TAG, "usersLastUpdate: " + usersLastUpdate.toString())
+        return@runBlocking usersLastUpdate.toCharArray().concatToString()
     }
 
+    private fun getAllUsersTimestamp() = runBlocking {
+        val client = HttpClient(CIO)
+        val response: HttpResponse = client.get(USERS_GET_LAST_UPDATE_VALUES)
+        val jsonString: String = response.receive()
+        Log.d(TAG, jsonString)
+        client.close()
+        val usersPairLastUpdate = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
+        return@runBlocking usersPairLastUpdate
+    }
+
+    private fun getUserByUserName(username: String): hsfl.project.e_storymaker.roomDB.Entities.user.User? = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val client = getHttpClient()
+            try {
+                val response: HttpResponse = client.delete(GET_USER_BY_USERNAME){
+                    parameter("username", username)
+                }
+                val stringBody: String = response.receive()
+                client.close()
+                val user: User = Gson().fromJson(stringBody, User::class.java)
+                convertWebserviceUserToDBUser(user)
+            }catch (e: Exception){
+                client.close()
+                null
+            }
+        }
+    }
+
+
+    fun getMyProfile(activity: Activity): hsfl.project.e_storymaker.roomDB.Entities.user.User? = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val username: String
+            val authToken: String
+            if(sharedPreferences.getUsername(activity = activity) != null){
+                username = sharedPreferences.getUsername(activity)!!
+            } else {
+                return@withContext null
+            }
+            if(sharedPreferences.getJWT(activity) != null){
+                authToken = sharedPreferences.getJWT(activity)!!
+            } else {
+                return@withContext null
+            }
+            val usersTimestamp = getUserByUsernameTimestamp(username)
+            if (userDao.rowExistByUsername(username)){
+                if (userDao.getUserByUsername(username).cachedTime < usersTimestamp.toLong()){
+                    val myProfile = sendMyProfileRequest(authToken)
+                    if(myProfile != null ){
+                        userDao.deleteUser(myProfile)
+                        userDao.insertWithTimestamp(myProfile)
+                        userDao.getUserByUsername(myProfile.username)
+                    } else {
+                        null
+                    }
+                } else {
+                    userDao.getUserByUsername(username)
+                }
+
+            } else {
+                val myProfile = sendMyProfileRequest(authToken)
+                if(myProfile != null){
+                    userDao.insertWithTimestamp(myProfile)
+                    userDao.getUserByUsername(myProfile.username)
+                } else {
+                    null
+                }
+
+            }
+        }
+    }
+
+    private fun sendMyProfileRequest(authToken: String) = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val client = getAuthHttpClient(authToken)
+            try {
+                val response: HttpResponse = client.get(GET_PROFILE)
+                val jsonString: String = response.receive()
+                Log.d(TAG, jsonString)
+                client.close()
+                convertWebserviceUserToDBUser(Gson().fromJson(jsonString, User::class.java))
+            } catch(e: Exception){
+                Log.d(TAG, e.toString())
+                null
+            }
+        }
+    }
     /*********Friendship Related Functions*********/
     fun getMyFriendships(authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.friendship.Friendship> = runBlocking {
         val client = getAuthHttpClient(authToken)
@@ -160,17 +286,17 @@ class UserRepository(application: Application) {
         return@runBlocking dbFriendships
     }
 
-    fun getMyIncomingFriendshipRequests(authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.friendship.Friendship> = runBlocking {
-        val client = getAuthHttpClient(authToken)
-        val response: HttpResponse = client.get(FRIENDSHIPS_GET_REQUESTS_FROM_ME)
-        val jsonString: String = response.receive()
-        client.close()
-        val friendships = Gson().fromJson(jsonString, Array<Friendship>::class.java).toList()
-        val dbFriendships = friendships.map {
-            convertWebserviceFriendshipToDbFriendship(it)
-        }
-        return@runBlocking dbFriendships
-    }
+//    fun getMyIncomingFriendshipRequests(authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.friendship.Friendship> = runBlocking {
+//        val client = getAuthHttpClient(authToken)
+//        val response: HttpResponse = client.get(FRIENDSHIPS_GET_REQUESTS_FROM_ME)
+//        val jsonString: String = response.receive()
+//        client.close()
+//        val friendships = Gson().fromJson(jsonString, Array<Friendship>::class.java).toList()
+//        val dbFriendships = friendships.map {
+//            convertWebserviceFriendshipToDbFriendship(it)
+//        }
+//        return@runBlocking dbFriendships
+//    }
 
     fun rejectFriendship(authToken: String, friendshipRequestModel: FriendshipServiceModel): Boolean = runBlocking {
         val client = getAuthHttpClient(authToken)
@@ -240,11 +366,13 @@ class UserRepository(application: Application) {
         }
     }
 
-    fun caheAllUsers(allUsers: List<hsfl.project.e_storymaker.roomDB.Entities.user.User>){
-        allUsers.map{
-            userDao.insertWithTimestamp(it)
-        }
-    }
+//    fun caheAllUsers(allUsers: List<hsfl.project.e_storymaker.roomDB.Entities.user.User>){
+//        allUsers.map{
+//            userDao.insertWithTimestamp(it)
+//        }
+//    }
+
+
 
     companion object {
         @Volatile

@@ -12,10 +12,10 @@ abstract class StoryDao {
     abstract fun delete(story: Story)
 
     @Query("SELECT * FROM story WHERE storyTitle LIKE :title LIMIT 1")
-    abstract fun getStory(title: String): LiveData<Story>
+    abstract fun getStory(title: String): Story
 
     @Query("SELECT * FROM story ORDER BY story_uuid ASC")
-    abstract fun getAllStories(): LiveData<List<Story>>
+    abstract fun getAllStories(): List<Story>
 
     @Update
     abstract fun changeStory(story: Story)
@@ -24,7 +24,10 @@ abstract class StoryDao {
     abstract fun getStoryByUuid(story_uuid : String): Story
 
     @Query("SELECT author_username FROM story WHERE story_uuid LIKE :story_uuid LIMIT 1 ")
-    abstract fun getAuthorUuidByStoryUuid(story_uuid: String): LiveData<String>
+    abstract fun getAuthorUuidByStoryUuid(story_uuid: String): String
+
+    @Query("SELECT EXISTS(SELECT * FROM story WHERE story_uuid = :uuid)")
+    abstract fun rowExistByUUID(uuid : String) : Boolean
 
     @Transaction
     open fun getStoriesByUuids(story_uuids : List<String>): List<Story>{

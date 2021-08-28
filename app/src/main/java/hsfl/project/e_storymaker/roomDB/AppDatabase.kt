@@ -20,6 +20,7 @@ import hsfl.project.e_storymaker.roomDB.Entities.rating.RatingDao
 import hsfl.project.e_storymaker.roomDB.Entities.story.Story
 import hsfl.project.e_storymaker.roomDB.Entities.tag.Tag
 import hsfl.project.e_storymaker.roomDB.Entities.story.StoryDao
+import hsfl.project.e_storymaker.roomDB.Entities.tag.TagDao
 
 import hsfl.project.e_storymaker.roomDB.Entities.user.User
 import hsfl.project.e_storymaker.roomDB.Entities.user.UserDao
@@ -47,6 +48,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun favoringDao(): FavoringDao
     abstract fun ratingDao(): RatingDao
     abstract fun chapterDao(): ChapterDao
+    abstract fun tagDao(): TagDao
 
     companion object {
         @Volatile

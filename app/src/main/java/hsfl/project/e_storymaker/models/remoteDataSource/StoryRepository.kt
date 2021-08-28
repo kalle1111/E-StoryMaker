@@ -14,6 +14,8 @@ import hsfl.project.e_storymaker.roomDB.Entities.friendship.FriendshipDao
 import hsfl.project.e_storymaker.roomDB.Entities.rating.Rating
 import hsfl.project.e_storymaker.roomDB.Entities.rating.RatingDao
 import hsfl.project.e_storymaker.roomDB.Entities.story.StoryDao
+import hsfl.project.e_storymaker.roomDB.Entities.tag.Tag
+import hsfl.project.e_storymaker.roomDB.Entities.tag.TagDao
 import hsfl.project.e_storymaker.roomDB.Entities.user.UserDao
 import hsfl.project.e_storymaker.sharedPreferences
 import io.ktor.client.*
@@ -44,6 +46,7 @@ class StoryRepository(application: Application){
     val chapterProgressDao: ChapterProgressDao
     val favoringDao: FavoringDao
     val ratingDao: RatingDao
+    val tagDao: TagDao
 
     init{
 
@@ -55,6 +58,7 @@ class StoryRepository(application: Application){
         chapterProgressDao = database.chapterProgressDao()
         favoringDao = database.favoringDao()
         ratingDao = database.ratingDao()
+        tagDao = database.tagDao()
 
         repository = AppRepository(userDao, storyDao, friendshipDao,
             chapterProgressDao, favoringDao, ratingDao)
@@ -313,6 +317,26 @@ class StoryRepository(application: Application){
         }
     }
 
+    fun getStory(uuid: String): hsfl.project.e_storymaker.roomDB.Entities.story.Story? = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val storyTimestamp =getStoryTimestampPerUUID(uuid).toLong()
+            if (!storyDao.rowExistByUUID(uuid)){
+                val story = getStoryByUUID(uuid)!!
+                storyDao.insertWithTimestamp(story)
+                storyDao.getStoryByUuid(uuid)
+            } else {
+                if(storyDao.getStoryByUuid(uuid).cachedTime > storyTimestamp){
+                    val story = getStoryByUUID(uuid)!!
+                    storyDao.insertWithTimestamp(story)
+                    storyDao.getStoryByUuid(uuid)
+                } else {
+                    storyDao.getStoryByUuid(uuid)
+                }
+            }
+        }
+    }
+
+
     /*********Rate Story Related Functions*********/
     fun rateStory(rateStoryRequest: RateStoryRequest): Boolean = runBlocking {
         withContext(Dispatchers.IO){
@@ -526,6 +550,9 @@ class StoryRepository(application: Application){
             false
         }
     }
+
+    /*********Tag Related Functions*********/
+
 
     fun cacheDataStories(stories: List<hsfl.project.e_storymaker.roomDB.Entities.story.Story>) {
         //repository.addStories(stories)

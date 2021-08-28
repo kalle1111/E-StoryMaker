@@ -186,6 +186,39 @@ class UserRepository(application: Application) {
         }
     }
 
+    fun getUser(username: String): hsfl.project.e_storymaker.roomDB.Entities.user.User? = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val authToken = sharedPreferences.getJWT(application)!!
+            val userTimestamp =getUserTimestamp(username, authToken)
+            if (!userDao.rowExistByUsername(username)){
+                val user = getUserByUserName(username)!!
+                userDao.insertWithTimestamp(user)
+                userDao.getUserByUsername(username)
+            } else {
+                if(userDao.getUserByUsername(username).cachedTime > userTimestamp){
+                    val user = getUserByUserName(username)!!
+                    userDao.insertWithTimestamp(user)
+                    userDao.getUserByUsername(username)
+                } else {
+                    userDao.getUserByUsername(username)
+                }
+            }
+        }
+    }
+
+    private fun getUserTimestamp(username: String, authToken: String): Long = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val client = getAuthHttpClient(authToken)
+
+            val response: HttpResponse = client.get(USER_GET_BY_USERNAME_LAST_UPDATE){
+                parameter("username", username)
+            }
+            val jsonString: String = response.receive()
+            client.close()
+            val userUpdate = Gson().fromJson(jsonString, Long::class.java)
+            userUpdate
+        }
+    }
 
     fun getMyProfile(): hsfl.project.e_storymaker.roomDB.Entities.user.User? = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){

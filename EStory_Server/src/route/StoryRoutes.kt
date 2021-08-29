@@ -220,7 +220,7 @@ fun Route.StoryRoutes(
                     story.storyTitle,
                     story.description,
                     story.storyChapters,
-                    story.cover
+                    story.cover!!
                 )
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story updated Successfully!"))
             } catch (e: Exception) {

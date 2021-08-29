@@ -5,7 +5,7 @@ data class UpdateStoryRequest(
     val storyTitle: String,
     val description: String,
     val storyChapters: String,
-    val cover: ByteArray
+    val cover: ByteArray?
 ) {
 
 }

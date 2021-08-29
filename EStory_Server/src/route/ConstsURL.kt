@@ -1,5 +1,7 @@
 package com.eStory.route
 
+import io.ktor.locations.*
+
 /**
 Beim Login bekommt man den Access-Token als message von dem Server.
 dies wird gespeichert, und immer beim Anfrafen so anhängen:
@@ -11,6 +13,7 @@ connection.setRequestProperty("Authorization", authHeaderValue)
 Ein User darf Anfragen senden, nur wenn er Online ist.
 Beim Anhängen dieses Messages, zeigt der User, dass er online ist
  */
+
 
 const val API_VERSION = "/v1"
 const val USERS = "$API_VERSION/users"
@@ -46,6 +49,8 @@ const val SEARCH_BY_Tag_STORIES = "$TAGS/searchByTag" // tag als Query parameter
 const val MAP_Story_To_Tag = "$TAGS/mapStoryToTag"
 const val GET_ALL_TAGS_TO_STORY = "$TAGS/getTagsToStory"
 const val GET_TAG_BY_UUID = "$TAGS/getByUUID"  // uuid als Query parameter eingeben
+const val GET_BY_TAGS_STORIES = "$TAGS/getByTags"
+const val GET_BY_TAGS_AND_TITLE_STORIES = "$TAGS/getByTagsAndTitle"
 
 const val RATE_STORIES = "$STORIES/rateStory"
 const val UPDATE_RATED_STORIES = "$STORIES/updateRatedStory"
@@ -64,7 +69,8 @@ const val MY_FAVORITE_STORIES = "$FAVORITE_STORIES/getMyFavoriteStories"
 const val SET_FAVORITE_STORIES = "$FAVORITE_STORIES/setFavorite"
 const val SET_AS_NOT_FAVORITE_STORIES = "$FAVORITE_STORIES/setNotFavorite"
 const val GET_FAVORITE_STORY_BY_UUID = "$FAVORITE_STORIES/getByUUID"  // uuid als Query parameter eingeben
-const val MY_FAVORITE_STORIES_GET_LAST_UPDATES = "$MY_FAVORITE_STORIES/getLastUpdates" // username als Query parameter eingeben
+const val MY_FAVORITE_STORIES_GET_LAST_UPDATES =
+    "$MY_FAVORITE_STORIES/getLastUpdates" // username als Query parameter eingeben
 
 
 const val FRIENDSHIPS = "$API_VERSION/friendships"

@@ -2,6 +2,8 @@ package com.eStory.route
 
 import com.eStory.model.SimpleResponse
 import com.eStory.model.tag.MapStoryToTagRequest
+import com.eStory.model.tag.SearchByTags
+import com.eStory.model.tag.SearchByTagsAndTitle
 import com.eStory.service.TagService
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -17,6 +19,12 @@ class GetTaggedStoriesRoute
 
 @Location(SEARCH_BY_Tag_STORIES)
 class GetStoriesByTag
+
+@Location(GET_BY_TAGS_STORIES)
+class GetStoriesByTags
+
+@Location(GET_BY_TAGS_AND_TITLE_STORIES)
+class GetStoriesByTagsAndTitle
 
 @Location(TAGS)
 class GetAllTagsRoute
@@ -80,6 +88,8 @@ fun Route.TagRoutes(
 
 
 
+
+
         get<GetAllTagsToStoryRoute> {
             val storyId = try {
                 call.request.queryParameters["storyId"]!!
@@ -140,6 +150,47 @@ fun Route.TagRoutes(
 
         }
 
+        get<GetStoriesByTags> {
+            val searchByTags = try {
+
+                call.receive<SearchByTags>()
+
+            } catch (e: Exception) {
+
+                call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "Missing Fields.."))
+                return@get
+            }
+            try {
+                val stories = tagService.getStoriesByTags(searchByTags.tags)
+                call.respond(HttpStatusCode.OK, stories)
+            } catch (e: Exception) {
+                call.respond(
+                    HttpStatusCode.Conflict,
+                    SimpleResponse(false, e.message ?: "Some Problems occurred setFavorite")
+                )
+            }
+
+        }
+        get<GetStoriesByTagsAndTitle> {
+            val searchByTagsAndTitle = try {
+
+                call.receive<SearchByTagsAndTitle>()
+
+            } catch (e: Exception) {
+
+                call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "Missing Fields.."))
+                return@get
+            }
+            try {
+                val stories = tagService.getStoriesByTagsAndTitle(searchByTagsAndTitle.tags, searchByTagsAndTitle.title)
+                call.respond(HttpStatusCode.OK, stories)
+            } catch (e: Exception) {
+                call.respond(
+                    HttpStatusCode.Conflict,
+                    SimpleResponse(false, e.message ?: "Some Problems occurred setFavorite")
+                )
+            }
+        }
 
     }
 }

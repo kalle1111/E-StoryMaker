@@ -20,15 +20,10 @@ object DatabaseFactory {
             SchemaUtils.create(TaggedStoriesTable)
             SchemaUtils.create(FilesTable)
             SchemaUtils.create(ReadChaptersTable)
-
-/*
-            UsersTable.deleteAll()
-            StoriesTable.deleteAll()
-            FriendshipsTable.deleteAll()
-            RatedStoriesTable.deleteAll()*/
         }
 
-        //  TagService().insertAllTags()
+        TagService().insertAllTags()
+
 
     }
 

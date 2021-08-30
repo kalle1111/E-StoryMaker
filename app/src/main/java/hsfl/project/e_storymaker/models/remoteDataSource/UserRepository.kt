@@ -147,7 +147,7 @@ class UserRepository(application: Application) {
 
     private fun getUserByUsernameTimestamp(username: String): String = runBlocking{
         val client = HttpClient(CIO)
-        val response: HttpResponse = client.get(){
+        val response: HttpResponse = client.get(USER_GET_BY_USERNAME_LAST_UPDATE){
             parameter("username", username)
         }
         val jsonString: String = response.receive()

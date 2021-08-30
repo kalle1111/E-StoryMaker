@@ -29,7 +29,7 @@ class ProfileFragVM : MainVM() {
     }
 
     fun getUser(user: String?){
-        viewModelScope.async(Dispatchers.IO){
+        runBlocking{
             if (userRep != null){
                 var potUser: User? = null
                     potUser = userRep?.getMyProfile()
@@ -47,7 +47,6 @@ class ProfileFragVM : MainVM() {
                 //applicaion?.baseContext.startActivity(intent)
             }
         }
-        Log.d("ProfileFragVM", "LAUNCH FINISHED!")
     }
 
     fun username(): String{

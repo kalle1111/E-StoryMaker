@@ -33,9 +33,15 @@ class LoginFragVM : AuthVM() {
     }
 
     fun login(username: String, password: String): Boolean{
-        Log.d("Main","username: " + username + " password: " + password)
-        val authorized = userRep?.loginRequest(LoginRequest(username, password))
-        return (authorized != null && authorized)
+        return if(userRep != null){
+            Log.d("Main","username: " + username + " password: " + password)
+            val authorized = userRep?.loginRequest(LoginRequest(username, password))
+            (authorized != null && authorized)
+        }else{
+            Log.e("LoginFragVM", "UserRep is not initialized!")
+            false
+        }
+
     }
 
     fun forgotPassword(){

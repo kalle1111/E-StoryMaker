@@ -25,8 +25,8 @@ class ReviewReadFragVM : ViewModel() {
     }
 
     fun getReviews(){
-        if (storyRep != null && false){
-            //currentReviewList = storyRep?.getAllRatedStoriesOfStory(storyID)
+        if (storyRep != null ){
+            //currentReviewList = storyRep?.getRa
         }else{
             //Throw error
         }

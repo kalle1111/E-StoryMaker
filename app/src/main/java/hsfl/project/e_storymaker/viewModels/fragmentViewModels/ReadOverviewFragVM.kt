@@ -2,9 +2,11 @@ package hsfl.project.e_storymaker.viewModels.fragmentViewModels
 
 
 import android.app.Application
+import android.util.Log
 import hsfl.project.e_storymaker.models.remoteDataSource.StoryRepository
 import hsfl.project.e_storymaker.roomDB.Entities.story.Story
 import hsfl.project.e_storymaker.viewModels.ReadingVM
+import io.ktor.auth.*
 
 class ReadOverviewFragVM : ReadingVM() {
 
@@ -21,15 +23,13 @@ class ReadOverviewFragVM : ReadingVM() {
     }
 
     private fun getStory(storyID: String?){
-        if (storyRep != null && false){
+        if (storyRep != null){
             if (storyID != null){
-                //currentStory = storyRep?.getStory(uuid)
+                currentStory = storyRep?.getStory(storyID)!!
+                Log.d("ReadOverviewFragVM", currentStory.toString())
             }else{
                 //Throw Error
             }
-        //currentStory = storyRep.getOverview()
-            currentStory = //storyRep?.get
-        TODO("WHERE IS THE ACCESS FUNCTION!???")
         }else{
             //THROW ERROR
         }

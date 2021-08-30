@@ -1,12 +1,14 @@
 package hsfl.project.e_storymaker.viewModels.fragmentViewModels
 
 import android.app.Application
+import android.content.Intent
 import androidx.lifecycle.ViewModel
 import hsfl.project.e_storymaker.models.remoteDataSource.UserRepository
 import hsfl.project.e_storymaker.roomDB.Entities.user.User
 
 import hsfl.project.e_storymaker.viewModels.AuthVM
 import hsfl.project.e_storymaker.viewModels.MainVM
+import hsfl.project.e_storymaker.views.activities.AuthActivity
 
 class ProfileFragVM : MainVM() {
 
@@ -33,7 +35,8 @@ class ProfileFragVM : MainVM() {
             }
             TODO(" Move this to backend!")
         }else{
-            //THrow ERROR
+            //val intent: Intent = Intent(applicaion?.baseContext, AuthActivity::class.java)
+            //applicaion?.baseContext.startActivity(intent)
         }
 
     }

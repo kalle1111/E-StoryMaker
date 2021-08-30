@@ -2,6 +2,7 @@ package hsfl.project.e_storymaker.views.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -41,7 +42,13 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.button2.setOnClickListener {
-            viewModel.register(binding.registerUsername.text.toString(), binding.registerMail.text.toString(), binding.registerPassword.text.toString(), binding.registerPassword.text.toString())
+            if(viewModel.register(binding.registerUsername.text.toString(), binding.registerMail.text.toString(), binding.registerPassword.text.toString(), binding.registerPassword.text.toString())){
+                //Popup + switch to login
+                findNavController().navigate(R.id.action_RegisterFragment_to_LoginFragment)
+            }else{
+                Log.d("RegisterFrag", "Failed to register!")
+                //popup failure
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 package hsfl.project.e_storymaker.models.remoteDataSource
 
-const val BASE_URL: String = "http://192.168.XXX.XXX:8080"
+const val BASE_URL: String = "http://192.168.178.20:8080"
 
 
 const val API_VERSION = "$BASE_URL/v1"

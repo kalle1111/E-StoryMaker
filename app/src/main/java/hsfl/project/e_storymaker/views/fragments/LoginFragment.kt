@@ -54,7 +54,7 @@ class LoginFragment : Fragment() {
         }
 
         binding.loginButton.setOnClickListener {
-            loginAndSwitchToMain(viewModel.login(binding.loginEmail.text.toString(), binding.loginPassword.text.toString()), VISIBLE)
+            loginAndSwitchToMain(viewModel.login(binding.loginUName.text.toString(), binding.loginPassword.text.toString()), VISIBLE)
         }
     }
 

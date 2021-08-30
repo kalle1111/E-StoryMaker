@@ -2,6 +2,7 @@ package hsfl.project.e_storymaker.viewModels.fragmentViewModels
 
 import android.app.Application
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import hsfl.project.e_storymaker.models.remoteDataSource.UserRepository
 import hsfl.project.e_storymaker.roomDB.Entities.user.User
@@ -26,14 +27,18 @@ class ProfileFragVM : MainVM() {
     }
 
     private fun getUser(user: String?){
-        if (userRep != null && false){
-            if (user == null){
-                currentUser = userRep?.getMyProfile()!!
-
-            }else{
-                //currentUser = userRep?.GetUserByUsername(username)
+        if (userRep != null){
+            val potUser: User?
+            kotlin.run {
+                //potUser = userRep?.getMyProfile()
+                potUser = userRep?.getUser("c")
             }
-            TODO(" Move this to backend!")
+
+            if(potUser != null){
+                currentUser = potUser
+            }else{
+                Log.e("ProfileFragVM", "No actual User returned!")
+            }
         }else{
             //val intent: Intent = Intent(applicaion?.baseContext, AuthActivity::class.java)
             //applicaion?.baseContext.startActivity(intent)

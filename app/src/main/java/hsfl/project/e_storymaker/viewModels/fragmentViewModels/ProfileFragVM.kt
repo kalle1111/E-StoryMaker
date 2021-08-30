@@ -10,6 +10,7 @@ import hsfl.project.e_storymaker.roomDB.Entities.user.User
 import hsfl.project.e_storymaker.viewModels.AuthVM
 import hsfl.project.e_storymaker.viewModels.MainVM
 import hsfl.project.e_storymaker.views.activities.AuthActivity
+import kotlinx.coroutines.runBlocking
 
 class ProfileFragVM : MainVM() {
 
@@ -23,14 +24,13 @@ class ProfileFragVM : MainVM() {
     fun setApplicationContext(application: Application, user: String?){
         this.applicaion = applicaion
         userRep = application?.let { UserRepository.getStoryRepository(it) }!!
-        getUser(user)
+        //getUser(user)
     }
 
     private fun getUser(user: String?){
         if (userRep != null){
             val potUser: User?
-            kotlin.run {
-                //potUser = userRep?.getMyProfile()
+            runBlocking {
                 potUser = userRep?.getUser("c")
             }
 

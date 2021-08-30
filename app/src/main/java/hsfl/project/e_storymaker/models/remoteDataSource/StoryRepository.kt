@@ -75,25 +75,20 @@ class StoryRepository(application: Application){
                     //Insert Story
                     val storyToInsert = getStoryByUUID(it.first)
                     if (storyToInsert != null){
-                        Log.d(TAG, "Story ist nicht in der DB!")
                         storyDao.insertWithTimestamp(storyToInsert)
                         dbStories.add(storyDao.getStoryByUuid(it.first))
                     } else {
-                        Log.e(TAG, "EMPTY ELSE! 1")
                     }
                 } else {
                     if (storyDao.getStoryByUuid(it.first).cachedTime < it.second) {
                         //Die Story anfordern und in der Datenbank speichern
                         val storyToInsert = getStoryByUUID(it.first)
                         if (storyToInsert != null){
-                            Log.d(TAG, "Story is outdated, locally!")
                             storyDao.insertWithTimestamp(storyToInsert)
                             dbStories.add(storyDao.getStoryByUuid(it.first))
                         } else {
-                            Log.e(TAG, "EMPTY ELSE! 2")
                         }
                     } else {
-                        Log.d(TAG, "Story is up to date locally!")
                         dbStories.add(storyDao.getStoryByUuid(it.first))
                     }
                 }
@@ -149,7 +144,7 @@ class StoryRepository(application: Application){
 
                     }
                 } else {
-                    if (storyDao.getStoryByUuid(it.first).cachedTime > it.second) {
+                    if (storyDao.getStoryByUuid(it.first).cachedTime < it.second) {
                         //Die Story anfordern und in der Datenbank speichern
                         val storyToInsert = getStoryByUUID(it.first)
                         if (storyToInsert != null){
@@ -289,7 +284,7 @@ class StoryRepository(application: Application){
 
                     }
                 } else {
-                    if (storyDao.getStoryByUuid(it).cachedTime > timestampOfStory.toLong()) {
+                    if (storyDao.getStoryByUuid(it).cachedTime < timestampOfStory.toLong()) {
                         //Die Story anfordern und in der Datenbank speichern
                         val storyToInsert = getStoryByUUID(it)
                         if (storyToInsert != null){
@@ -328,7 +323,7 @@ class StoryRepository(application: Application){
                 storyDao.insertWithTimestamp(story)
                 storyDao.getStoryByUuid(uuid)
             } else {
-                if(storyDao.getStoryByUuid(uuid).cachedTime > storyTimestamp){
+                if(storyDao.getStoryByUuid(uuid).cachedTime < storyTimestamp){
                     val story = getStoryByUUID(uuid)!!
                     storyDao.insertWithTimestamp(story)
                     storyDao.getStoryByUuid(uuid)
@@ -396,7 +391,7 @@ class StoryRepository(application: Application){
 
                     }
                 } else {
-                    if (storyDao.getStoryByUuid(it.first).cachedTime > it.second) {
+                    if (storyDao.getStoryByUuid(it.first).cachedTime < it.second) {
                         //Das Rating anfordern und in der Datenbank speichern
                         val ratedStoryToInsert = getRatedStoryByUUID(it.first)
                         if(ratedStoryToInsert != null){

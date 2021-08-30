@@ -24,7 +24,7 @@ class ProfileFragVM : MainVM() {
     fun setApplicationContext(application: Application, user: String?){
         this.applicaion = applicaion
         userRep = application?.let { UserRepository.getStoryRepository(it) }!!
-        //getUser(user)
+        getUser(user)
     }
 
     private fun getUser(user: String?){

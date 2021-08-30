@@ -75,22 +75,25 @@ class StoryRepository(application: Application){
                     //Insert Story
                     val storyToInsert = getStoryByUUID(it.first)
                     if (storyToInsert != null){
+                        Log.d(TAG, "Story ist nicht in der DB!")
                         storyDao.insertWithTimestamp(storyToInsert)
                         dbStories.add(storyDao.getStoryByUuid(it.first))
                     } else {
-
+                        Log.e(TAG, "EMPTY ELSE! 1")
                     }
                 } else {
-                    if (storyDao.getStoryByUuid(it.first).cachedTime > it.second) {
+                    if (storyDao.getStoryByUuid(it.first).cachedTime < it.second) {
                         //Die Story anfordern und in der Datenbank speichern
                         val storyToInsert = getStoryByUUID(it.first)
                         if (storyToInsert != null){
+                            Log.d(TAG, "Story is outdated, locally!")
                             storyDao.insertWithTimestamp(storyToInsert)
                             dbStories.add(storyDao.getStoryByUuid(it.first))
                         } else {
-
+                            Log.e(TAG, "EMPTY ELSE! 2")
                         }
                     } else {
+                        Log.d(TAG, "Story is up to date locally!")
                         dbStories.add(storyDao.getStoryByUuid(it.first))
                     }
                 }
@@ -103,7 +106,7 @@ class StoryRepository(application: Application){
         return@runBlocking withContext(Dispatchers.IO){
             val client = getHttpClient()
             try {
-                val response: HttpResponse = client.delete(GET_STORY_BY_UUID){
+                val response: HttpResponse = client.get(GET_STORY_BY_UUID){
                     parameter("uuid", uuid)
                 }
                 val stringBody: String = response.receive()

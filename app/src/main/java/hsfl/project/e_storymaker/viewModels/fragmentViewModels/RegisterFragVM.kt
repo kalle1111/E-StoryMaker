@@ -24,7 +24,7 @@ class RegisterFragVM : AuthVM() {
         return if (userRep != null){
             Log.d(TAG, "username: " + username + " email: " + email + " password: " + password + "passwordCONF: " + passwordConf)
 
-            val test:Boolean? = userRep?.registerRequest(RegisterRequest("a", "b",username, "", "22.18.20323", password, ByteArray(9)))
+            val test:Boolean? = userRep?.registerRequest(RegisterRequest("REMOVE", "REMOVE",username, "No description yet!", "22.18.20323", password, ByteArray(9)))
             Log.d(TAG, test.toString())
 
             Log.d(TAG, "REPOSITORY QUERRIED!")

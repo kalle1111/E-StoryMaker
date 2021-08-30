@@ -105,6 +105,8 @@ class StoryRepository(application: Application){
                     parameter("uuid", uuid)
                 }
                 val stringBody: String = response.receive()
+                Log.d(TAG, "HELLO...........................")
+                Log.d(TAG, stringBody)
                 client.close()
                 val story: Story = Gson().fromJson(stringBody, Story::class.java)
                 convertWebserviceStoryToDbStory(story)

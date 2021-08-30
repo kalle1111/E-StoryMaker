@@ -20,15 +20,16 @@ class StoryFinderFragVM : MainVM() {
     }
 
     fun CurrentStoryList(): List<Story>{
+        return currentStoryList!!
+        /*
         return listOf(Story("0", "0", "MAX_TESTTITLE", "/Description/ \n\n\n /End Description/", "1.1.0000", 0, ByteArray(0), 4.0, 0),
             Story("0", "0", "TAEOFENOA", "/Description/ \n\n\n /End Description/", "1.1.0000", 0, ByteArray(0), 4.0, 0),
             Story("0", "0", "ABCDEFG", "/Description/ \n\n\n /End Description/", "1.1.0000", 0, ByteArray(0), 4.0, 0)
-        )
-        //return currentStoryList
+        )*/
     }
 
     fun getStories(){
-        if (storyRep != null && false){
+        if (storyRep != null){
             //when() to detect different kinds of search!
             currentStoryList = storyRep?.getAllStories()
         }else{

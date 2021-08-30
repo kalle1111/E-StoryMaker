@@ -21,10 +21,10 @@ class ReadChapterFragVM : ReadingVM() {
         storyRep = application?.let { StoryRepository.getStoryRepository(it) }!!
     }
 
-    private fun getStory(){
-        if (storyRep != null && false){
-            //currentChapter = storyRep?.getMyStories("???")!!
-            TODO("WHERE IS THE FUNCTION?")
+    private fun getChapter(){
+        if (storyRep != null){
+            //currentChapter = storyRep?.
+            //TODO("GET CHAPTER!")
         }else{
             //THROW ERROR
         }

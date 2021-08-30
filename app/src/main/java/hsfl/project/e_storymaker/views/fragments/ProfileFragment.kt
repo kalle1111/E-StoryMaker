@@ -57,6 +57,7 @@ class ProfileFragment : Fragment() {
 
         (requireActivity() as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         (requireActivity() as MainActivity).findViewById<TextView>(R.id.mToolbarTitle).setText(viewModel.username())
+
     //(requireActivity() as MainActivity).supportActionBar!! .title = viewModel.username()
 
 

@@ -126,7 +126,7 @@ class UserRepository(application: Application) {
 
                     }
                 } else {
-                    if(userDao.getUserByUsername(it.first).cachedTime > it.second){
+                    if(userDao.getUserByUsername(it.first).cachedTime < it.second){
                         //Den User anfordern und in der Datenbank speichern
                         val user = getUserByUserName(it.first)
                         if (user != null) {
@@ -195,7 +195,7 @@ class UserRepository(application: Application) {
                 userDao.insertWithTimestamp(user)
                 userDao.getUserByUsername(username)
             } else {
-                if(userDao.getUserByUsername(username).cachedTime > userTimestamp){
+                if(userDao.getUserByUsername(username).cachedTime < userTimestamp){
                     val user = getUserByUserName(username)!!
                     userDao.insertWithTimestamp(user)
                     userDao.getUserByUsername(username)

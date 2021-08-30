@@ -189,8 +189,8 @@ class StoryService {
     fun getRatedStoryByUUID(uuid: String): RatedStory? =
         transaction { RatedStoryEntity.findById(UUID.fromString(uuid))?.toDTO() }
 
-    fun getRatedStoryByStoryId(storyId: String): RatedStory =
-        transaction { RatedStoryEntity.find { RatedStoriesTable.storyId eq UUID.fromString(storyId) }.first() }.toDTO()
+    fun getRatedStoryByStoryId(storyId: String): List<RatedStory> =
+        getAllRatedStories().filter { it.story.uuid == storyId }
 
     fun getAllRatedStories(): List<RatedStory> = transaction { RatedStoryEntity.all().map { it.toDTO() } }
 

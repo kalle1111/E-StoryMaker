@@ -168,6 +168,9 @@ class LibraryFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding.viewmodel = viewModel
 
         (requireActivity() as MainActivity).findViewById<TextView>(R.id.mToolbarTitle).setText(viewModel.username())
+
+        viewModel.getStories()
+        populateStoryList(viewModel.CurrentStoryList())
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {

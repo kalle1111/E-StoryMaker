@@ -426,7 +426,7 @@ class StoryRepository(application: Application){
         return@runBlocking withContext(Dispatchers.IO){
             val client = getHttpClient()
             try {
-                val response: HttpResponse = client.delete(GET_RATED_STORY_BY_UUID){
+                val response: HttpResponse = client.get(GET_RATED_STORY_BY_UUID){
                     parameter("uuid", uuid)
                 }
                 val stringBody: String = response.receive()
@@ -489,6 +489,54 @@ class StoryRepository(application: Application){
             ratedStoriesPairLastUpdate
         }
     }
+
+    fun getRatedStoriesByStoryId(uuid: String):  List<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = runBlocking{
+        return@runBlocking withContext(Dispatchers.IO){
+            val ratedStoryByIdTimestamp = getRatedStoriesTimestampByStoryId(uuid)
+            val dbRatedStories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating>()
+            ratedStoryByIdTimestamp.map {
+                if (!ratingDao.rowExistByUUID(it.first)) {
+                    //Insert Rating
+                    val ratedStoryToInsert = getRatedStoryByUUID(it.first)
+                    if(ratedStoryToInsert != null){
+                        ratingDao.insertRating(ratedStoryToInsert)
+                        dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
+                    } else {
+
+                    }
+                } else {
+                    if (storyDao.getStoryByUuid(it.first).cachedTime > it.second) {
+                        //Das Rating anfordern und in der Datenbank speichern
+                        val ratedStoryToInsert = getRatedStoryByUUID(it.first)
+                        if(ratedStoryToInsert != null){
+                            ratingDao.deleteRating(ratedStoryToInsert.user_username, ratedStoryToInsert.story_uuid)
+                            ratingDao.insertRating(ratedStoryToInsert)
+                            dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
+                        } else {
+
+                        }
+                    } else {
+                        dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
+                    }
+                }
+            }
+            dbRatedStories
+        }
+    }
+
+    private fun getRatedStoriesTimestampByStoryId(storyId: String): List<PairLastUpdate> = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val client = getHttpClient()
+            val response: HttpResponse = client.get(GET_LAST_UPDATES_RATED_STORIES_BY_STORY_ID){
+                parameter("storyId", storyId)
+            }
+            val jsonString: String = response.receive()
+            client.close()
+            val ratedStoriesPairLastUpdate = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
+            ratedStoriesPairLastUpdate
+        }
+    }
+
 
     /*********Favorite Story Related Functions*********/
     fun getMyFavoriteStories(): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {

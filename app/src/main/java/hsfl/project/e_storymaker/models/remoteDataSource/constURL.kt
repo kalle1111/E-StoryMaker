@@ -44,6 +44,8 @@ const val RATED_STORIES = "$STORIES/ratedStories"
 const val FROM_ME_RATED_STORIES = "$STORIES/fromMeRatedStories"
 const val FROM_RATED_STORIES_GET_LAST_UPDATES =
     "$FROM_ME_RATED_STORIES/getLastUpdates" // username als Query parameter eingeben
+const val GET_LAST_UPDATES_RATED_STORIES_BY_STORY_ID =
+    "$RATED_STORIES/getByStoryId" // storyId als Query Parameter eingeben
 const val RATED_STORY_GET_BY_ID_LAST_UPDATE = "$STORIES/ratedStoryGetLastUpdateById"
 const val RATED_STORIES_GET_LAST_UPDATE_VALUES = "$STORIES/ratedStoriesGetLastUpdates"
 const val GET_RATED_STORY_BY_UUID = "$STORIES/getRatedStoryByUUID" // uuid als Query parameter eingeben
@@ -55,7 +57,8 @@ const val MY_FAVORITE_STORIES = "$FAVORITE_STORIES/getMyFavoriteStories"
 const val SET_FAVORITE_STORIES = "$FAVORITE_STORIES/setFavorite"
 const val SET_AS_NOT_FAVORITE_STORIES = "$FAVORITE_STORIES/setNotFavorite"
 const val GET_FAVORITE_STORY_BY_UUID = "$FAVORITE_STORIES/getByUUID"  // uuid als Query parameter eingeben
-const val MY_FAVORITE_STORIES_GET_LAST_UPDATES = "$MY_FAVORITE_STORIES/getLastUpdates" // username als Query parameter eingeben
+const val MY_FAVORITE_STORIES_GET_LAST_UPDATES =
+    "$MY_FAVORITE_STORIES/getLastUpdates" // username als Query parameter eingeben
 
 
 const val FRIENDSHIPS = "$API_VERSION/friendships"

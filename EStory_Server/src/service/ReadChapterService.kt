@@ -13,6 +13,7 @@ class ReadChapterService {
     fun getByUUID(uuid: String): ReadChapter? =
         transaction { ReadChapterEntity.findById(UUID.fromString(uuid))?.toDTO() }
 
+    // updating the read chapter of stories
     fun updateReadChapter(userName: String, storyId: String, chapterNumber: Int): ReadChapter? = transaction {
         val readChapterEntity =
             ReadChapterEntity.find { ReadChaptersTable.storyId.eq(UUID.fromString(storyId)) }.singleOrNull()

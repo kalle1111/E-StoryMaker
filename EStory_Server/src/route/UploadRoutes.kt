@@ -19,7 +19,7 @@ class UploadFile
 class DownloadFile
 
 @OptIn(KtorExperimentalLocationsAPI::class)
-fun Route.UploadRoutes() {
+fun Route.uploadRoutes() {
     var fileDescription = ""
     var fileName = ""
     // authenticate("jwt") {

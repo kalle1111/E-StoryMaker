@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.eStory.model.user.User
 
 class JwtService {
-    private val issuer = "noteServer"
+    private val issuer = "StoryMakerServer"
     private val jwtSecret = System.getenv("JWT_SECRET")
     private val algorithm = Algorithm.HMAC512(jwtSecret)
 
@@ -17,7 +17,7 @@ class JwtService {
 
     fun generateToken(user: User): String {
         return JWT.create()
-            .withSubject("NOteAuthentication")
+            .withSubject("StoryMakerAuthentication")
             .withIssuer(issuer)
             .withClaim("userName", user.userName)
             .sign(algorithm)

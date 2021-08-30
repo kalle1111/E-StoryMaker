@@ -32,6 +32,7 @@ class UserService {
         return user
     }
 
+    // deleting a user by username
     fun deleteByUsername(userName: String, hashPassword: String): User {
         val user = getByUserName(userName)
         transaction {
@@ -45,6 +46,7 @@ class UserService {
         return user
     }
 
+    // inserting new user
     fun insert(
         firstname: String,
         lastname: String,
@@ -82,6 +84,7 @@ class UserService {
         }
     }
 
+    // update user profile by user name
     fun updateByUserName(
         username: String,
         firstname: String? = null,
@@ -121,7 +124,7 @@ class UserService {
 
     /*****************get Date ***************/
 
-
+    // the attribute lastUpdate is refreshed when the profile updated
     fun getLastUpdateByUserName(userName: String): Long =
         transaction { UserEntity.find { UsersTable.userName eq userName }.first().lastUpdate }
 

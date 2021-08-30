@@ -57,7 +57,7 @@ class FriendshipDeleteRoute
 @Location(GET_FRIENDSHIP_BY_UUID)
 class GetFriendshipByUUIDRoute
 
-fun Route.FriendshipRoutes(
+fun Route.friendshipRoutes(
     friendshipService: FriendshipService
 ) {
     get<GetFriendshipByUUIDRoute> {

@@ -11,9 +11,7 @@ import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.gson.*
 import io.ktor.http.*
-import io.ktor.http.content.*
 import io.ktor.locations.*
-import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
@@ -62,12 +60,12 @@ fun Application.module(testing: Boolean = false) {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
-        UserRoutes(userService, jwtService, hashFunction)
-        StoryRoutes(storyService)
-        FriendshipRoutes(friendshipService)
-        TagRoutes(tagService)
-        ReadChapterRoutes(readChapterService)
-        UploadRoutes()
+        userRoutes(userService, jwtService, hashFunction)
+        storyRoutes(storyService)
+        friendshipRoutes(friendshipService)
+        tagRoutes(tagService)
+        readChapterRoutes(readChapterService)
+        uploadRoutes()
 
         get("/session/increment") {
             val session = call.sessions.get<MySession>() ?: MySession()

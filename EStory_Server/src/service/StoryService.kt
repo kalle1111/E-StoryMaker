@@ -28,7 +28,7 @@ class StoryService {
 
     fun getAllByUserName(userName: String): List<Story> = getAll().filter { it.user.userName == userName }
 
-    fun getStoryByTitle(title: String): List<Story> = getAll().filter { it.storyTitle == title }
+    fun getStoryBySubTitle(subTitle: String): List<Story> = getAll().filter { it.storyTitle.contains(subTitle) }
 
 
     //private val users = listOf(testUser).associateBy(User::id)
@@ -140,6 +140,7 @@ class StoryService {
         }
     }
 
+    //updating the rating of a Story by a specific user name and Story id
     fun updateRatedStory(
         userName: String, storyId: String,
         ratingTitle: String?,
@@ -181,7 +182,6 @@ class StoryService {
                     rs[this.ratingCharacterValue] = ratingCharacterValue
                 }
                 rs[this.lastUpdate] = Date().time
-
             }
         }
     }
@@ -208,6 +208,9 @@ class StoryService {
             .map { Pair(it.id.toString(), it.lastUpdate) }
     }
 
+    fun getLastUpdatesRatedStoriesByStoryId(storyId: String): List<Pair<String, Long>> =
+        getRatedStoryByStoryId(storyId).map { Pair(it.uuid, it.lastUpdate) }
+
     /******************Story as Favorite *****************/
     fun setStoryAsFavorite(userName: String, storyId: String) {
         transaction {
@@ -227,10 +230,11 @@ class StoryService {
     fun getMyFavoriteStories(userName: String): List<StoryAsFavorite> =
         getAllStoriesAsFavorite().filter { it.user.userName == userName }
 
-    fun getLastUpdatesFromMyFavoriteStories(username : String): List<Pair<String, Long>> = getMyFavoriteStories(username).map { Pair(it.story.uuid, it.story.lastUpdate)}
+    fun getLastUpdatesFromMyFavoriteStories(username: String): List<Pair<String, Long>> =
+        getMyFavoriteStories(username).map { Pair(it.story.uuid, it.story.lastUpdate) }
 
     fun setStoryAsNotFavorite(userName: String, storyId: String): StoryAsFavorite {
-        val storyAsFavorite = getMyFavoriteStories(userName).first { it.story.uuid.toString() == storyId }
+        val storyAsFavorite = getMyFavoriteStories(userName).first { it.story.uuid == storyId }
         transaction {
             StoryAsFavoriteEntity.find {
 
@@ -242,9 +246,7 @@ class StoryService {
 
             }.first().delete()
         }
-
         return storyAsFavorite
-
     }
 
 }

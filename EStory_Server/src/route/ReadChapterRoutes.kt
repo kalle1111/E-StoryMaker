@@ -25,7 +25,7 @@ class GetALlReadChapterRoute
 @Location(GET_READ_CHAPTER_BY_UUID)
 class GetReadChapterByUUIDRoute
 
-fun Route.ReadChapterRoutes(
+fun Route.readChapterRoutes(
     readChapterService: ReadChapterService
 ) {
 

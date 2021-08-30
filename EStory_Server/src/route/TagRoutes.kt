@@ -38,7 +38,7 @@ class GetAllTagsToStoryRoute
 @Location(GET_TAG_BY_UUID)
 class GetTagByUUIDRoute
 
-fun Route.TagRoutes(
+fun Route.tagRoutes(
     tagService: TagService,
 ) {
     get<GetTagByUUIDRoute> {

@@ -16,83 +16,112 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import java.lang.Exception
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(CREAT_STORIES)
 class StoryCreateRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(MY_STORIES)
 class MyStoriesGetRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(STORIES)
 class StoriesGetRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(UPDATE_STORIES)
 class StoryUpdateRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(DELETE_STORIES)
 class StoryDeleteRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(RATE_STORIES)
 class StoryRateRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(UPDATE_RATED_STORIES)
 class StoryUpdateRateRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(RATED_STORIES)
 class RatedStoriesGetRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(FROM_ME_RATED_STORIES)
 class FromMeRatedStoriesGetRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(FAVORITE_STORIES)
 class FavoriteStoriesGetRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(MY_FAVORITE_STORIES)
 class MyFavoriteStoriesGetRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(SET_FAVORITE_STORIES)
 class SetFavoriteStoryRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(SET_AS_NOT_FAVORITE_STORIES)
 class SetAsNotFavoriteStoryRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(SEARCH_BY_TITLE_STORIES)
 class StorySearchByTitleRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(STORY_GET_BY_ID_LAST_UPDATE)
 class StoryGetLastUpdateRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(STORIES_GET_LAST_UPDATE_VALUES)
 class StoriesGetLastUpdateValuesRoute
 
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(RATED_STORY_GET_BY_ID_LAST_UPDATE)
 class RatedStoryGetLastUpdateRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(RATED_STORIES_GET_LAST_UPDATE_VALUES)
 class RatedStoriesGetLastUpdateValuesRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(MY_STORIES_GET_LAST_UPDATE_VALUES)
 class GetLastUpdatesMyStoriesRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(GET_STORY_BY_UUID)
 class GetStoryByUUIDRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(GET_FAVORITE_STORY_BY_UUID)
 class GetFavoriteStoryByUUIDRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(GET_RATED_STORY_BY_UUID)
 class GetRatedStoryByUUIDRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(GET_RATED_STORY_BY_STORY_ID)
 class GetRatedStoryByStoryIdRoute
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(FROM_RATED_STORIES_GET_LAST_UPDATES)
 class GetLastUpdatesFromMeRatedStories
 
+@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(MY_FAVORITE_STORIES_GET_LAST_UPDATES)
 class GetLastUpdatesFromMyFavoriteStories
 
-fun Route.StoryRoutes(
+@Location (GET_LAST_UPDATES_RATED_STORIES_BY_STORY_ID)
+class GetLastUpdatesRatedStoriesByStoryId
+
+fun Route.storyRoutes(
+
     storyService: StoryService
 ) {
     get<GetStoryByUUIDRoute> {
@@ -205,8 +234,6 @@ fun Route.StoryRoutes(
 
         post<StoryUpdateRoute> {
             // val uuid = call.parameters["uuid"]!!
-
-
             val story = try {
                 call.receive<UpdateStoryRequest>()
 
@@ -268,7 +295,7 @@ fun Route.StoryRoutes(
                 return@get
             }
             try {
-                val story = storyService.getStoryByTitle(storyTitle)
+                val story = storyService.getStoryBySubTitle(storyTitle)
                 call.respond(HttpStatusCode.OK, story)
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
@@ -513,5 +540,20 @@ fun Route.StoryRoutes(
         }
     }
 
+    get<GetLastUpdatesRatedStoriesByStoryId> {
+        val storyId = try {
+            call.request.queryParameters["storyId"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter: storyId is not present"))
+            return@get
+        }
+        try {
+            val lastUpdateValues = storyService.getLastUpdatesRatedStoriesByStoryId(storyId)
+            call.respond(HttpStatusCode.OK, lastUpdateValues)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
+
+        }
+    }
 
 }

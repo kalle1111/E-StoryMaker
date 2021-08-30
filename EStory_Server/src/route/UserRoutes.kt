@@ -4,7 +4,6 @@ import authentication.JwtService
 import com.eStory.model.user.LoginRequest
 import com.eStory.model.user.RegisterRequest
 import com.eStory.model.SimpleResponse
-import com.eStory.model.story.UpdateStoryRequest
 import com.eStory.model.user.UpdateProfile
 import com.eStory.model.user.User
 import com.eStory.service.UserService
@@ -44,7 +43,7 @@ class GetUserByUsernameRoute
 @Location(GET_USER_BY_UUID)
 class GetUserByUUIDRoute
 
-fun Route.UserRoutes(
+fun Route.userRoutes(
     userService: UserService,
     jwtService: JwtService,
     hashFunction: (String) -> String

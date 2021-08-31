@@ -6,6 +6,7 @@ import com.eStory.model.story.RateStoryRequest
 import com.eStory.model.story.StoryAsFavoriteRequest
 import com.eStory.model.story.UpdateStoryRequest
 import com.eStory.model.user.User
+import com.eStory.service.ChapterService
 import com.eStory.service.StoryService
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -122,7 +123,8 @@ class GetLastUpdatesRatedStoriesByStoryId
 
 fun Route.storyRoutes(
 
-    storyService: StoryService
+    storyService: StoryService,
+    chapterService: ChapterService
 ) {
     get<GetStoryByUUIDRoute> {
         val uuid = try {
@@ -202,7 +204,10 @@ fun Route.storyRoutes(
             }
             try {
                 val username = call.principal<User>()!!.userName
-                storyService.insert(username, story.storyTitle, story.description, story.storyChapters, story.cover)
+                //storyService.insert(username, story.storyTitle, story.description, story.storyChapters, story.cover)
+
+                storyService.insert(username, story.storyTitle, story.description, story.cover)
+                chapterService.insertChapter(story.insertFirstChapter.storyId, story.insertFirstChapter.title, story.insertFirstChapter.content, story.insertFirstChapter.index)
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story created Successfully!"))
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
@@ -246,7 +251,7 @@ fun Route.storyRoutes(
                     story.uuid,
                     story.storyTitle,
                     story.description,
-                    story.storyChapters,
+                 //   story.storyChapters,
                     story.cover!!
                 )
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story updated Successfully!"))

@@ -25,6 +25,7 @@ fun Application.module(testing: Boolean = false) {
     DatabaseFactory.init()
     val userService = UserService()
     val storyService = StoryService()
+    val chapterService = ChapterService()
     val readChapterService = ReadChapterService()
     val friendshipService = FriendshipService()
     val tagService = TagService()
@@ -61,7 +62,7 @@ fun Application.module(testing: Boolean = false) {
         }
 
         userRoutes(userService, jwtService, hashFunction)
-        storyRoutes(storyService)
+        storyRoutes(storyService, chapterService)
         friendshipRoutes(friendshipService)
         tagRoutes(tagService)
         readChapterRoutes(readChapterService)

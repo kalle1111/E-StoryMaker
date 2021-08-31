@@ -13,6 +13,7 @@ object DatabaseFactory {
         transaction {
             SchemaUtils.create(UsersTable)
             SchemaUtils.create(StoriesTable)
+            SchemaUtils.create(ChaptersTable)
             SchemaUtils.create(FriendshipsTable)
             SchemaUtils.create(RatedStoriesTable)
             SchemaUtils.create(StoriesAsFavoriteTable)

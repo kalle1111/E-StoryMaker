@@ -55,8 +55,6 @@ class ChapterService {
                     ch[this.content] = content
                 }
                 ch[this.lastUpdate] = Date().time
-
-
             }
         }
     }

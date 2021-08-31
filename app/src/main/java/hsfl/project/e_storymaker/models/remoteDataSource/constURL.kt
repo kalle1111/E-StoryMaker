@@ -25,6 +25,15 @@ const val STORIES_GET_LAST_UPDATE_VALUES = "$STORIES/getLastUpdates"
 const val MY_STORIES_GET_LAST_UPDATE_VALUES = "$MY_STORIES/getLastUpdates" // username als Query parameter eingeben
 const val GET_STORY_BY_UUID = "$STORIES/getByUUID"  // uuid als Query parameter eingeben
 
+const val CHAPTERS = "$API_VERSION/CHAPTERS"
+const val INSERT_CHAPTER_ROUTE = "$CHAPTERS/insertChapter"
+const val GET_CHAPTER_BY_UUID_ROUTE = "$CHAPTERS/getChapterById" // uuid als Query parameter eingeben
+const val GET_CHAPTERS_BY_STORY_ID_ROUTE = "$CHAPTERS/getChaptersByStoryId" // storyId als Query parameter eingeben
+const val GET_LAST_UPDATE_BY_CHAPTER_ID_ROUTE = "$CHAPTERS/getLastUpdateById" // uuid als Query parameter eingeben
+const val GET_CHAPTERS_LAST_UPDATES_BY_STORY_ID_ROUTE =
+    "$CHAPTERS/getLastUpdatesByStoryId" // storyId als Query parameter eingeben
+const val UPDATE_CHAPTER_BY_ID_ROUTE = "$CHAPTERS/updateChapterById" // siehe die Klasse UpdateChapterRequest
+
 const val SEARCH_BY_TITLE_STORIES = "$STORIES/searchByTitle"
 
 const val READ_CHAPTERS = "$API_VERSION/ReadChapters"

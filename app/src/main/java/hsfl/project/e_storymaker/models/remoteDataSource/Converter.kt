@@ -26,3 +26,11 @@ fun convertWebserviceFavoriteToDbFavorite(storyAsFavorite: StoryAsFavorite): hsf
 fun convertWebserviceFriendshipToDbFriendship(friendship: Friendship): hsfl.project.e_storymaker.roomDB.Entities.friendship.Friendship{
     return hsfl.project.e_storymaker.roomDB.Entities.friendship.Friendship(friendship.uuid, friendship.requesterUser.uuid, friendship.friend.uuid, friendship.isAccepted, friendship.requestTime, 0.toLong())
 }
+
+fun convertWebserviceChapterToDbChapter(chapter: Chapter): hsfl.project.e_storymaker.roomDB.Entities.chapter.Chapter {
+    return hsfl.project.e_storymaker.roomDB.Entities.chapter.Chapter(chapter.uuid, chapter.storyId, chapter.title, chapter.content, chapter.index, chapter.lastUpdate)
+}
+
+fun convertWebserviceTagToDbTag(tag: Tag): hsfl.project.e_storymaker.roomDB.Entities.tag.Tag {
+    return hsfl.project.e_storymaker.roomDB.Entities.tag.Tag(tag.uuid, tag.name, 0.toLong())
+}

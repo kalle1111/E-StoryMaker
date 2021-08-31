@@ -14,7 +14,7 @@ abstract class ChapterDao {
     abstract fun getChapterByUuid(chapter_uuid : String): Chapter
 
     @Query("SELECT * FROM chapter ORDER BY chapter_uuid ASC")
-    abstract fun getAllChapters(): LiveData<List<Chapter>>
+    abstract fun getAllChapters(): List<Chapter>
 
     @Update
     abstract fun changeChapter(chapter: Chapter)
@@ -30,7 +30,10 @@ abstract class ChapterDao {
     }
 
     @Query("SELECT * FROM chapter WHERE story_uuid LIKE :story_uuid ORDER BY chapter_index ASC")
-    abstract fun getChaptersByStoryUuid(story_uuid: String): LiveData<List<Chapter>>
+    abstract fun getChaptersByStoryUuid(story_uuid: String): List<Chapter>
+
+    @Query("SELECT EXISTS(SELECT * FROM chapter WHERE chapter_uuid = :uuid)")
+    abstract fun rowExistByUUID(uuid : String) : Boolean
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertChapter(chapter: Chapter)

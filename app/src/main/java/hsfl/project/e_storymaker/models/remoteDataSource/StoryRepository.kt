@@ -8,6 +8,8 @@ import com.google.gson.Gson
 import hsfl.project.e_storymaker.repository.webserviceModels.*
 import hsfl.project.e_storymaker.roomDB.AppDatabase
 import hsfl.project.e_storymaker.roomDB.AppRepository
+import hsfl.project.e_storymaker.roomDB.Entities.chapter.Chapter
+import hsfl.project.e_storymaker.roomDB.Entities.chapter.ChapterDao
 import hsfl.project.e_storymaker.roomDB.Entities.chapterProgress.ChapterProgressDao
 import hsfl.project.e_storymaker.roomDB.Entities.favoring.FavoringDao
 import hsfl.project.e_storymaker.roomDB.Entities.friendship.FriendshipDao
@@ -47,6 +49,7 @@ class StoryRepository(application: Application){
     val favoringDao: FavoringDao
     val ratingDao: RatingDao
     val tagDao: TagDao
+    val chapterDao: ChapterDao
 
     init{
 
@@ -59,6 +62,7 @@ class StoryRepository(application: Application){
         favoringDao = database.favoringDao()
         ratingDao = database.ratingDao()
         tagDao = database.tagDao()
+        chapterDao = database.chapterDao()
 
         repository = AppRepository(userDao, storyDao, friendshipDao,
             chapterProgressDao, favoringDao, ratingDao)
@@ -459,7 +463,7 @@ class StoryRepository(application: Application){
 
                 }
             } else {
-                if (storyDao.getStoryByUuid(it.first).cachedTime > it.second) {
+                if (storyDao.getStoryByUuid(it.first).cachedTime < it.second) {
                     //Das Rating anfordern und in der Datenbank speichern
                     val ratedStoryToInsert = getRatedStoryByUUID(it.first)
                     if(ratedStoryToInsert != null){
@@ -507,7 +511,7 @@ class StoryRepository(application: Application){
 
                     }
                 } else {
-                    if (storyDao.getStoryByUuid(it.first).cachedTime > it.second) {
+                    if (storyDao.getStoryByUuid(it.first).cachedTime < it.second) {
                         //Das Rating anfordern und in der Datenbank speichern
                         val ratedStoryToInsert = getRatedStoryByUUID(it.first)
                         if(ratedStoryToInsert != null){
@@ -599,8 +603,172 @@ class StoryRepository(application: Application){
         }
     }
 
-    /*********Tag Related Functions*********/
+    /*********Chapter Related Functions*********/
+    fun createChapter(insertChapterRequest: InsertChapterRequest): Boolean = runBlocking {
+        val authToken = sharedPreferences.getJWT(application)!!
+        val client = getAuthHttpClient(authToken)
+        try {
+            val response: HttpResponse = client.post(INSERT_CHAPTER_ROUTE){
+                contentType(ContentType.Application.Json)
+                body = insertChapterRequest
+            }
+            val stringBody: String = response.receive()
+            client.close()
+            val webResponse: WebResponse = Gson().fromJson(stringBody, WebResponse::class.java)
+            webResponse.success
+        } catch (e: Exception){
+            client.close()
+            false
+        }
+    }
 
+    fun updateChapter(updateChapterRequest: UpdateChapterRequest): Boolean = runBlocking {
+        val authToken = sharedPreferences.getJWT(application)!!
+        val client = getAuthHttpClient(authToken)
+        try {
+            val response: HttpResponse = client.post(UPDATE_CHAPTER_BY_ID_ROUTE){
+                contentType(ContentType.Application.Json)
+                body = updateChapterRequest
+            }
+            val stringBody: String = response.receive()
+            client.close()
+            val webResponse: WebResponse = Gson().fromJson(stringBody, WebResponse::class.java)
+            webResponse.success
+        } catch (e: Exception){
+            client.close()
+            false
+        }
+    }
+
+    fun getAllChaptersOfStory(storyId: String): List<hsfl.project.e_storymaker.roomDB.Entities.chapter.Chapter?> = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO) {
+            val chapterTimestamps: List<PairLastUpdate> = getAllChaptersTimestampsFromStoryId(storyId)
+            val chapters: MutableList<hsfl.project.e_storymaker.roomDB.Entities.chapter.Chapter?> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.chapter.Chapter?>()
+            chapterTimestamps.map{
+                if (!chapterDao.rowExistByUUID(it.first)){
+                    val chapterToInsert = getChapterByUUIDwithoutTimestampCheck(it.first)
+                    chapterDao.insertWithTimestamp(chapterToInsert)
+                    chapters.add(chapterDao.getChapterByUuid(it.first))
+                } else {
+                    if (chapterDao.getChapterByUuid(it.first).cachedTime < it.second){
+                        val chapterToInsert = getChapterByUUIDwithoutTimestampCheck(it.first)
+                        chapterDao.insertWithTimestamp(chapterToInsert)
+                        chapters.add(chapterDao.getChapterByUuid(it.first))
+                    } else {
+                        chapters.add(chapterDao.getChapterByUuid(it.first))
+                    }
+                }
+            }
+            chapters
+        }
+    }
+
+    private fun getAllChaptersTimestampsFromStoryId(storyId: String) = runBlocking {
+
+            val authToken = sharedPreferences.getJWT(application)!!
+            val client: HttpClient = getAuthHttpClient(authToken)
+            val response: HttpResponse = client.get(GET_CHAPTERS_LAST_UPDATES_BY_STORY_ID_ROUTE){
+                parameter("storyId", storyId)
+            }
+            val jsonString: String = response.receive()
+            Log.d(TAG, jsonString)
+            client.close()
+            val chapterTimestampPairLastUpdate = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
+            chapterTimestampPairLastUpdate
+    }
+
+    private fun getChapterByUUIDwithoutTimestampCheck(uuid: String): hsfl.project.e_storymaker.roomDB.Entities.chapter.Chapter = runBlocking {
+        val authToken = sharedPreferences.getJWT(application)!!
+        val client: HttpClient = getAuthHttpClient(authToken)
+        val response: HttpResponse = client.get(GET_CHAPTER_BY_UUID_ROUTE){
+            parameter("uuid", uuid)
+        }
+        val jsonString: String = response.receive()
+        Log.d(TAG, jsonString)
+        client.close()
+        val chapter = Gson().fromJson(jsonString, hsfl.project.e_storymaker.repository.webserviceModels.Chapter::class.java)
+        convertWebserviceChapterToDbChapter(chapter)
+    }
+
+    fun getChapter(uuid: String): hsfl.project.e_storymaker.roomDB.Entities.chapter.Chapter = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            if(!chapterDao.rowExistByUUID(uuid)){
+                val chapterToInsert = getChapterByUUIDwithoutTimestampCheck(uuid)
+                chapterDao.insertWithTimestamp(chapterToInsert)
+                chapterDao.getChapterByUuid(uuid)
+            } else {
+                val chapterTimestamp = getChapterTimestampFromChapterUUID(uuid)
+                if(chapterDao.getChapterByUuid(uuid).cachedTime < chapterTimestamp.second){
+                    val chapterToInsert = getChapterByUUIDwithoutTimestampCheck(uuid)
+                    chapterDao.insertWithTimestamp(chapterToInsert)
+                    chapterDao.getChapterByUuid(uuid)
+                } else {
+                    chapterDao.getChapterByUuid(uuid)
+                }
+            }
+        }
+    }
+
+    private fun getChapterTimestampFromChapterUUID(uuid: String): PairLastUpdate = runBlocking {
+
+            val authToken = sharedPreferences.getJWT(application)!!
+            val client: HttpClient = getAuthHttpClient(authToken)
+            val response: HttpResponse = client.get(GET_LAST_UPDATE_BY_CHAPTER_ID_ROUTE){
+                parameter("uuid", uuid)
+            }
+            val jsonString: String = response.receive()
+            Log.d(TAG, jsonString)
+            client.close()
+            val chapterTimestamp = Gson().fromJson(jsonString, PairLastUpdate::class.java)
+            chapterTimestamp
+    }
+
+    /*********Tag Related Functions*********/
+    fun getAllTags(): List<Tag> = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val authToken = sharedPreferences.getJWT(application)!!
+            val client: HttpClient = getAuthHttpClient(authToken)
+            val response: HttpResponse = client.get(TAGS)
+            val jsonString: String = response.receive()
+            Log.d(TAG, jsonString)
+            client.close()
+            val tags = Gson().fromJson(jsonString, Array<hsfl.project.e_storymaker.repository.webserviceModels.Tag>::class.java).toList()
+            val roomDBTags = tags.map{
+                tagDao.insertWithTimestamp(convertWebserviceTagToDbTag(it))
+                tagDao.getTagByUUID(it.uuid)
+            }
+            roomDBTags
+        }
+    }
+
+//    fun getAllStoriesWithTag(tag: Tag): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
+//        return@runBlocking withContext(Dispatchers.IO){
+//
+//        }
+//    }
+
+    fun getTagsOfStory(storyId: String): List<Tag> = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val authToken = sharedPreferences.getJWT(application)!!
+            val client: HttpClient = getAuthHttpClient(authToken)
+            val response: HttpResponse = client.get(GET_ALL_TAGS_TO_STORY){
+                parameter("storyId", storyId)
+            }
+            val jsonString: String = response.receive()
+            Log.d(TAG, jsonString)
+            client.close()
+            val tags = Gson().fromJson(jsonString, Array<hsfl.project.e_storymaker.repository.webserviceModels.Tag>::class.java).toList()
+            val roomDBTags = tags.map{
+                if(!tagDao.rowExistByUUID(it.uuid)){
+                    tagDao.insertWithTimestamp(convertWebserviceTagToDbTag(it))
+                    tagDao.getTagByUUID(it.uuid)
+                } else {
+                    tagDao.getTagByUUID(it.uuid)
+                }
+            }
+            roomDBTags
+        }
+    }
 
     fun cacheDataStories(stories: List<hsfl.project.e_storymaker.roomDB.Entities.story.Story>) {
         //repository.addStories(stories)

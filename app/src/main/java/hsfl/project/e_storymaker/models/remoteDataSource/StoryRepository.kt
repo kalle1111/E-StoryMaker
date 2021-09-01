@@ -461,7 +461,8 @@ class StoryRepository(application: Application){
         }
     }
 
-    fun setStoryAsFavorite(authToken: String, storyAsFavoriteRequest: StoryAsFavoriteRequest): Boolean = runBlocking {
+    fun setStoryAsFavorite(storyAsFavoriteRequest: StoryAsFavoriteRequest): Boolean = runBlocking {
+        val authToken = sharedPreferences.getJWT(application)!!
         val client = getAuthHttpClient(authToken)
         try {
             val response: HttpResponse = client.post(SET_FAVORITE_STORIES){

@@ -109,17 +109,7 @@ class UserRepository(application: Application) {
         }
     }
 
-    private fun getUserByUsernameTimestamp(): String = runBlocking{
-        val client = HttpClient(CIO)
-        val username = sharedPreferences.getUsername(application)!!
-        val response: HttpResponse = client.get(USER_GET_BY_USERNAME_LAST_UPDATE){
-            parameter("username", username)
-        }
-        val jsonString: String = response.receive()
-        client.close()
-        val usersLastUpdate = Gson().fromJson(jsonString, String::class.java).toList()
-        usersLastUpdate.toCharArray().concatToString()
-    }
+
 
     private fun getAllUsersTimestamp() = runBlocking {
         val client = HttpClient(CIO)
@@ -177,21 +167,6 @@ class UserRepository(application: Application) {
         }
     }
 
-    private fun sendMyProfileRequest(authToken: String) = runBlocking {
-        return@runBlocking withContext(Dispatchers.IO){
-            val client = getAuthHttpClient(authToken)
-            try {
-                val response: HttpResponse = client.get(GET_PROFILE)
-                val jsonString: String = response.receive()
-                Log.d(TAG, jsonString)
-                client.close()
-                convertWebserviceUserToDBUser(Gson().fromJson(jsonString, User::class.java))
-            } catch(e: Exception){
-                Log.d(TAG, e.toString())
-                null
-            }
-        }
-    }
     /*********Friendship Related Functions*********/
     fun getMyFriendships(authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.friendship.Friendship> = runBlocking {
         val client = getAuthHttpClient(authToken)

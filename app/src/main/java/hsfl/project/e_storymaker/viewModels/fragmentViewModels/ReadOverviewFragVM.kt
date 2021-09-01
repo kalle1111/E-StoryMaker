@@ -4,6 +4,7 @@ package hsfl.project.e_storymaker.viewModels.fragmentViewModels
 import android.app.Application
 import android.util.Log
 import hsfl.project.e_storymaker.models.remoteDataSource.StoryRepository
+import hsfl.project.e_storymaker.repository.webserviceModels.StoryAsFavoriteRequest
 import hsfl.project.e_storymaker.roomDB.Entities.story.Story
 import hsfl.project.e_storymaker.viewModels.ReadingVM
 import io.ktor.auth.*
@@ -22,7 +23,7 @@ class ReadOverviewFragVM : ReadingVM() {
         getStory(storyID)
     }
 
-    private fun getStory(storyID: String?){
+    fun getStory(storyID: String?){
         if (storyRep != null){
             if (storyID != null){
                 this.storyID = storyID
@@ -34,6 +35,22 @@ class ReadOverviewFragVM : ReadingVM() {
         }else{
             //THROW ERROR
         }
+    }
+
+    fun isFav(): Boolean{
+        return storyRep?.getMyFavoriteStories()?.any{ it.story_uuid == this.storyID}!!
+    }
+
+    fun favoriteStory(): Boolean{
+        Log.e("ReadOverviewFragVM", storyRep?.getMyFavoriteStories().toString())
+        return if(isFav()){
+            storyRep?.setStoryAsNotFavorite(StoryAsFavoriteRequest(this.storyID!!))
+            false
+        }else{
+            storyRep?.setStoryAsFavorite(StoryAsFavoriteRequest(this.storyID!!))
+            true
+        }
+
     }
 
     fun storyCover(): ByteArray{

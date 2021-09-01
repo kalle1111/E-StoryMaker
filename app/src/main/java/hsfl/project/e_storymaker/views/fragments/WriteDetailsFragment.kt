@@ -28,6 +28,7 @@ import hsfl.project.e_storymaker.R
 import hsfl.project.e_storymaker.databinding.WriteDetailsFragmentBinding
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.WriteDetailsFragVM
 import hsfl.project.e_storymaker.views.activities.WritingActivity
+import kotlinx.serialization.descriptors.PrimitiveKind
 import java.io.ByteArrayOutputStream
 
 class WriteDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener {
@@ -86,7 +87,13 @@ class WriteDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val addChapter: Boolean? = (requireActivity() as WritingActivity).intent.extras?.getBoolean("addChapter")
+        val sID: String? = (requireActivity() as WritingActivity).intent.extras?.getString("storyID")
+        if (addChapter != null && addChapter == true){
+            val bundle = bundleOf("storyID" to sID)
+            findNavController().navigate(R.id.action_WriteOverview_to_WriteChapter, bundle)
 
+        }
         val storyToEdit: String? = (requireActivity() as WritingActivity).intent.extras?.getString("storyToEditID")
         viewModel = ViewModelProvider(this).get(WriteDetailsFragVM::class.java)
         viewModel.setApplicationContext((requireActivity() as WritingActivity).application, storyToEdit)
@@ -109,6 +116,8 @@ class WriteDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.writeDetailsTagSelector.adapter = adapter
         }
+
+
 
 
     }

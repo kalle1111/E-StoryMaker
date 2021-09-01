@@ -125,7 +125,7 @@ class UserRepository(application: Application) {
         return@runBlocking withContext(Dispatchers.IO){
             val client = getHttpClient()
             try {
-                val response: HttpResponse = client.delete(GET_USER_BY_USERNAME){
+                val response: HttpResponse = client.get(GET_USER_BY_USERNAME){
                     parameter("username", username)
                 }
                 val stringBody: String = response.receive()
@@ -133,6 +133,7 @@ class UserRepository(application: Application) {
                 val user: User = Gson().fromJson(stringBody, User::class.java)
                 convertWebserviceUserToDBUser(user)
             }catch (e: Exception){
+                Log.e(TAG, e.toString())
                 client.close()
                 null
             }

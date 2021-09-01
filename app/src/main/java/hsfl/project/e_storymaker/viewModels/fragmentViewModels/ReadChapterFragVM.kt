@@ -30,6 +30,15 @@ class ReadChapterFragVM : ReadingVM() {
         Log.i("ReadChapterFRAGVM", chapterList.toString())
     }
 
+    fun prevChapter(): Boolean{
+        return if (currentChapter > 0){
+            currentChapter--
+            true
+        }else{
+            false
+        }
+    }
+
     fun nextChapter(): Boolean{
         return if (currentChapter+1 < chapterList?.count()!!){
             currentChapter++
@@ -50,7 +59,7 @@ class ReadChapterFragVM : ReadingVM() {
 
     fun chapterTitle(): String{
         try {
-            return chapterList?.get(currentChapter)?.chapter_Title!!
+            return (currentChapter +1).toString() + ": " + chapterList?.get(currentChapter)?.chapter_Title!!
         }catch (e: Exception){
             return "NO CHAPTER FOUND!"
         }

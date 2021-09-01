@@ -22,6 +22,7 @@ class WriteChapterFragVM : WritingVM() {
 
     fun createChapter(storyID: String, title: String, content: String, index: Int): Boolean {
         Log.d("WriteChapter", "ch title: " + title + " ; " + "ch content: " + content + " sID: " +storyID)
-        return storyRep?.createChapter(InsertChapterRequest(storyID, title, content, 0))!!
+        Log.d("WriteChapterFragVM", storyRep?.getAllChaptersOfStory(storyID)?.count()!!.toString())
+        return storyRep?.createChapter(InsertChapterRequest(storyID, title, content, storyRep?.getAllChaptersOfStory(storyID)?.count()!!))!!
     }
 }

@@ -140,5 +140,31 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <Button
+            android:id="@+id/readOverview_addChapterB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Add Chapter"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/readOverview_favB" />
+
+        <ImageButton
+            android:id="@+id/readOverview_favB"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="25dp"
+            android:backgroundTint="#0A25B8"
+            android:scaleX="2"
+            android:scaleY="2"
+            android:tint="#757575"
+            android:tintMode="multiply"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+            app:srcCompat="@android:drawable/checkbox_on_background" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -42,6 +42,7 @@ class WriteChapterFragment : Fragment() {
                 (requireActivity() as WritingActivity).finish()
                 //Log.d("WriteChapterFrag", "SUCCESS")
             }else{
+                Log.e("WriteChapterFrag", "CHAPTER WAS NOT ADDED!")
                 //TODO("FIX INDEXING!")
             }
         }

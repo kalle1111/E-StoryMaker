@@ -33,6 +33,19 @@ class ReadChapterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.readChapNextB.setOnClickListener {
+            viewModel.nextChapter()
+
+            binding.readChapTitle.text = viewModel.chapterTitle()
+            binding.readChapCont.text = viewModel.chapterContent()
+        }
+
+        binding.readChapPrevB.setOnClickListener {
+            viewModel.prevChapter()
+            binding.readChapTitle.text = viewModel.chapterTitle()
+            binding.readChapCont.text = viewModel.chapterContent()
+        }
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

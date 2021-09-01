@@ -45,7 +45,7 @@ class LibraryFragVM : MainVM() {
             Log.d("LibraryFragVM", "getStories(): " + "MODE=" + libraryMode)
             when(libraryMode){
                 0 -> {
-                    val tempSList: MutableList<Story> = mutableListOf()
+                    var tempSList: MutableList<Story> = mutableListOf()
 
                     val originalList = storyRep?.getMyStories()
                     originalList?.forEach {
@@ -61,6 +61,7 @@ class LibraryFragVM : MainVM() {
                     revList?.forEach {
                         tempSList.add(storyRep?.getStory(it.story_uuid)!!)
                     }
+                    tempSList = tempSList.distinctBy { it.story_uuid } as MutableList<Story>
                     currentStoryList = tempSList
                 }
 
@@ -99,6 +100,8 @@ class LibraryFragVM : MainVM() {
             return "Your Library"
         }
     }
+
+
 
 
 

@@ -132,8 +132,14 @@ class StoryFinderFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getStories()
+        populateStoryList(viewModel.CurrentStoryList())
+    }
+
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        //TODO("Not yet implemented")
+        //viewModel.CurrentStoryList().sortedBy { it.storyTitle }
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

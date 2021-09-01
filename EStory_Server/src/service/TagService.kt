@@ -74,14 +74,27 @@ class TagService {
         val temporarilyList = mutableListOf<TaggedStory>()
 
         val allTaggedStories = getAllTaggedStories()
+        val Alllist: MutableList<List<TaggedStory>> = mutableListOf()
+        var filteredLists: MutableList<TaggedStory> = mutableListOf()
+
         listOfTags.forEach { tagName ->
-            val filteredList =
-                allTaggedStories.filter { it.tag.name == tagName } // the list can have duplicated elements
-            temporarilyList.addAll(filteredList)
+            Alllist.add(allTaggedStories.filter { it.tag.name == tagName })
         }
 
+        Alllist.get(0).forEach {taggedStory->
+            val story = taggedStory.story.uuid
+            if(Alllist.all { list -> list.any { it.story.uuid == story } }){
+                filteredLists.add(taggedStory)
+            }
+
+        }
+
+
+
+
+
         // remove duplicated elements and return list of stories
-        return temporarilyList.distinctBy { it.story.uuid }.map { it.story }
+        return filteredLists.distinctBy { it.story.uuid }.map { it.story }
     }
 
     // client can search for stories by tags and title of stories, parameter is list of tags and title

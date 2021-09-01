@@ -58,14 +58,15 @@ fun Application.module(testing: Boolean = false) {
 
     routing {
         get("/") {
-            call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
+            call.respondText("HELLO STORY_MAKER!", contentType = ContentType.Text.Plain)
         }
 
         userRoutes(userService, jwtService, hashFunction)
-        storyRoutes(storyService, chapterService)
+        storyRoutes(storyService)
         friendshipRoutes(friendshipService)
         tagRoutes(tagService)
         readChapterRoutes(readChapterService)
+        chapterRoutes(chapterService)
 
         get("/session/increment") {
             val session = call.sessions.get<MySession>() ?: MySession()
@@ -73,21 +74,6 @@ fun Application.module(testing: Boolean = false) {
             call.respondText("Counter is ${session.count}. Refresh to increment.")
         }
 
-        get("/json/gson") {
-            call.respond(mapOf("hello" to "world"))
-        }
-    }
-
-    routing {
-        get("/download") {
-            val file = File("uploads/ktor_logo.png")
-            call.response.header(
-                HttpHeaders.ContentDisposition,
-                ContentDisposition.Attachment.withParameter(ContentDisposition.Parameters.FileName, "ktor_logo.png")
-                    .toString()
-            )
-            call.respondFile(file)
-        }
     }
 }
 

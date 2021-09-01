@@ -46,7 +46,6 @@ class StoryService {
         userName: String,
         storyTitle: String,
         description: String,
-      //  storyChapters: String,
         cover: ByteArray?
     ): Story =
         transaction {
@@ -55,7 +54,7 @@ class StoryService {
                 this.description = description
                 this.storyTitle = storyTitle
                 this.createTime = Date().time
-               // this.storyChapters = storyChapters
+                // this.storyChapters = storyChapters
                 this.averageRating = 0.0
                 if (cover != null) {
                     this.cover = cover
@@ -68,7 +67,7 @@ class StoryService {
         uuid: String,
         storyTitle: String? = null,
         description: String? = null,
-     //   storyChapters: String? = null,
+        //   storyChapters: String? = null,
         cover: ByteArray
     ) {
         transaction {
@@ -84,9 +83,9 @@ class StoryService {
                 if (description != null) {
                     st[this.description] = description
                 }
-               /* if (storyChapters != null) {
-                    st[this.storyChapters] = storyChapters
-                }*/
+                /* if (storyChapters != null) {
+                     st[this.storyChapters] = storyChapters
+                 }*/
                 st[this.cover] = cover
 
                 st[this.lastUpdate] = Date().time

@@ -85,7 +85,7 @@ fun Route.chapterRoutes(
         }
 
 
-
+        //get all chapters of A story by story id
         get<GetChaptersByStoryIdRoute> {
             val storyId = try {
                 call.request.queryParameters["storyId"]!!

@@ -118,13 +118,12 @@ class GetLastUpdatesFromMeRatedStories
 @Location(MY_FAVORITE_STORIES_GET_LAST_UPDATES)
 class GetLastUpdatesFromMyFavoriteStories
 
-@Location (GET_LAST_UPDATES_RATED_STORIES_BY_STORY_ID)
+@Location(GET_LAST_UPDATES_RATED_STORIES_BY_STORY_ID)
 class GetLastUpdatesRatedStoriesByStoryId
 
 fun Route.storyRoutes(
 
-    storyService: StoryService,
-    chapterService: ChapterService
+    storyService: StoryService
 ) {
     get<GetStoryByUUIDRoute> {
         val uuid = try {
@@ -207,7 +206,6 @@ fun Route.storyRoutes(
                 //storyService.insert(username, story.storyTitle, story.description, story.storyChapters, story.cover)
 
                 storyService.insert(username, story.storyTitle, story.description, story.cover)
-                chapterService.insertChapter(story.insertFirstChapter.storyId, story.insertFirstChapter.title, story.insertFirstChapter.content, story.insertFirstChapter.index)
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story created Successfully!"))
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
@@ -251,7 +249,7 @@ fun Route.storyRoutes(
                     story.uuid,
                     story.storyTitle,
                     story.description,
-                 //   story.storyChapters,
+                    //   story.storyChapters,
                     story.cover!!
                 )
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story updated Successfully!"))

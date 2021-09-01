@@ -8,7 +8,7 @@ fun convertWebserviceUserToDBUser(user: User): hsfl.project.e_storymaker.roomDB.
 
 //TODO: Parameter und Storyklasse anpassen
 fun convertWebserviceStoryToDbStory(story: Story): hsfl.project.e_storymaker.roomDB.Entities.story.Story{
-    return hsfl.project.e_storymaker.roomDB.Entities.story.Story(story.uuid, story.user.userName, story.storyTitle, story.description, story.createTime.toString(), 0, ByteArray(0), story.averageRating, story.lastUpdate)
+    return hsfl.project.e_storymaker.roomDB.Entities.story.Story(story.uuid, story.user.userName, story.storyTitle, story.description, story.createTime.toString(), 0, story.cover!!, story.averageRating, story.lastUpdate)
 }
 
 //fun convertDbStoryToWebserviceStory (story:  hsfl.project.e_storymaker.roomDB.Entities.story.Story, user: User): Story {

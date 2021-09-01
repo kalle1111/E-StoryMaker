@@ -41,6 +41,8 @@ class GetTagByUUIDRoute
 @Location(GET_LAST_UPDATES_BY_TAGS)
 class GetLastUpdatesByTags
 
+@Location (GET_LAST_UPDATES_BY_TAGS_AND_TITLE)
+class GetLastUpdatesByTagsAndTitle
 fun Route.tagRoutes(
     tagService: TagService,
 ) {
@@ -56,6 +58,29 @@ fun Route.tagRoutes(
         }
         try {
             val lastUpdates = tagService.getLastUpdatesByTags(searchByTags.tags)
+            call.respond(HttpStatusCode.OK, lastUpdates)
+        } catch (e: Exception) {
+            call.respond(
+                HttpStatusCode.Conflict,
+                SimpleResponse(false, e.message ?: "Some Problems occurred setFavorite")
+            )
+        }
+    }
+
+
+
+    get<GetLastUpdatesByTagsAndTitle> {
+        val searchByTagsAndTitle = try {
+
+            call.receive<SearchByTagsAndTitle>()
+
+        } catch (e: Exception) {
+
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "Missing Fields.."))
+            return@get
+        }
+        try {
+            val lastUpdates = tagService.getLastUpdatesByTagsAndTitle(searchByTagsAndTitle.tags, searchByTagsAndTitle.title)
             call.respond(HttpStatusCode.OK, lastUpdates)
         } catch (e: Exception) {
             call.respond(

@@ -46,6 +46,7 @@ const val GET_TAG_BY_UUID = "$TAGS/getByUUID"  // uuid als Query parameter einge
 const val GET_BY_TAGS_STORIES = "$TAGS/getByTags"
 const val GET_BY_TAGS_AND_TITLE_STORIES = "$TAGS/getByTagsAndTitle"
 const val GET_LAST_UPDATES_BY_TAGS = "$TAGS/getLastUpdatesByTags"
+const val GET_LAST_UPDATES_BY_TAGS_AND_TITLE = "$TAGS/getLastUpdatesByTagsAndTitle"
 
 const val RATE_STORIES = "$STORIES/rateStory"
 const val UPDATE_RATED_STORIES = "$STORIES/updateRatedStory"
@@ -67,7 +68,6 @@ const val SET_AS_NOT_FAVORITE_STORIES = "$FAVORITE_STORIES/setNotFavorite"
 const val GET_FAVORITE_STORY_BY_UUID = "$FAVORITE_STORIES/getByUUID"  // uuid als Query parameter eingeben
 const val MY_FAVORITE_STORIES_GET_LAST_UPDATES =
     "$MY_FAVORITE_STORIES/getLastUpdates" // username als Query parameter eingeben
-
 
 const val FRIENDSHIPS = "$API_VERSION/friendships"
 const val MY_FRIENDSHIPS = "$FRIENDSHIPS/myFriendships"

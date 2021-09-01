@@ -88,4 +88,7 @@ class TagService {
 
     fun getLastUpdatesByTags(listOfTags: List<String>): List<Pair<String, Long>> =
         getStoriesByTags(listOfTags).map { Pair(it.uuid, it.lastUpdate) }
+
+    fun getLastUpdatesByTagsAndTitle(listOfTags: List<String>, subTitle: String): List<Pair<String, Long>> =
+        getStoriesByTagsAndTitle(listOfTags, subTitle).map { Pair(it.uuid, it.lastUpdate) }
 }

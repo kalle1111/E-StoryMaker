@@ -18,7 +18,7 @@ abstract class TagDao {
     abstract fun getTagByTagname(tagName: String): Tag
 
     @Query("SELECT EXISTS(SELECT * FROM tag WHERE tagName = :tagName)")
-    abstract fun rowExistByUUID(tagName : String) : Boolean
+    abstract fun rowExistByTagname(tagName : String) : Boolean
 
     fun insertWithTimestamp(tag: Tag) {
         insertTag(tag.apply{

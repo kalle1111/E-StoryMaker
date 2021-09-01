@@ -122,10 +122,7 @@ fun Route.userRoutes(
         }
         try {
             val user = userService.insert(
-                registerRequest.firstname,
-                registerRequest.lastname,
                 registerRequest.userName,
-                registerRequest.birthday,
                 registerRequest.description,
                 hashFunction(registerRequest.password),
                 registerRequest.image

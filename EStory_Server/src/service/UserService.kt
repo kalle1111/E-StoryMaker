@@ -48,22 +48,16 @@ class UserService {
 
     // inserting new user
     fun insert(
-        firstname: String,
-        lastname: String,
         userName: String,
-        birthday: String,
         description: String,
         password: String,
         image: ByteArray?
     ): User =
         transaction {
             UserEntity.new {
-                this.firstname = firstname
-                this.lastname = lastname
                 this.hashPassword = password
                 this.userName = userName
                 this.description = description
-                this.birthday = birthday
                 if (image != null) {
                     this.image = image
                 }

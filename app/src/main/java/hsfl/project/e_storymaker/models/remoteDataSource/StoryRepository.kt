@@ -63,31 +63,7 @@ class StoryRepository(application: Application){
         return@runBlocking withContext(Dispatchers.IO) {
             //val authToken = sharedPreferences.getJWT(activity)
             val storiesWithTimestamp = getAllStoriesTimestamp()
-            val dbStories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.story.Story>()
-            storiesWithTimestamp.map {
-                if (!storyDao.rowExistByUUID(it.first)) {
-                    //Insert Story
-                    val storyToInsert = getStoryByUUID(it.first)
-                    if (storyToInsert != null){
-                        storyDao.insertWithTimestamp(storyToInsert)
-                        dbStories.add(storyDao.getStoryByUuid(it.first))
-                    } else {
-                    }
-                } else {
-                    if (storyDao.getStoryByUuid(it.first).cachedTime < it.second) {
-                        //Die Story anfordern und in der Datenbank speichern
-                        val storyToInsert = getStoryByUUID(it.first)
-                        if (storyToInsert != null){
-                            storyDao.insertWithTimestamp(storyToInsert)
-                            dbStories.add(storyDao.getStoryByUuid(it.first))
-                        } else {
-                        }
-                    } else {
-                        dbStories.add(storyDao.getStoryByUuid(it.first))
-                    }
-                }
-            }
-            dbStories
+            cacheStories(storiesWithTimestamp)
         }
     }
 
@@ -128,33 +104,7 @@ class StoryRepository(application: Application){
             val username = sharedPreferences.getUsername(application)!!
             val authToken = sharedPreferences.getJWT(application)!!
             val storiesWithTimestamp = getMyStoriesTimestamp(username, authToken)
-            val dbStories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.story.Story>()
-            storiesWithTimestamp.map {
-                if (!storyDao.rowExistByUUID(it.first)) {
-                    //Insert Story
-                    val storyToInsert = getStoryByUUID(it.first)
-                    if (storyToInsert != null){
-                        storyDao.insertWithTimestamp(storyToInsert)
-                        dbStories.add(storyDao.getStoryByUuid(it.first))
-                    } else {
-
-                    }
-                } else {
-                    if (storyDao.getStoryByUuid(it.first).cachedTime < it.second) {
-                        //Die Story anfordern und in der Datenbank speichern
-                        val storyToInsert = getStoryByUUID(it.first)
-                        if (storyToInsert != null){
-                            storyDao.insertWithTimestamp(storyToInsert)
-                            dbStories.add(storyDao.getStoryByUuid(it.first))
-                        } else {
-
-                        }
-                    } else {
-                        dbStories.add(storyDao.getStoryByUuid(it.first))
-                    }
-                }
-            }
-            dbStories
+            cacheStories(storiesWithTimestamp)
         }
     }
 
@@ -249,7 +199,6 @@ class StoryRepository(application: Application){
 
     private fun compareStoriesWithTimestamp(timestamps: List<PairLastUpdate>, authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
-            val httpClient = getAuthHttpClient(authToken)
             val stories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = mutableListOf()
             timestamps.map{
                 if(!storyDao.rowExistByUUID(it.first)){
@@ -346,28 +295,12 @@ class StoryRepository(application: Application){
     }
 
     fun getStoriesTitle(title: String): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
-        return@runBlocking withContext(Dispatchers.IO){
+        return@runBlocking withContext(Dispatchers.IO) {
             val storiesTimestamps: List<PairLastUpdate> = getStoryTimestampsByTitle(title)
-            val stories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = mutableListOf()
-            storiesTimestamps.map{
-                if (!storyDao.rowExistByUUID(it.first)){
-                    val storyToInsert = getStoryByUUID(it.first)!!
-                    storyDao.insertWithTimestamp(storyToInsert)
-                    stories.add(storyDao.getStoryByUuid(it.first))
-                } else {
-                    if(storyDao.getStoryByUuid(it.first).cachedTime < it.second){
-                        val storyToInsert = getStoryByUUID(it.first)!!
-                        storyDao.insertWithTimestamp(storyToInsert)
-                        stories.add(storyDao.getStoryByUuid(it.first))
-                    } else {
-                        stories.add(storyDao.getStoryByUuid(it.first))
-
-                    }
-                }
-            }
-            stories
+            cacheStories(storiesTimestamps)
         }
     }
+
 
     private fun getStoryTimestampsByTitle(title: String): List<PairLastUpdate> = runBlocking {
         val authToken = sharedPreferences.getJWT(application)!!
@@ -426,34 +359,7 @@ class StoryRepository(application: Application){
     fun getAllRatedStories(): List<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = runBlocking {
         withContext(Dispatchers.IO){
             val ratedStoriesTimestamp = getAllRatedStoriesTimestamp()
-            val dbRatedStories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating>()
-            ratedStoriesTimestamp.map {
-                if (!ratingDao.rowExistByUUID(it.first)) {
-                    //Insert Rating
-                    val ratedStoryToInsert = getRatedStoryByUUID(it.first)
-                    if(ratedStoryToInsert != null){
-                        ratingDao.insertRating(ratedStoryToInsert)
-                        dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
-                    } else {
-
-                    }
-                } else {
-                    if (storyDao.getStoryByUuid(it.first).cachedTime < it.second) {
-                        //Das Rating anfordern und in der Datenbank speichern
-                        val ratedStoryToInsert = getRatedStoryByUUID(it.first)
-                        if(ratedStoryToInsert != null){
-                            ratingDao.deleteRating(ratedStoryToInsert.user_username, ratedStoryToInsert.story_uuid)
-                            ratingDao.insertRating(ratedStoryToInsert)
-                            dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
-                        } else {
-
-                        }
-                    } else {
-                        dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
-                    }
-                }
-            }
-            dbRatedStories
+            cacheRatedStories(ratedStoriesTimestamp)
         }
     }
 
@@ -489,42 +395,15 @@ class StoryRepository(application: Application){
 
     fun getMyRatedStories(): List<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
+            val ratedStoriesTimestamp = getMyRatedStoriesTimestamp()
+            cacheRatedStories(ratedStoriesTimestamp)
+        }
+    }
+
+    private fun getMyRatedStoriesTimestamp() = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
             val authToken = sharedPreferences.getJWT(application)!!
             val username = sharedPreferences.getUsername(application)!!
-        val ratedStoriesTimestamp = getMyRatedStoriesTimestamp(authToken, username)
-        val dbRatedStories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating>()
-        ratedStoriesTimestamp.map {
-            if (!ratingDao.rowExistByUUID(it.first)) {
-                //Insert Rating
-                val ratedStoryToInsert = getRatedStoryByUUID(it.first)
-                if(ratedStoryToInsert != null){
-                    ratingDao.insertRating(ratedStoryToInsert)
-                    dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
-                } else {
-
-                }
-            } else {
-                if (storyDao.getStoryByUuid(it.first).cachedTime < it.second) {
-                    //Das Rating anfordern und in der Datenbank speichern
-                    val ratedStoryToInsert = getRatedStoryByUUID(it.first)
-                    if(ratedStoryToInsert != null){
-                        ratingDao.deleteRating(ratedStoryToInsert.user_username, ratedStoryToInsert.story_uuid)
-                        ratingDao.insertRating(ratedStoryToInsert)
-                        dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
-                    } else {
-
-                    }
-                } else {
-                    dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
-                }
-            }
-        }
-        dbRatedStories
-    }
-    }
-
-    private fun getMyRatedStoriesTimestamp(authToken: String, username: String) = runBlocking {
-        return@runBlocking withContext(Dispatchers.IO){
             val client = getAuthHttpClient(authToken)
             val response: HttpResponse = client.get(MY_STORIES_GET_LAST_UPDATE_VALUES){
                 parameter("username", username)
@@ -540,34 +419,7 @@ class StoryRepository(application: Application){
     fun getRatedStoriesByStoryId(uuid: String):  List<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = runBlocking{
         return@runBlocking withContext(Dispatchers.IO){
             val ratedStoryByIdTimestamp = getRatedStoriesTimestampByStoryId(uuid)
-            val dbRatedStories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating>()
-            ratedStoryByIdTimestamp.map {
-                if (!ratingDao.rowExistByUUID(it.first)) {
-                    //Insert Rating
-                    val ratedStoryToInsert = getRatedStoryByUUID(it.first)
-                    if(ratedStoryToInsert != null){
-                        ratingDao.insertRating(ratedStoryToInsert)
-                        dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
-                    } else {
-
-                    }
-                } else {
-                    if (storyDao.getStoryByUuid(it.first).cachedTime < it.second) {
-                        //Das Rating anfordern und in der Datenbank speichern
-                        val ratedStoryToInsert = getRatedStoryByUUID(it.first)
-                        if(ratedStoryToInsert != null){
-                            ratingDao.deleteRating(ratedStoryToInsert.user_username, ratedStoryToInsert.story_uuid)
-                            ratingDao.insertRating(ratedStoryToInsert)
-                            dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
-                        } else {
-
-                        }
-                    } else {
-                        dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
-                    }
-                }
-            }
-            dbRatedStories
+            cacheRatedStories(ratedStoryByIdTimestamp)
         }
     }
 
@@ -588,15 +440,15 @@ class StoryRepository(application: Application){
     /*********Favorite Story Related Functions*********/
     fun getMyFavoriteStories(): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
-            val authToken = sharedPreferences.getJWT(application)!!
-            val username = sharedPreferences.getUsername(application)!!
-            val favoriteStoriesTimestamp = getMyFavoriteStoriesTimestamp(authToken, username)
-            compareStoriesWithTimestamp(favoriteStoriesTimestamp, authToken)
+            val favoriteStoriesTimestamp = getMyFavoriteStoriesTimestamp()
+            cacheStories(favoriteStoriesTimestamp)
         }
     }
 
-    private fun getMyFavoriteStoriesTimestamp(authToken: String, username: String): List<PairLastUpdate> = runBlocking {
+    private fun getMyFavoriteStoriesTimestamp(): List<PairLastUpdate> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
+            val authToken = sharedPreferences.getJWT(application)!!
+            val username = sharedPreferences.getUsername(application)!!
             val client = getAuthHttpClient(authToken)
             val response: HttpResponse = client.get(MY_FAVORITE_STORIES_GET_LAST_UPDATES){
                 parameter("username", username)
@@ -885,8 +737,59 @@ class StoryRepository(application: Application){
             storyTimestamps
     }
 
-    fun cacheDataStories(stories: List<hsfl.project.e_storymaker.roomDB.Entities.story.Story>) {
-        //repository.addStories(stories)
+    private fun cacheStories(storiesTimestamps: List<PairLastUpdate>): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val stories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = mutableListOf()
+            storiesTimestamps.map{
+                if (!storyDao.rowExistByUUID(it.first)){
+                    val storyToInsert = getStoryByUUID(it.first)!!
+                    storyDao.insertWithTimestamp(storyToInsert)
+                    stories.add(storyDao.getStoryByUuid(it.first))
+                } else {
+                    if(storyDao.getStoryByUuid(it.first).cachedTime < it.second){
+                        val storyToInsert = getStoryByUUID(it.first)!!
+                        storyDao.insertWithTimestamp(storyToInsert)
+                        stories.add(storyDao.getStoryByUuid(it.first))
+                    } else {
+                        stories.add(storyDao.getStoryByUuid(it.first))
+                    }
+                }
+            }
+            stories
+        }
+    }
+
+    private fun cacheRatedStories(ratedStoriesTimestamps: List<PairLastUpdate>): List<Rating> = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val dbRatedStories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating>()
+            ratedStoriesTimestamps.map {
+                if (!ratingDao.rowExistByUUID(it.first)) {
+                    //Insert Rating
+                    val ratedStoryToInsert = getRatedStoryByUUID(it.first)
+                    if(ratedStoryToInsert != null){
+                        ratingDao.insertRating(ratedStoryToInsert)
+                        dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
+                    } else {
+
+                    }
+                } else {
+                    if (storyDao.getStoryByUuid(it.first).cachedTime < it.second) {
+                        //Das Rating anfordern und in der Datenbank speichern
+                        val ratedStoryToInsert = getRatedStoryByUUID(it.first)
+                        if(ratedStoryToInsert != null){
+                            ratingDao.deleteRating(ratedStoryToInsert.user_username, ratedStoryToInsert.story_uuid)
+                            ratingDao.insertRating(ratedStoryToInsert)
+                            dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
+                        } else {
+
+                        }
+                    } else {
+                        dbRatedStories.add(ratingDao.getRatingByUuid(it.first))
+                    }
+                }
+            }
+            dbRatedStories
+        }
     }
 
     fun deleteData() {

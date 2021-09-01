@@ -185,6 +185,8 @@ class StoryService {
                 rs[this.lastUpdate] = Date().time
             }
         }
+        updateAverageRatingToStory(storyId)
+
     }
 
     fun getRatedStoryByUUID(uuid: String): RatedStory? =

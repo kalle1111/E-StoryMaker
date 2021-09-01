@@ -741,11 +741,43 @@ class StoryRepository(application: Application){
         }
     }
 
-//    fun getAllStoriesWithTag(tag: Tag): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
-//        return@runBlocking withContext(Dispatchers.IO){
-//
-//        }
-//    }
+    fun getAllStoriesWithTag(tags: List<Tag>): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val storiesTimestamps = getStoryTimestampsByTags(tags)
+            val stories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = mutableListOf()
+            storiesTimestamps.map{
+                if (!storyDao.rowExistByUUID(it.first)){
+                    val storyToInsert = getStoryByUUID(it.first)!!
+                    storyDao.insertWithTimestamp(storyToInsert)
+                    stories.add(storyDao.getStoryByUuid(it.first))
+                } else {
+                    if(storyDao.getStoryByUuid(it.first).cachedTime < it.second){
+                        val storyToInsert = getStoryByUUID(it.first)!!
+                        storyDao.insertWithTimestamp(storyToInsert)
+                        stories.add(storyDao.getStoryByUuid(it.first))
+                    } else {
+                        stories.add(storyDao.getStoryByUuid(it.first))
+
+                    }
+                }
+            }
+            stories
+        }
+    }
+
+    private fun getStoryTimestampsByTags(tags: List<Tag>): List<PairLastUpdate> = runBlocking {
+        val authToken = sharedPreferences.getJWT(application)!!
+        val client: HttpClient = getAuthHttpClient(authToken)
+        val response: HttpResponse = client.get(GET_LAST_UPDATES_BY_TAGS){
+            contentType(ContentType.Application.Json)
+            body = tags
+        }
+        val jsonString: String = response.receive()
+        Log.d(TAG, jsonString)
+        client.close()
+        val storyTimestamps = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
+        storyTimestamps
+    }
 
     fun getTagsOfStory(storyId: String): List<Tag> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){

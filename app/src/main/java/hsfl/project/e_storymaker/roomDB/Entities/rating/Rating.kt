@@ -13,5 +13,7 @@ data class Rating (
     val rating_character: Int,
     val user_username: String,
     val story_uuid: String,
+    val title: String,
+    val description: String,
     var cachedTime: Long
 )

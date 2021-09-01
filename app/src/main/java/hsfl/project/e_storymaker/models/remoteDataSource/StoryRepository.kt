@@ -172,7 +172,7 @@ class StoryRepository(application: Application){
         }
     }
 
-    fun createStory(storyRequest: StoryRequest, tagsOfStoryRequest: List<String>): Boolean = runBlocking {
+    fun createStory(storyRequest: StoryRequest, tagsOfStoryRequest: List<String>): String? = runBlocking {
         val authToken = sharedPreferences.getJWT(application)!!
         var client = getAuthHttpClient(authToken)
         try {
@@ -193,11 +193,15 @@ class StoryRepository(application: Application){
             Log.e(TAG, jsonString)
             client.close()
             val webResponse: WebResponse = Gson().fromJson(jsonString, WebResponse::class.java)
-            webResponse.success
+            if(webResponse.success) {
+                createdStory.uuid
+            } else {
+                null
+            }
         } catch (e: Exception){
             Log.e(TAG, e.toString())
             client.close()
-            false
+            null
         }
     }
 

@@ -4,6 +4,7 @@ package hsfl.project.e_storymaker.viewModels.fragmentViewModels
 import android.app.Application
 import android.util.Log
 import hsfl.project.e_storymaker.models.remoteDataSource.StoryRepository
+import hsfl.project.e_storymaker.repository.webserviceModels.InsertChapterRequest
 import hsfl.project.e_storymaker.roomDB.AppDatabase_Impl
 import hsfl.project.e_storymaker.viewModels.MainVM
 import hsfl.project.e_storymaker.viewModels.WritingVM
@@ -18,10 +19,9 @@ class WriteChapterFragVM : WritingVM() {
         storyRep = application?.let { StoryRepository.getStoryRepository(it) }!!
     }
 
-    fun createChapter(title: String, content: String): Boolean {
+    fun createChapter(storyID: String, title: String, content: String, index: Int): Boolean {
         Log.d("WriteChapter", "ch title: " + title + " ; " + "ch content: " + content)
-        //storyRep?.chapter
+        storyRep?.createChapter(InsertChapterRequest(storyID, title, content, index))
         return true
-        TODO("CREATE CHAPTER? HENRY?")
     }
 }

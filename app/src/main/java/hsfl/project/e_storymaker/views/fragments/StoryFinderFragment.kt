@@ -1,6 +1,8 @@
 package hsfl.project.e_storymaker.views.fragments
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,6 +14,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import hsfl.project.e_storymaker.viewModels.MainVM
@@ -41,11 +44,15 @@ class StoryFinderFragment : Fragment() {
        _binding = StoryFinderFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
+    private fun byteArrayToBitmap(data: ByteArray): Bitmap {
+        return BitmapFactory.decodeByteArray(data, 0, data.size)
+    }
 
     private fun populateStoryList(storylist: List<Story>){
         binding.mainStoryFinderStoryCont.removeAllViews()
         storylist.forEach {
             val cardLayout: View = layoutInflater.inflate(R.layout.story_overview_card, null, false)
+            cardLayout.findViewById<ImageView>(R.id.storyCard_image).setImageBitmap(byteArrayToBitmap(it.cover))
             cardLayout.findViewById<TextView>(R.id.storyCard_title).text = it.storyTitle
             cardLayout.findViewById<TextView>(R.id.storyCard_descr).text = it.description
             cardLayout.findViewById<ImageButton>(R.id.arrow_button).setOnClickListener {

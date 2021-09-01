@@ -1,6 +1,8 @@
 package hsfl.project.e_storymaker.views.fragments
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -44,10 +46,15 @@ class LibraryFragment : Fragment(), AdapterView.OnItemSelectedListener {
         return binding.root
     }
 
+    private fun byteArrayToBitmap(data: ByteArray): Bitmap{
+        return BitmapFactory.decodeByteArray(data, 0, data.size)
+    }
+
     private fun populateStoryList(storylist: List<Story>){
         binding.mainLibraryStoryCont.removeAllViews()
         storylist.forEach {
             val cardLayout: View = layoutInflater.inflate(R.layout.story_overview_card, null, false)
+            cardLayout.findViewById<ImageView>(R.id.storyCard_image).setImageBitmap(byteArrayToBitmap(it.cover))
             cardLayout.findViewById<TextView>(R.id.storyCard_title).text = it.storyTitle
             cardLayout.findViewById<TextView>(R.id.storyCard_descr).text = it.description
             cardLayout.findViewById<ImageButton>(R.id.arrow_button).setOnClickListener {

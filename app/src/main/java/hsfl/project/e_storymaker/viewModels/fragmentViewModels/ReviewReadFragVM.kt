@@ -20,8 +20,8 @@ class ReviewReadFragVM : ViewModel() {
     }
 
     fun CurrentReviewList(): List<Rating>{
-        return listOf(Rating("0", 5, 5, 5, 5, 5, "GG", "WP", 0),
-            Rating("1", 1, 2, 3, 4, 5, "GG2", "WP2", 0))
+        return listOf(Rating("0", 5, 5, 5, 5, 5, "GG", "WP", "", "",0),
+            Rating("1", 1, 2, 3, 4, 5, "GG2", "WP2", "", "",0))
     }
 
     fun getReviews(){

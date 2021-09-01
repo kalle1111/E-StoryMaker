@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import hsfl.project.e_storymaker.viewModels.MainVM
@@ -45,6 +46,12 @@ class ProfileFragment : Fragment() {
             val intent = Intent((requireActivity() as MainActivity), ReadingActivity::class.java)
             startActivity(intent)
         }
+
+        binding.profileEditB.setOnClickListener {
+            //binding.profileDesc.
+            //val intent: Intent = Intent((requireActivity() as MainActivity), )
+            //EDIT PROFILE PAGE!
+        }
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -55,8 +62,18 @@ class ProfileFragment : Fragment() {
         viewModel.setApplicationContext((requireActivity() as MainActivity).application, userToView)
         binding.viewmodel = viewModel
 
+
         (requireActivity() as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
+
         (requireActivity() as MainActivity).findViewById<TextView>(R.id.mToolbarTitle).setText(viewModel.username())
+
+        if (viewModel.ownProfile()){
+            Log.d("TEST", "Y>QAY")
+            binding.profileEditB.visibility = VISIBLE
+        }
+
+
 
     //(requireActivity() as MainActivity).supportActionBar!! .title = viewModel.username()
 

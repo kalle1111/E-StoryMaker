@@ -37,10 +37,10 @@ class WriteChapterFragment : Fragment() {
 
         binding.button9.setOnClickListener {
 
-            if (viewModel.createChapter(binding.writeChapterTitle.text.toString(), binding.writeChapterContent.text.toString())){
+            if (viewModel.createChapter("sID", binding.writeChapterTitle.text.toString(), binding.writeChapterContent.text.toString(), 0)){
                 (requireActivity() as WritingActivity).finish()
             }else{
-                //TODO("SHOW THE USER AN ERROR MESSAGE")
+                //TODO("FIX INDEXING!")
             }
         }
     }

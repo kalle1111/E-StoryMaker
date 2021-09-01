@@ -12,7 +12,7 @@ class ReadOverviewFragVM : ReadingVM() {
 
     private var application: Application? = null
     private var storyRep: StoryRepository? = null
-
+    var storyID: String? = null
 
     private var currentStory: Story = Story("0", "Max_Mustermann", "Story_Title", "/Description/ \n\n\n /End Description/", "1.1.0000", 0, ByteArray(0), 3.2, 0)
 
@@ -25,6 +25,7 @@ class ReadOverviewFragVM : ReadingVM() {
     private fun getStory(storyID: String?){
         if (storyRep != null){
             if (storyID != null){
+                this.storyID = storyID
                 currentStory = storyRep?.getStory(storyID)!!
                 Log.d("ReadOverviewFragVM", currentStory.toString())
             }else{

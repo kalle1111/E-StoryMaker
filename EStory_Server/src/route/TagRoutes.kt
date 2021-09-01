@@ -55,7 +55,7 @@ fun Route.tagRoutes(
             return@get
         }
         try {
-            val lastUpdates = tagService.getLastÚpdatesByTags(searchByTags.tags)
+            val lastUpdates = tagService.getLastUpdatesByTags(searchByTags.tags)
             call.respond(HttpStatusCode.OK, lastUpdates)
         } catch (e: Exception) {
             call.respond(
@@ -193,8 +193,8 @@ fun Route.tagRoutes(
                     SimpleResponse(false, e.message ?: "Some Problems occurred setFavorite")
                 )
             }
-
         }
+
         get<GetStoriesByTagsAndTitle> {
             val searchByTagsAndTitle = try {
 

@@ -66,7 +66,6 @@ fun Application.module(testing: Boolean = false) {
         friendshipRoutes(friendshipService)
         tagRoutes(tagService)
         readChapterRoutes(readChapterService)
-        uploadRoutes()
 
         get("/session/increment") {
             val session = call.sessions.get<MySession>() ?: MySession()
@@ -79,9 +78,6 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
-
-
-
     routing {
         get("/download") {
             val file = File("uploads/ktor_logo.png")
@@ -92,7 +88,6 @@ fun Application.module(testing: Boolean = false) {
             )
             call.respondFile(file)
         }
-
     }
 }
 

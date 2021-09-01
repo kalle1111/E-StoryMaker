@@ -78,6 +78,6 @@ class TagService {
     fun getStoriesByTagsAndTitle(listOfTags: List<String>, subTitle: String): List<Story> =
         getStoriesByTags(listOfTags).filter { it.storyTitle.contains(subTitle) }
 
-    fun getLastÚpdatesByTags(listOfTags: List<String>): List<Pair<String, Long>> =
+    fun getLastUpdatesByTags(listOfTags: List<String>): List<Pair<String, Long>> =
         getStoriesByTags(listOfTags).map { Pair(it.uuid, it.lastUpdate) }
 }

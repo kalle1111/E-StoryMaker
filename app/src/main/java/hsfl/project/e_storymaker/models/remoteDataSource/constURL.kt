@@ -49,6 +49,7 @@ const val GET_TAG_BY_UUID = "$TAGS/getByUUID"  // uuid als Query parameter einge
 const val GET_BY_TAGS_STORIES = "$TAGS/getByTags"
 const val GET_BY_TAGS_AND_TITLE_STORIES = "$TAGS/getByTagsAndTitle"
 const val GET_LAST_UPDATES_BY_TAGS = "$TAGS/getLastUpdatesByTags"
+const val GET_LAST_UPDATES_BY_TAGS_AND_TITLE = "$TAGS/getLastUpdatesByTagsAndTitle"
 
 const val RATE_STORIES = "$STORIES/rateStory"
 const val UPDATE_RATED_STORIES = "$STORIES/updateRatedStory"

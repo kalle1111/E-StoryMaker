@@ -791,7 +791,7 @@ class StoryRepository(application: Application){
             client.close()
             val tags = Gson().fromJson(jsonString, Array<hsfl.project.e_storymaker.repository.webserviceModels.Tag>::class.java).toList()
             val roomDBTags = tags.map{
-                if(!tagDao.rowExistByUUID(it.uuid)){
+                if(!tagDao.rowExistByTagname(it.name)){
                     tagDao.insertWithTimestamp(convertWebserviceTagToDbTag(it))
                     tagDao.getTagByTagname(it.name)
                 } else {
@@ -800,6 +800,46 @@ class StoryRepository(application: Application){
             }
             roomDBTags
         }
+    }
+
+    fun getStoriesByTagAndTitle(title: String, tags: List<String>): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val storiesTimestamps: List<PairLastUpdate> = getStoryTimestampsByTagsAndTitle(title, tags)
+            val stories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = mutableListOf()
+            storiesTimestamps.map{
+                if (!storyDao.rowExistByUUID(it.first)){
+                    val storyToInsert = getStoryByUUID(it.first)!!
+                    storyDao.insertWithTimestamp(storyToInsert)
+                    stories.add(storyDao.getStoryByUuid(it.first))
+                } else {
+                    if(storyDao.getStoryByUuid(it.first).cachedTime < it.second){
+                        val storyToInsert = getStoryByUUID(it.first)!!
+                        storyDao.insertWithTimestamp(storyToInsert)
+                        stories.add(storyDao.getStoryByUuid(it.first))
+                    } else {
+                        stories.add(storyDao.getStoryByUuid(it.first))
+
+                    }
+                }
+            }
+            stories
+        }
+    }
+
+    private fun getStoryTimestampsByTagsAndTitle(title: String, tags: List<String>): List<PairLastUpdate> = runBlocking {
+
+            val authToken = sharedPreferences.getJWT(application)!!
+            val client: HttpClient = getAuthHttpClient(authToken)
+            val response: HttpResponse = client.get(GET_LAST_UPDATES_BY_TAGS_AND_TITLE){
+                contentType(ContentType.Application.Json)
+                body = SearchByTagsAndTitle(tags, title)
+            }
+            val jsonString: String = response.receive()
+            Log.d(TAG, jsonString)
+            client.close()
+            val storyTimestamps = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
+            storyTimestamps
+
     }
 
     fun cacheDataStories(stories: List<hsfl.project.e_storymaker.roomDB.Entities.story.Story>) {

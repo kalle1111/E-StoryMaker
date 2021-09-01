@@ -7,7 +7,6 @@ import com.eStory.table.*
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import java.text.SimpleDateFormat
 import java.util.*
 
 class StoryService {
@@ -28,8 +27,10 @@ class StoryService {
 
     fun getAllByUserName(userName: String): List<Story> = getAll().filter { it.user.userName == userName }
 
-    fun getStoryBySubTitle(subTitle: String): List<Story> = getAll().filter { it.storyTitle.contains(subTitle) }
+    fun getStoriesBySubTitle(subTitle: String): List<Story> = getAll().filter { it.storyTitle.contains(subTitle) }
 
+    fun getLastUpdatesBySubTitle(subTitle: String): List<Pair<String, Long>> =
+        getStoriesBySubTitle(subTitle).map { Pair(it.uuid, it.lastUpdate) }
 
     //private val users = listOf(testUser).associateBy(User::id)
     fun deleteByUUID(uuid: String): Story? {

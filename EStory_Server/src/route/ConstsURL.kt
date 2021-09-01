@@ -21,6 +21,7 @@ const val STORY_GET_BY_ID_LAST_UPDATE = "$STORIES/getLastUpdateById"
 const val STORIES_GET_LAST_UPDATE_VALUES = "$STORIES/getLastUpdates"
 const val MY_STORIES_GET_LAST_UPDATE_VALUES = "$MY_STORIES/getLastUpdates" // username als Query parameter eingeben
 const val GET_STORY_BY_UUID = "$STORIES/getByUUID"  // uuid als Query parameter eingeben
+const val GET_LAST_UPDATES_BY_SUB_TITLE = "$STORIES/getLastUpdatesByTitle" // title als Query parameter eingeben
 
 const val CHAPTERS = "$API_VERSION/CHAPTERS"
 const val INSERT_CHAPTER_ROUTE = "$CHAPTERS/insertChapter"

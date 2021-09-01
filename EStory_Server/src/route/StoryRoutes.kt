@@ -120,6 +120,9 @@ class GetLastUpdatesFromMyFavoriteStories
 @Location(GET_LAST_UPDATES_RATED_STORIES_BY_STORY_ID)
 class GetLastUpdatesRatedStoriesByStoryId
 
+@Location(GET_LAST_UPDATES_BY_SUB_TITLE)
+class GetLastUpdatesBySubTitle
+
 fun Route.storyRoutes(
 
     storyService: StoryService
@@ -297,7 +300,7 @@ fun Route.storyRoutes(
                 return@get
             }
             try {
-                val story = storyService.getStoryBySubTitle(storyTitle)
+                val story = storyService.getStoriesBySubTitle(storyTitle)
                 call.respond(HttpStatusCode.OK, story)
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
@@ -551,6 +554,22 @@ fun Route.storyRoutes(
         }
         try {
             val lastUpdateValues = storyService.getLastUpdatesRatedStoriesByStoryId(storyId)
+            call.respond(HttpStatusCode.OK, lastUpdateValues)
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
+
+        }
+    }
+
+    get<GetLastUpdatesBySubTitle> {
+        val title = try {
+            call.request.queryParameters["title"]!!
+        } catch (e: Exception) {
+            call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter: title is not present"))
+            return@get
+        }
+        try {
+            val lastUpdateValues = storyService.getLastUpdatesBySubTitle(title)
             call.respond(HttpStatusCode.OK, lastUpdateValues)
         } catch (e: Exception) {
             call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")

@@ -1,7 +1,5 @@
 package com.eStory.route
 
-import io.ktor.locations.*
-
 const val API_VERSION = "/v1"
 const val USERS = "$API_VERSION/users"
 const val GET_ALL_USERS = "$USERS/getAll"
@@ -82,5 +80,3 @@ const val CANCEL_FRIENDSHIPS = "$FRIENDSHIPS/cancel"
 const val DELETE_FRIENDSHIPS = "$FRIENDSHIPS/delete"
 const val GET_FRIENDSHIP_BY_UUID = "$FRIENDSHIPS/getByUUID" // uuid als Query parameter eingeben
 
-const val UPLOAD_FILE_POST = "$API_VERSION/upload"
-const val DOWNLOAD_FILE_POST = "$API_VERSION/download"

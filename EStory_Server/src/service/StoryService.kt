@@ -54,7 +54,6 @@ class StoryService {
                 this.description = description
                 this.storyTitle = storyTitle
                 this.createTime = Date().time
-                // this.storyChapters = storyChapters
                 this.averageRating = 0.0
                 if (cover != null) {
                     this.cover = cover
@@ -67,7 +66,6 @@ class StoryService {
         uuid: String,
         storyTitle: String? = null,
         description: String? = null,
-        //   storyChapters: String? = null,
         cover: ByteArray
     ) {
         transaction {

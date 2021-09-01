@@ -6,7 +6,6 @@ import com.eStory.model.story.RateStoryRequest
 import com.eStory.model.story.StoryAsFavoriteRequest
 import com.eStory.model.story.UpdateStoryRequest
 import com.eStory.model.user.User
-import com.eStory.service.ChapterService
 import com.eStory.service.StoryService
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -191,7 +190,7 @@ fun Route.storyRoutes(
 
         post<StoryCreateRoute> {
 
-            val story = try {
+            val storyRequest = try {
 
                 call.receive<InsertStoryRequest>()
 
@@ -203,10 +202,10 @@ fun Route.storyRoutes(
             }
             try {
                 val username = call.principal<User>()!!.userName
-                //storyService.insert(username, story.storyTitle, story.description, story.storyChapters, story.cover)
 
-                storyService.insert(username, story.storyTitle, story.description, story.cover)
-                call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story created Successfully!"))
+                val story =
+                    storyService.insert(username, storyRequest.storyTitle, storyRequest.description, storyRequest.cover)
+                call.respond(HttpStatusCode.OK, story)
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
             }

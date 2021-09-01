@@ -1,6 +1,5 @@
 package hsfl.project.e_storymaker.models.remoteDataSource
 
-import android.app.Activity
 import android.app.Application
 import android.util.Log
 import com.google.gson.Gson
@@ -62,7 +61,6 @@ class UserRepository(application: Application) {
                     body = registerRequest
                 }
                 val stringBody: String = response.receive()
-                Log.d(TAG, ("RegisterResponse: " + stringBody))
                 val webResponse = Gson().fromJson(stringBody, WebResponse::class.java)
                 //jwt Token
                 if(webResponse.success){
@@ -107,48 +105,20 @@ class UserRepository(application: Application) {
     fun getAllUsers(): List<hsfl.project.e_storymaker.roomDB.Entities.user.User> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO) {
             val usersWithTimestamp = getAllUsersTimestamp()
-            val dbUsers: MutableList<hsfl.project.e_storymaker.roomDB.Entities.user.User> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.user.User>()
-            usersWithTimestamp.map{
-                if(!userDao.rowExistByUsername(it.first)){
-                    //Insert User
-                    val user = getUserByUserName(it.first)
-                    if (user != null) {
-                        userDao.insertWithTimestamp(user)
-                        dbUsers.add(userDao.getUserByUsername(user.username))
-                    } else {
-
-                    }
-                } else {
-                    if(userDao.getUserByUsername(it.first).cachedTime < it.second){
-                        //Den User anfordern und in der Datenbank speichern
-                        val user = getUserByUserName(it.first)
-                        if (user != null) {
-                            userDao.insertWithTimestamp(user)
-                            dbUsers.add(userDao.getUserByUsername(user.username))
-                        } else {
-
-                        }
-                    } else {
-                        dbUsers.add(userDao.getUserByUsername(it.first))
-                    }
-                }
-
-            }
-            dbUsers
+            cacheUsers(usersWithTimestamp)
         }
     }
 
-    private fun getUserByUsernameTimestamp(username: String): String = runBlocking{
+    private fun getUserByUsernameTimestamp(): String = runBlocking{
         val client = HttpClient(CIO)
+        val username = sharedPreferences.getUsername(application)!!
         val response: HttpResponse = client.get(USER_GET_BY_USERNAME_LAST_UPDATE){
             parameter("username", username)
         }
         val jsonString: String = response.receive()
-        Log.d(TAG, "jsonString :" + jsonString)
         client.close()
         val usersLastUpdate = Gson().fromJson(jsonString, String::class.java).toList()
-        Log.d(TAG, "usersLastUpdate: " + usersLastUpdate.toString())
-        return@runBlocking usersLastUpdate.toCharArray().concatToString()
+        usersLastUpdate.toCharArray().concatToString()
     }
 
     private fun getAllUsersTimestamp() = runBlocking {
@@ -180,27 +150,14 @@ class UserRepository(application: Application) {
     }
 
     fun getUser(username: String): hsfl.project.e_storymaker.roomDB.Entities.user.User? = runBlocking {
-        return@runBlocking withContext(Dispatchers.IO){
-            val authToken = sharedPreferences.getJWT(application)!!
-            val userTimestamp =getUserTimestamp(username, authToken)
-            if (!userDao.rowExistByUsername(username)){
-                val user = getUserByUserName(username)!!
-                userDao.insertWithTimestamp(user)
-                userDao.getUserByUsername(username)
-            } else {
-                if(userDao.getUserByUsername(username).cachedTime < userTimestamp){
-                    val user = getUserByUserName(username)!!
-                    userDao.insertWithTimestamp(user)
-                    userDao.getUserByUsername(username)
-                } else {
-                    userDao.getUserByUsername(username)
-                }
-            }
+        return@runBlocking withContext(Dispatchers.IO) {
+            cacheUser(username)
         }
     }
 
-    private fun getUserTimestamp(username: String, authToken: String): Long = runBlocking {
+    private fun getUserTimestamp(username: String): Long = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
+            val authToken = sharedPreferences.getJWT(application)!!
             val client = getAuthHttpClient(authToken)
 
             val response: HttpResponse = client.get(USER_GET_BY_USERNAME_LAST_UPDATE){
@@ -214,44 +171,9 @@ class UserRepository(application: Application) {
     }
 
     fun getMyProfile(): hsfl.project.e_storymaker.roomDB.Entities.user.User? = runBlocking {
-        return@runBlocking withContext(Dispatchers.IO){
-            val username: String
-            val authToken: String
-            if(sharedPreferences.getUsername(application) != null){
-                username = sharedPreferences.getUsername(application)!!
-            } else {
-                return@withContext null
-            }
-            if(sharedPreferences.getJWT(application) != null){
-                authToken = sharedPreferences.getJWT(application)!!
-            } else {
-                return@withContext null
-            }
-            val usersTimestamp = getUserByUsernameTimestamp(username)
-            if (userDao.rowExistByUsername(username)){
-                if (userDao.getUserByUsername(username).cachedTime < usersTimestamp.toLong()){
-                    val myProfile = sendMyProfileRequest(authToken)
-                    if(myProfile != null ){
-                        userDao.deleteUser(myProfile)
-                        userDao.insertWithTimestamp(myProfile)
-                        userDao.getUserByUsername(myProfile.username)
-                    } else {
-                        null
-                    }
-                } else {
-                    userDao.getUserByUsername(username)
-                }
-
-            } else {
-                val myProfile = sendMyProfileRequest(authToken)
-                if(myProfile != null){
-                    userDao.insertWithTimestamp(myProfile)
-                    userDao.getUserByUsername(myProfile.username)
-                } else {
-                    null
-                }
-
-            }
+        return@runBlocking withContext(Dispatchers.IO) {
+            val username = sharedPreferences.getUsername(application)!!
+            cacheUser(username)
         }
     }
 
@@ -311,18 +233,6 @@ class UserRepository(application: Application) {
         }
         return@runBlocking dbFriendships
     }
-
-//    fun getMyIncomingFriendshipRequests(authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.friendship.Friendship> = runBlocking {
-//        val client = getAuthHttpClient(authToken)
-//        val response: HttpResponse = client.get(FRIENDSHIPS_GET_REQUESTS_FROM_ME)
-//        val jsonString: String = response.receive()
-//        client.close()
-//        val friendships = Gson().fromJson(jsonString, Array<Friendship>::class.java).toList()
-//        val dbFriendships = friendships.map {
-//            convertWebserviceFriendshipToDbFriendship(it)
-//        }
-//        return@runBlocking dbFriendships
-//    }
 
     fun rejectFriendship(authToken: String, friendshipRequestModel: FriendshipServiceModel): Boolean = runBlocking {
         val client = getAuthHttpClient(authToken)
@@ -392,12 +302,48 @@ class UserRepository(application: Application) {
         }
     }
 
-//    fun caheAllUsers(allUsers: List<hsfl.project.e_storymaker.roomDB.Entities.user.User>){
-//        allUsers.map{
-//            userDao.insertWithTimestamp(it)
-//        }
-//    }
+    private fun cacheUsers(userTimestamps: List<PairLastUpdate>): List<hsfl.project.e_storymaker.roomDB.Entities.user.User> = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val dbUsers: MutableList<hsfl.project.e_storymaker.roomDB.Entities.user.User> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.user.User>()
+            userTimestamps.map{
+                if(!userDao.rowExistByUsername(it.first)){
+                    //Insert User
+                    val user = getUserByUserName(it.first)!!
+                    userDao.insertWithTimestamp(user)
+                    dbUsers.add(userDao.getUserByUsername(user.username))
+                } else {
+                    if(userDao.getUserByUsername(it.first).cachedTime < it.second){
+                        //Den User anfordern und in der Datenbank speichern
+                        val user = getUserByUserName(it.first)!!
+                        userDao.insertWithTimestamp(user)
+                        dbUsers.add(userDao.getUserByUsername(user.username))
+                    } else {
+                        dbUsers.add(userDao.getUserByUsername(it.first))
+                    }
+                }
+            }
+            dbUsers
+        }
+    }
 
+    private fun cacheUser(username: String): hsfl.project.e_storymaker.roomDB.Entities.user.User? = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val userTimestamp = getUserTimestamp(username)
+            if (!userDao.rowExistByUsername(username)){
+                val user = getUserByUserName(username)!!
+                userDao.insertWithTimestamp(user)
+                userDao.getUserByUsername(username)
+            } else {
+                if(userDao.getUserByUsername(username).cachedTime < userTimestamp){
+                    val user = getUserByUserName(username)!!
+                    userDao.insertWithTimestamp(user)
+                    userDao.getUserByUsername(username)
+                } else {
+                    userDao.getUserByUsername(username)
+                }
+            }
+        }
+    }
 
 
     companion object {

@@ -172,7 +172,7 @@ class StoryRepository(application: Application){
         }
     }
 
-    fun createStory(storyRequest: StoryRequest, tagsOfStoryRequest: List<Tag>): Boolean = runBlocking {
+    fun createStory(storyRequest: StoryRequest, tagsOfStoryRequest: List<String>): Boolean = runBlocking {
         val authToken = sharedPreferences.getJWT(application)!!
         val client = getAuthHttpClient(authToken)
         try {
@@ -183,12 +183,9 @@ class StoryRepository(application: Application){
             var jsonString: String = response.receive()
             client.close()
             val createdStory: Story = Gson().fromJson(jsonString, Story::class.java)
-            val tagNames: List<String> = tagsOfStoryRequest.map {
-                it.tagName
-            }
             response = client.post(MAP_Story_To_Tags){
                 contentType(ContentType.Application.Json)
-                body = MapStoryToTagRequest(tagNames, createdStory.uuid)
+                body = MapStoryToTagRequest(tagsOfStoryRequest, createdStory.uuid)
             }
             jsonString = response.receive()
             client.close()

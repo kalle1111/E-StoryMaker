@@ -21,5 +21,8 @@
         android:label="Read Chapter"
         tools:layout="@layout/read_chapter_fragment">
 
+        <argument
+            android:name="storyID"
+            app:argType="string" />
     </fragment>
 </navigation>

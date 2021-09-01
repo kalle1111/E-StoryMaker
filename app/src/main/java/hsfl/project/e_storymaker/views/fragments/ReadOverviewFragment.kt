@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import hsfl.project.e_storymaker.R
 import hsfl.project.e_storymaker.databinding.ReadOverviewFragmentBinding
@@ -41,7 +42,8 @@ class ReadOverviewFragment : Fragment(), RatingBar.OnRatingBarChangeListener {
 
 
         binding.button5.setOnClickListener{
-            findNavController().navigate(R.id.action_ReadOverview_to_ReadChapter)
+            val bundle = bundleOf("storyID" to viewModel.storyID)
+            findNavController().navigate(R.id.action_ReadOverview_to_ReadChapter, bundle)
         }
 
         binding.readOverviewReviewsB.setOnClickListener {

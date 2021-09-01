@@ -42,7 +42,7 @@ class ReviewWriteFragment : Fragment(), RatingBar.OnRatingBarChangeListener {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSecond.setOnClickListener {
-            viewModel.SendReview("TEMP Story_Name", binding.reviewWriteTitle.text.toString(), binding.reviewWriteOverall.rating, binding.reviewWriteStyle.rating,
+            viewModel.SendReview("SName?", binding.reviewWriteTitle.text.toString(), binding.reviewWriteOverall.rating, binding.reviewWriteStyle.rating,
                 binding.reviewWriteStory.rating, binding.reviewWriteGrammar.rating, binding.reviewWriteChar.rating, binding.reviewWriteText.text.toString())
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }

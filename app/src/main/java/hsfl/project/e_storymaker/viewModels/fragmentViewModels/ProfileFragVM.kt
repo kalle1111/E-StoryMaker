@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import hsfl.project.e_storymaker.models.remoteDataSource.UserRepository
 import hsfl.project.e_storymaker.roomDB.Entities.user.User
+import hsfl.project.e_storymaker.sharedPreferences
 
 import hsfl.project.e_storymaker.viewModels.AuthVM
 import hsfl.project.e_storymaker.viewModels.MainVM
@@ -23,28 +24,30 @@ class ProfileFragVM : MainVM() {
 
 
     fun setApplicationContext(application: Application, user: String?){
-        this.applicaion = applicaion
+        this.applicaion = application
         userRep = application?.let { UserRepository.getStoryRepository(it) }!!
         getUser(user)
     }
 
-    fun getUser(user: String?){
+    fun ownProfile(): Boolean{
+        Log.d("ProfileFragVM", "Your username: " + sharedPreferences.getUsername(applicaion!!)+ " / CurrentProfile: " + currentUser.username)
+        Log.d("ProfileFragVM", sharedPreferences.getUsername(applicaion!!).equals(currentUser.username).toString())
+        return sharedPreferences.getUsername(applicaion!!).equals(currentUser.username)
+    }
+
+    private fun getUser(user: String?){
         runBlocking{
-            if (userRep != null){
+            if (userRep != null && user != null){
                 var potUser: User? = null
-                    potUser = userRep?.getMyProfile()
+                    potUser = userRep?.getUser(user!!)
                     Log.d("ProfileFragVM", potUser.toString())
 
-                if(potUser != null){
                     currentUser = potUser!!
                     Log.d("ProfileFragVM", "User Assigned!")
-                }else{
-                    Log.e("ProfileFragVM", "No actual User returned!")
-                }
+
             }else{
-                Log.e("ProfileFragVM", "UserRep not found!")
-                //val intent: Intent = Intent(applicaion?.baseContext, AuthActivity::class.java)
-                //applicaion?.baseContext.startActivity(intent)
+                Log.e("ProfileFragVM", "No actual User requested, getting ownProfile()!")
+                currentUser = userRep?.getMyProfile()!!
             }
         }
     }

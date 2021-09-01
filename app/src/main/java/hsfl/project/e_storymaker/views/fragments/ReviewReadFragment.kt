@@ -42,8 +42,14 @@ class ReviewReadFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding.reviewReviewReadReviewCont.removeAllViews()
         reviewList.forEach {
             val cardLayout: View = layoutInflater.inflate(R.layout.review_card, null, false)
-            cardLayout.findViewById<TextView>(R.id.reviewCard_title).text = "TO_DO_TITLE"
-            cardLayout.findViewById<TextView>(R.id.reviewCard_descr).text = "TO_DO_DESCRIPTION"
+            cardLayout.findViewById<TextView>(R.id.reviewCard_title).text = "IMPLEMENT TITLE GODDAMMIT!"
+            cardLayout.findViewById<RatingBar>(R.id.reviewCard_ratingTotal).rating = it.rating_overall.toFloat()
+            cardLayout.findViewById<RatingBar>(R.id.reviewCard_ratingStyle).rating = it.rating_style.toFloat()
+            cardLayout.findViewById<RatingBar>(R.id.reviewCard_ratingStory).rating = it.rating_story.toFloat()
+            cardLayout.findViewById<RatingBar>(R.id.reviewCard_ratingGrammar).rating = it.rating_grammar.toFloat()
+            cardLayout.findViewById<RatingBar>(R.id.reviewCard_ratingChar).rating = it.rating_character.toFloat()
+            cardLayout.findViewById<TextView>(R.id.reviewCard_descr).text = "IMPLEMENT DECRIPTION GODDAMIT!"
+
             cardLayout.findViewById<ImageButton>(R.id.arrow_button).setOnClickListener{
                 var expL: ConstraintLayout = cardLayout.findViewById(R.id.expandable_layout)
                 if (expL.visibility == GONE){

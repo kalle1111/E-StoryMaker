@@ -39,7 +39,7 @@
                 app:layout_constraintVertical_bias="0.0">
 
                 <ImageView
-                    android:id="@+id/imageView20"
+                    android:id="@+id/storyCard_image"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="5dp"
@@ -56,7 +56,7 @@
                     android:text="Story_Title"
                     android:textColor="#000000"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView20"
+                    app:layout_constraintStart_toEndOf="@+id/storyCard_image"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -67,7 +67,7 @@
                     android:text="Tags"
                     android:textColor="#000000"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView20"
+                    app:layout_constraintStart_toEndOf="@+id/storyCard_image"
                     app:layout_constraintTop_toBottomOf="@+id/storyCard_title" />
 
                 <ImageButton
@@ -79,7 +79,7 @@
                     android:src="@android:drawable/arrow_down_float"
                     app:layout_constraintBottom_toBottomOf="@id/fixed_layout"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView20" />
+                    app:layout_constraintStart_toEndOf="@+id/storyCard_image" />
 
                 <Button
                     android:id="@+id/storyCard_readB"

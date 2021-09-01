@@ -37,7 +37,9 @@ class ReadChapterFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ReadChapterFragVM::class.java)
-        viewModel.setApplicationContext((requireActivity() as ReadingActivity).application)
+        val storyID: String? = arguments?.getString("storyID")
+        viewModel.setApplicationContext((requireActivity() as ReadingActivity).application, storyID)
+
 
         binding.viewmodel = viewModel
     }

@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import androidx.core.content.PermissionChecker
 import androidx.core.content.PermissionChecker.checkSelfPermission
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import hsfl.project.e_storymaker.viewModels.WritingVM
 import hsfl.project.e_storymaker.R
@@ -55,8 +56,10 @@ class WriteDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         binding.button8.setOnClickListener {
 
-            if (viewModel.createStory(imageToByteArray(binding.imageView3), binding.writeDetailsTitle.text.toString(),binding.writeDetailsDescription.text.toString())){
-                findNavController().navigate(R.id.action_WriteOverview_to_WriteChapter)
+            val sID: String? = viewModel.createStory(imageToByteArray(binding.imageView3), binding.writeDetailsTitle.text.toString(),binding.writeDetailsDescription.text.toString())
+            if (sID != null){
+                val bundle = bundleOf("storyID" to sID)
+                findNavController().navigate(R.id.action_WriteOverview_to_WriteChapter, bundle)
             }else{
                Log.e("WriteDetailsFrag", "Server refused to create!")
             }

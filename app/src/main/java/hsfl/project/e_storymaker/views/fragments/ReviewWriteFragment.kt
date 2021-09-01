@@ -44,14 +44,16 @@ class ReviewWriteFragment : Fragment(), RatingBar.OnRatingBarChangeListener {
         binding.buttonSecond.setOnClickListener {
             viewModel.SendReview("SName?", binding.reviewWriteTitle.text.toString(), binding.reviewWriteOverall.rating, binding.reviewWriteStyle.rating,
                 binding.reviewWriteStory.rating, binding.reviewWriteGrammar.rating, binding.reviewWriteChar.rating, binding.reviewWriteText.text.toString())
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+            (requireActivity() as ReviewActivity).finish()
+            //findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ReviewWriteFragVM::class.java)
-        viewModel.setApplicationContext((requireActivity() as ReviewActivity).application)
+        val storyID: String? = arguments?.getString("storyID")
+        viewModel.setApplicationContext((requireActivity() as ReviewActivity).application, storyID!!)
         //binding.viewmodel = viewmodel
     }
 

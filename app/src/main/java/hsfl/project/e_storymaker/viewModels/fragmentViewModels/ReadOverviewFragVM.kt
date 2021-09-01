@@ -27,7 +27,7 @@ class ReadOverviewFragVM : ReadingVM() {
             if (storyID != null){
                 this.storyID = storyID
                 currentStory = storyRep?.getStory(storyID)!!
-                Log.d("ReadOverviewFragVM", currentStory.toString())
+                Log.d("ReadOverviewFragVM", currentStory.avgRating.toString())
             }else{
                 //Throw Error
             }
@@ -53,8 +53,11 @@ class ReadOverviewFragVM : ReadingVM() {
     }
 
     fun tagList(): String{
-        return "/TAGS/\n\n/END TAGS/"
-        TODO("GET ACTUAL TAGLIST")
+        val tList = mutableListOf<String>()
+        storyRep?.getTagsOfStory(currentStory.story_uuid)?.forEach {
+            tList.add(it.tagName)
+        }
+        return tList.toString()
     }
 
     fun description(): String{
@@ -66,7 +69,7 @@ class ReadOverviewFragVM : ReadingVM() {
     }
 
     fun ratingLabel(): String{
-        return rating().toString()
+        return  String.format("%.1f", rating())
     }
 
 }

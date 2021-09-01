@@ -14,19 +14,25 @@ class ReviewReadFragVM : ViewModel() {
 
     private var currentReviewList: List<Rating>? = null
 
-    fun setApplicationContext(application: Application){
+    var storyID: String? = null
+
+    fun setApplicationContext(application: Application, storyID: String){
         this.application = application
         storyRep = application?.let { StoryRepository.getStoryRepository(it) }!!
+        this.storyID = storyID
+        getReviews()
     }
 
     fun CurrentReviewList(): List<Rating>{
+        return currentReviewList!!
+        /*
         return listOf(Rating("0", 5, 5, 5, 5, 5, "GG", "WP", "", "",0),
-            Rating("1", 1, 2, 3, 4, 5, "GG2", "WP2", "", "",0))
+            Rating("1", 1, 2, 3, 4, 5, "GG2", "WP2", "", "",0))*/
     }
 
     fun getReviews(){
         if (storyRep != null ){
-            //currentReviewList = storyRep?.getRa
+            currentReviewList = storyRep?.getRatedStoriesByStoryId(storyID!!)
         }else{
             //Throw error
         }

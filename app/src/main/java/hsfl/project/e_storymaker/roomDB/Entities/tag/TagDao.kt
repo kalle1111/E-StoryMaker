@@ -15,7 +15,7 @@ abstract class TagDao {
     abstract fun insertTag(tag: Tag)
 
     @Query("SELECT * FROM tag WHERE tagName LIKE :tagName ")
-    abstract fun getTagByUUID(tagName: String): Tag
+    abstract fun getTagByTagname(tagName: String): Tag
 
     @Query("SELECT EXISTS(SELECT * FROM tag WHERE tagName = :tagName)")
     abstract fun rowExistByUUID(tagName : String) : Boolean

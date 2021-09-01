@@ -725,7 +725,7 @@ class StoryRepository(application: Application){
             val tags = Gson().fromJson(jsonString, Array<hsfl.project.e_storymaker.repository.webserviceModels.Tag>::class.java).toList()
             val roomDBTags = tags.map{
                 tagDao.insertWithTimestamp(convertWebserviceTagToDbTag(it))
-                tagDao.getTagByUUID(it.uuid)
+                tagDao.getTagByTagname(it.name)
             }
             roomDBTags
         }
@@ -786,9 +786,9 @@ class StoryRepository(application: Application){
             val roomDBTags = tags.map{
                 if(!tagDao.rowExistByUUID(it.uuid)){
                     tagDao.insertWithTimestamp(convertWebserviceTagToDbTag(it))
-                    tagDao.getTagByUUID(it.uuid)
+                    tagDao.getTagByTagname(it.name)
                 } else {
-                    tagDao.getTagByUUID(it.uuid)
+                    tagDao.getTagByTagname(it.name)
                 }
             }
             roomDBTags

@@ -69,12 +69,6 @@ class UserService {
     //TODO: the function works not well, see update story !!
     fun updateByUUID(uuid: String, firstname: String? = null, lastname: String? = null) {
         UsersTable.update({ UsersTable.id eq UUID.fromString(uuid) }) {
-            if (firstname != null) {
-                it[this.firstname] = firstname
-            }
-            if (lastname != null) {
-                it[this.lastname] = lastname
-            }
         }
     }
 
@@ -93,18 +87,6 @@ class UserService {
                     UsersTable.userName.eq(username)
                 }
             ) { ut ->
-                if (firstname != null) {
-                    ut[this.firstname] = firstname
-                }
-                if (lastname != null) {
-                    ut[this.lastname] = lastname
-                }
-                if (description != null) {
-                    ut[this.description] = description
-                }
-                if (birthday != null) {
-                    ut[this.birthday] = birthday
-                }
                 if (image != null) {
                     ut[this.image] = image
                 }

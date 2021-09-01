@@ -28,6 +28,10 @@ class ReviewActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         
     }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        //finish()
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_review)

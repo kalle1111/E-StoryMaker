@@ -285,16 +285,18 @@ class StoryRepository(application: Application){
             } else {
                 if(storyDao.getStoryByUuid(uuid).cachedTime < storyTimestamp){
                     val story = getStoryByUUID(uuid)!!
+                    Log.e(TAG, "WE ARE HERE, yay: outdated!")
                     storyDao.insertWithTimestamp(story)
                     storyDao.getStoryByUuid(uuid)
                 } else {
+                    Log.e(TAG, "WE ARE HERE, yay: uptodate!: " +storyTimestamp + ";" + storyDao.getStoryByUuid(uuid).cachedTime)
                     storyDao.getStoryByUuid(uuid)
                 }
             }
         }
     }
 
-    fun getStoriesTitle(title: String): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
+    fun getStoriesByTitle(title: String): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO) {
             val storiesTimestamps: List<PairLastUpdate> = getStoryTimestampsByTitle(title)
             cacheStories(storiesTimestamps)
@@ -773,7 +775,7 @@ class StoryRepository(application: Application){
 
                     }
                 } else {
-                    if (storyDao.getStoryByUuid(it.first).cachedTime < it.second) {
+                    if (ratingDao.getRatingByUuid(it.first).cachedTime < it.second) {
                         //Das Rating anfordern und in der Datenbank speichern
                         val ratedStoryToInsert = getRatedStoryByUUID(it.first)
                         if(ratedStoryToInsert != null){

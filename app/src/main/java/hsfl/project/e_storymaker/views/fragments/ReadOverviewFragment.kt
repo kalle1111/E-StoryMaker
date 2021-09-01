@@ -51,6 +51,7 @@ class ReadOverviewFragment : Fragment(), RatingBar.OnRatingBarChangeListener {
 
         binding.readOverviewReviewsB.setOnClickListener {
             val intent = Intent((requireActivity() as ReadingActivity), ReviewActivity::class.java)
+            intent.putExtra("storyID", viewModel.storyID)
             startActivity(intent)
         }
 

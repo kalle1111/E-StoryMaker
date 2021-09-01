@@ -31,12 +31,20 @@ class StoryFinderFragVM : MainVM() {
         )*/
     }
 
-    fun search(){
+    fun search(titleSearch: String){
         if(selectedTags.count() == 0){
-            //currentStoryList = storyRep?.get
+            currentStoryList = storyRep?.getStoriesByTitle(titleSearch)
         }else{
-
+            currentStoryList = storyRep?.getStoriesByTagAndTitle(titleSearch, selectedTags)
         }
+    }
+
+    fun storyTags(storyID: String): String{
+        val tList = mutableListOf<String>()
+        storyRep?.getTagsOfStory(storyID)?.forEach {
+            tList.add(it.tagName)
+        }
+        return tList.toString()
     }
 
     fun allTags(): List<String>{

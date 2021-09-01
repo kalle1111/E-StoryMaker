@@ -47,6 +47,7 @@ class StoryFinderFragment : Fragment(), AdapterView.OnItemSelectedListener {
         storylist.forEach {
             val cardLayout: View = layoutInflater.inflate(R.layout.story_overview_card, null, false)
             cardLayout.findViewById<ImageView>(R.id.storyCard_image).setImageBitmap(byteArrayToBitmap(it.cover))
+            cardLayout.findViewById<TextView>(R.id.storyCard_Tags).text = viewModel.storyTags(it.story_uuid)
             cardLayout.findViewById<TextView>(R.id.storyCard_title).text = it.storyTitle
             cardLayout.findViewById<TextView>(R.id.storyFinder_tagList).text = it.description
             cardLayout.findViewById<ImageButton>(R.id.arrow_button).setOnClickListener {
@@ -87,10 +88,11 @@ class StoryFinderFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
 
         binding.storyFinderSearchB.setOnClickListener{
-            //TODO("GET THE SEARCH PARAMETeRS TO THE VM")
+            viewModel.search(binding.storyFinderSearchTitle.text.toString())
+
             binding.expandableLayout.visibility = GONE
 
-            viewModel.getStories()
+            //viewModel.getStories()
             populateStoryList(viewModel.CurrentStoryList())
         }
 

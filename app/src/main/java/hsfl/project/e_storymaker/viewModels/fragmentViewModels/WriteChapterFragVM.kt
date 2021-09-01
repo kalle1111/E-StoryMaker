@@ -13,6 +13,7 @@ class WriteChapterFragVM : WritingVM() {
 
     private var application: Application? = null
     private var storyRep: StoryRepository? = null
+    var storyID: String? = null
 
     fun setApplicationContext(application: Application){
         this.application = application

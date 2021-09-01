@@ -28,7 +28,7 @@ class WriteDetailsFragVM() : WritingVM() {
     }
 
 
-    fun createStory(image: ByteArray?, title: String, desciption: String): Boolean {
+    fun createStory(image: ByteArray?, title: String, desciption: String): String {
         //Log.d("WriteDetails", "title: " + title + " ; " + "descr: " + desciption)
         Log.d("WriteDetailsFragVM", selectedTags.toString()+ "<---------------------------")
         return storyRep?.createStory(StoryRequest(title, desciption, image), selectedTags)!!

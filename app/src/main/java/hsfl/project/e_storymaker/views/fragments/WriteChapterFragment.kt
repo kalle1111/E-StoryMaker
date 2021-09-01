@@ -38,9 +38,9 @@ class WriteChapterFragment : Fragment() {
 
         binding.button9.setOnClickListener {
 
-            if (viewModel.createChapter("sID", binding.writeChapterTitle.text.toString(), binding.writeChapterContent.text.toString(), 0)){
-                //(requireActivity() as WritingActivity).finish()
-                Log.d("WriteChapterFrag", "SUCCESS")
+            if (viewModel.createChapter(viewModel.storyID!!, binding.writeChapterTitle.text.toString(), binding.writeChapterContent.text.toString(), 0)){
+                (requireActivity() as WritingActivity).finish()
+                //Log.d("WriteChapterFrag", "SUCCESS")
             }else{
                 //TODO("FIX INDEXING!")
             }
@@ -52,6 +52,8 @@ class WriteChapterFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(WriteChapterFragVM::class.java)
         viewModel.setApplicationContext((requireActivity() as WritingActivity).application)
         binding.viewmodel = viewModel
+
+        viewModel.storyID = arguments?.getString("storyID")
     }
 
 }

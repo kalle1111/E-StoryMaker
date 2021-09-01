@@ -51,7 +51,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <EditText
-                        android:id="@+id/editTextTextPersonName"
+                        android:id="@+id/storyFinder_searchTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"

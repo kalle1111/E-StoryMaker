@@ -9,6 +9,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import hsfl.project.e_storymaker.R
@@ -42,13 +43,13 @@ class ReviewReadFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding.reviewReviewReadReviewCont.removeAllViews()
         reviewList.forEach {
             val cardLayout: View = layoutInflater.inflate(R.layout.review_card, null, false)
-            cardLayout.findViewById<TextView>(R.id.reviewCard_title).text = "IMPLEMENT TITLE GODDAMMIT!"
+            cardLayout.findViewById<TextView>(R.id.reviewCard_title).text = it.title
             cardLayout.findViewById<RatingBar>(R.id.reviewCard_ratingTotal).rating = it.rating_overall.toFloat()
             cardLayout.findViewById<RatingBar>(R.id.reviewCard_ratingStyle).rating = it.rating_style.toFloat()
             cardLayout.findViewById<RatingBar>(R.id.reviewCard_ratingStory).rating = it.rating_story.toFloat()
             cardLayout.findViewById<RatingBar>(R.id.reviewCard_ratingGrammar).rating = it.rating_grammar.toFloat()
             cardLayout.findViewById<RatingBar>(R.id.reviewCard_ratingChar).rating = it.rating_character.toFloat()
-            cardLayout.findViewById<TextView>(R.id.reviewCard_descr).text = "IMPLEMENT DECRIPTION GODDAMIT!"
+            cardLayout.findViewById<TextView>(R.id.reviewCard_descr).text = it.description
 
             cardLayout.findViewById<ImageButton>(R.id.arrow_button).setOnClickListener{
                 var expL: ConstraintLayout = cardLayout.findViewById(R.id.expandable_layout)
@@ -69,7 +70,8 @@ class ReviewReadFragment : Fragment(), AdapterView.OnItemSelectedListener {
         (requireActivity() as ReviewActivity).supportActionBar!!.title = "Reviews of: " +  "TODO: STORY_NAME"
 
         binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_ReviewRead_to_ReviewWrite)
+            val bundle = bundleOf("storyID" to viewModel.storyID)
+            findNavController().navigate(R.id.action_ReviewRead_to_ReviewWrite, bundle)
         }
 
         ArrayAdapter.createFromResource(
@@ -88,8 +90,11 @@ class ReviewReadFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ReviewReadFragVM::class.java)
-        viewModel.setApplicationContext((requireActivity() as ReviewActivity).application)
+        val storyID: String? = (requireActivity() as ReviewActivity).intent.getStringExtra("storyID")
+        viewModel.setApplicationContext((requireActivity() as ReviewActivity).application, storyID!!)
         //binding.viewModel = viewModel
+
+
 
         populateReviewList(viewModel.CurrentReviewList())
     }

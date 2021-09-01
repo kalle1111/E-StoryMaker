@@ -52,13 +52,15 @@ fun Route.chapterRoutes(
                 return@post
             }
             try {
-
+                println(chapterRequest.toString())
                 chapterService.insertChapter(
                     chapterRequest.storyId,
                     chapterRequest.title,
                     chapterRequest.content,
                     chapterRequest.index
                 )
+
+
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Chapter inserted Successfully!"))
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))

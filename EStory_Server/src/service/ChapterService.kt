@@ -21,8 +21,9 @@ class ChapterService {
         storyId: String,
         title: String,
         content: String,
-        index: Int,
+        index: Int
     ): Chapter = transaction {
+        println("InsertChapter..............." + storyId)
         ChapterEntity.new {
             this.storyEntity = StoryEntity.findById(UUID.fromString(storyId))!!
             this.title = title

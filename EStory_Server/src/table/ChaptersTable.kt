@@ -9,7 +9,7 @@ import org.jetbrains.exposed.dao.id.UUIDTable
 import java.util.*
 
 object ChaptersTable : UUIDTable() {
-    val storyId = reference("storyID", id)
+    val storyId = reference("storyID", StoriesTable.id)
     val title = text("title")
     val content = text("content")
     val index = integer("index")
@@ -19,6 +19,7 @@ object ChaptersTable : UUIDTable() {
 
 class ChapterEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     companion object : UUIDEntityClass<ChapterEntity>(ChaptersTable)
+
     var storyEntity by StoryEntity referencedOn ChaptersTable.storyId
     var title by ChaptersTable.title
     var content by ChaptersTable.content
@@ -29,7 +30,8 @@ class ChapterEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     fun toDTO(): Chapter =
         Chapter(
             this.id.toString(),
-            this.storyEntity.id.toString(), this.title,
+            this.storyEntity.id.toString(),
+            this.title,
             this.content,
             this.index,
             this.createTime,

@@ -758,9 +758,12 @@ class StoryRepository(application: Application){
     private fun getStoryTimestampsByTags(tags: List<Tag>): List<PairLastUpdate> = runBlocking {
         val authToken = sharedPreferences.getJWT(application)!!
         val client: HttpClient = getAuthHttpClient(authToken)
+        val tagNames = tags.map{
+            it.tagName
+        }
         val response: HttpResponse = client.get(GET_LAST_UPDATES_BY_TAGS){
             contentType(ContentType.Application.Json)
-            body = tags
+            body = SearchByTags(tagNames)
         }
         val jsonString: String = response.receive()
         Log.d(TAG, jsonString)

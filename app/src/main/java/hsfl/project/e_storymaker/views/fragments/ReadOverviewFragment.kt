@@ -1,6 +1,8 @@
 package hsfl.project.e_storymaker.views.fragments
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,6 +14,7 @@ import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import hsfl.project.e_storymaker.R
 import hsfl.project.e_storymaker.databinding.ReadOverviewFragmentBinding
+
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.ReadOverviewFragVM
 import hsfl.project.e_storymaker.views.activities.MainActivity
 import hsfl.project.e_storymaker.views.activities.ReadingActivity
@@ -60,6 +63,10 @@ class ReadOverviewFragment : Fragment(), RatingBar.OnRatingBarChangeListener {
 
     }
 
+    private fun byteArrayToBitmap(data: ByteArray): Bitmap {
+        return BitmapFactory.decodeByteArray(data, 0, data.size)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ReadOverviewFragVM::class.java)
@@ -68,6 +75,7 @@ class ReadOverviewFragment : Fragment(), RatingBar.OnRatingBarChangeListener {
         binding.viewmodel = viewModel
         (requireActivity() as ReadingActivity).supportActionBar!!.title = viewModel.title()
 
+        binding.imageView2.setImageBitmap(byteArrayToBitmap(viewModel.storyCover()))
     }
 
     override fun onRatingChanged(p0: RatingBar?, p1: Float, p2: Boolean) {

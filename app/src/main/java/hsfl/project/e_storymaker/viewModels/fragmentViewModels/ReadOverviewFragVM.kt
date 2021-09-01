@@ -36,6 +36,10 @@ class ReadOverviewFragVM : ReadingVM() {
         }
     }
 
+    fun storyCover(): ByteArray{
+        return currentStory.cover
+    }
+
     fun username(): String{
         return currentStory.author_username
     }

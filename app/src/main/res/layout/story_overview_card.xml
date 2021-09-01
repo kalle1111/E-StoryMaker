@@ -12,9 +12,9 @@
         android:id="@+id/storyCard_cardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="55dp"
-        android:layout_marginEnd="25dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -40,8 +40,8 @@
 
                 <ImageView
                     android:id="@+id/storyCard_image"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:layout_marginStart="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -74,11 +74,13 @@
                     android:id="@+id/arrow_button"
                     android:layout_width="100dp"
                     android:layout_height="40dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginBottom="5dp"
                     android:background="#0A25B8"
                     android:src="@android:drawable/arrow_down_float"
                     app:layout_constraintBottom_toBottomOf="@id/fixed_layout"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/storyCard_readB"
                     app:layout_constraintStart_toEndOf="@+id/storyCard_image" />
 
                 <Button
@@ -88,7 +90,6 @@
                     android:text="Read"
                     app:layout_constraintBottom_toBottomOf="@+id/arrow_button"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/arrow_button"
                     app:layout_constraintTop_toTopOf="@+id/arrow_button" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -96,7 +97,7 @@
                 android:id="@+id/expandable_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fixed_layout">
@@ -107,6 +108,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
+                    android:padding="15dp"
                     android:text="Story_Descr"
                     android:textAlignment="center"
                     android:textColor="#000000"

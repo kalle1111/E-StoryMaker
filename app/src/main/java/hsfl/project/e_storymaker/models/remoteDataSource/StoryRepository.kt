@@ -172,17 +172,27 @@ class StoryRepository(application: Application){
         }
     }
 
-    fun createStory(storyRequest: StoryRequest): Boolean = runBlocking {
+    fun createStory(storyRequest: StoryRequest, tagsOfStoryRequest: List<Tag>): Boolean = runBlocking {
         val authToken = sharedPreferences.getJWT(application)!!
         val client = getAuthHttpClient(authToken)
         try {
-            val response: HttpResponse = client.post(CREATE_STORIES){
+            var response: HttpResponse = client.post(CREATE_STORIES){
                 contentType(ContentType.Application.Json)
                 body = storyRequest
             }
-            val stringBody: String = response.receive()
+            var jsonString: String = response.receive()
             client.close()
-            val webResponse: WebResponse = Gson().fromJson(stringBody, WebResponse::class.java)
+            val createdStory: Story = Gson().fromJson(jsonString, Story::class.java)
+            val tagNames: List<String> = tagsOfStoryRequest.map {
+                it.tagName
+            }
+            response = client.post(MAP_Story_To_Tags){
+                contentType(ContentType.Application.Json)
+                body = MapStoryToTagRequest(tagNames, createdStory.uuid)
+            }
+            jsonString = response.receive()
+            client.close()
+            val webResponse: WebResponse = Gson().fromJson(jsonString, WebResponse::class.java)
             webResponse.success
         } catch (e: Exception){
             client.close()

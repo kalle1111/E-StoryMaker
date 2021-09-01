@@ -54,12 +54,9 @@ class TagService {
                 }.toDTO()
                 taggedStories.add(taggedStory)
             }
-
         }
         return taggedStories
     }
-
-
     fun getAllTaggedStories(): List<TaggedStory> = transaction { TaggedStoriesEntity.all().map { it.toDTO() } }
 
     //TODO: Diese Function brauchen wir nicht .....
@@ -70,29 +67,20 @@ class TagService {
 
     // client can search for stories by tags, parameter is list of tags
     fun getStoriesByTags(listOfTags: List<String>): List<Story> {
-
-        val temporarilyList = mutableListOf<TaggedStory>()
-
         val allTaggedStories = getAllTaggedStories()
-        val Alllist: MutableList<List<TaggedStory>> = mutableListOf()
+        val AllList: MutableList<List<TaggedStory>> = mutableListOf()
         var filteredLists: MutableList<TaggedStory> = mutableListOf()
 
         listOfTags.forEach { tagName ->
-            Alllist.add(allTaggedStories.filter { it.tag.name == tagName })
+            AllList.add(allTaggedStories.filter { it.tag.name == tagName })
         }
 
-        Alllist.get(0).forEach {taggedStory->
+        AllList[0].forEach { taggedStory ->
             val story = taggedStory.story.uuid
-            if(Alllist.all { list -> list.any { it.story.uuid == story } }){
+            if (AllList.all { list -> list.any { it.story.uuid == story } }) {
                 filteredLists.add(taggedStory)
             }
-
         }
-
-
-
-
-
         // remove duplicated elements and return list of stories
         return filteredLists.distinctBy { it.story.uuid }.map { it.story }
     }

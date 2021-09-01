@@ -134,7 +134,10 @@ class StoryService {
                 where = {
                     StoriesTable.id.eq(UUID.fromString(storyId))
                 }
-            ) { rs -> rs[this.averageRating] = averageValue }
+            ) { rs ->
+                rs[this.averageRating] = averageValue
+                rs[this.lastUpdate] = Date().time
+            }
         }
     }
 

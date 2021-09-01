@@ -33,6 +33,7 @@ const val GET_LAST_UPDATE_BY_CHAPTER_ID_ROUTE = "$CHAPTERS/getLastUpdateById" //
 const val GET_CHAPTERS_LAST_UPDATES_BY_STORY_ID_ROUTE =
     "$CHAPTERS/getLastUpdatesByStoryId" // storyId als Query parameter eingeben
 const val UPDATE_CHAPTER_BY_ID_ROUTE = "$CHAPTERS/updateChapterById" // siehe die Klasse UpdateChapterRequest
+const val GET_LAST_UPDATES_BY_SUB_TITLE = "$STORIES/getLastUpdatesByTitle" // title als Query parameter eingeben
 
 const val SEARCH_BY_TITLE_STORIES = "$STORIES/searchByTitle"
 

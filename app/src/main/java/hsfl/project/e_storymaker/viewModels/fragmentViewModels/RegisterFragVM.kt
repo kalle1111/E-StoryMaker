@@ -20,11 +20,11 @@ class RegisterFragVM : AuthVM() {
         userRep = application.let { UserRepository.getStoryRepository(it) }!!
     }
 
-    fun register(username: String, email: String, password: String, passwordConf: String): Boolean{
+    fun register(username: String, email: String, password: String, passwordConf: String, image: ByteArray): Boolean{
         return if (userRep != null){
             Log.d(TAG, "username: " + username + " email: " + email + " password: " + password + "passwordCONF: " + passwordConf)
 
-            val test:Boolean? = userRep?.registerRequest(RegisterRequest("REMOVE", "REMOVE",username, "No description yet!", "22.18.20323", password, ByteArray(9)))
+            val test:Boolean? = userRep?.registerRequest(RegisterRequest(username, "No description yet!", password, image))
             Log.d(TAG, test.toString())
 
             Log.d(TAG, "REPOSITORY QUERRIED!")

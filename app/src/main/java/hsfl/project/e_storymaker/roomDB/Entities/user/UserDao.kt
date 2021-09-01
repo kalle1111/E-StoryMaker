@@ -17,10 +17,6 @@ abstract class UserDao {
     @Delete
     abstract fun deleteUser(user:User)
 
-    @Query("SELECT * FROM user " +
-            "WHERE firstname LIKE :firstname " +
-            "AND lastname LIKE :lastname LIMIT 1 ")
-    abstract fun getUserByName(firstname: String, lastname: String): LiveData<User>
 
     @Query("SELECT * FROM user WHERE username LIKE :username LIMIT 1 ")
     abstract fun getUserByUsername(username: String): User

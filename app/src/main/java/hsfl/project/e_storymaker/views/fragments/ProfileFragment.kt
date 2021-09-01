@@ -1,6 +1,8 @@
 package hsfl.project.e_storymaker.views.fragments
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -53,6 +55,11 @@ class ProfileFragment : Fragment() {
             //EDIT PROFILE PAGE!
         }
     }
+
+    private fun byteArrayToBitmap(data: ByteArray): Bitmap {
+        return BitmapFactory.decodeByteArray(data, 0, data.size)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -74,6 +81,7 @@ class ProfileFragment : Fragment() {
         }
 
 
+        binding.profileImage.setImageBitmap(byteArrayToBitmap(viewModel.userImage()))
 
     //(requireActivity() as MainActivity).supportActionBar!! .title = viewModel.username()
 

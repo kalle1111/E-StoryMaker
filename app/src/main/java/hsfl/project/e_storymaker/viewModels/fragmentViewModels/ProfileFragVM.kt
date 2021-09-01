@@ -19,8 +19,8 @@ class ProfileFragVM : MainVM() {
     private var applicaion: Application? = null
     private var userRep: UserRepository? = null
 
-    private var currentUser: User = User("MAX_MUSTERMANN", "MAX", "Mustermann", "/DESCR/\n...\n\n\n\n\n\n/END DESCR/",
-        "1.1.0000", "why?", 2)
+    private var currentUser: User = User("MAX_MUSTERMANN", "/DESCR/\n...\n\n\n\n\n\n/END DESCR/",
+        "",ByteArray(0) , 2)
 
 
     fun setApplicationContext(application: Application, user: String?){
@@ -50,6 +50,10 @@ class ProfileFragVM : MainVM() {
                 currentUser = userRep?.getMyProfile()!!
             }
         }
+    }
+
+    fun userImage(): ByteArray{
+        return currentUser.image
     }
 
     fun username(): String{

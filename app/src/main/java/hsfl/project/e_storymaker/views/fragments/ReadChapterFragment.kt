@@ -2,6 +2,7 @@ package hsfl.project.e_storymaker.views.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -38,7 +39,8 @@ class ReadChapterFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ReadChapterFragVM::class.java)
         val storyID: String? = arguments?.getString("storyID")
-        viewModel.setApplicationContext((requireActivity() as ReadingActivity).application, storyID)
+        Log.i("ReadChapterFrag", storyID!!)
+        viewModel.setApplicationContext((requireActivity() as ReadingActivity).application, storyID!!)
 
 
         binding.viewmodel = viewModel

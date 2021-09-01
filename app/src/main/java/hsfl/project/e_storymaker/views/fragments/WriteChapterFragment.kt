@@ -2,6 +2,7 @@ package hsfl.project.e_storymaker.views.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -38,7 +39,8 @@ class WriteChapterFragment : Fragment() {
         binding.button9.setOnClickListener {
 
             if (viewModel.createChapter("sID", binding.writeChapterTitle.text.toString(), binding.writeChapterContent.text.toString(), 0)){
-                (requireActivity() as WritingActivity).finish()
+                //(requireActivity() as WritingActivity).finish()
+                Log.d("WriteChapterFrag", "SUCCESS")
             }else{
                 //TODO("FIX INDEXING!")
             }

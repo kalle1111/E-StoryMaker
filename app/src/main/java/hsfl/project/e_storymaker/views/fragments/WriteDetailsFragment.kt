@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import androidx.core.content.PermissionChecker
 import androidx.core.content.PermissionChecker.checkSelfPermission
@@ -27,7 +29,7 @@ import hsfl.project.e_storymaker.viewModels.fragmentViewModels.WriteDetailsFragV
 import hsfl.project.e_storymaker.views.activities.WritingActivity
 import java.io.ByteArrayOutputStream
 
-class WriteDetailsFragment : Fragment() {
+class WriteDetailsFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var _binding: WriteDetailsFragmentBinding? = null
     private val binding get() = _binding!!
@@ -56,7 +58,7 @@ class WriteDetailsFragment : Fragment() {
             if (viewModel.createStory(imageToByteArray(binding.imageView3), binding.writeDetailsTitle.text.toString(),binding.writeDetailsDescription.text.toString())){
                 findNavController().navigate(R.id.action_WriteOverview_to_WriteChapter)
             }else{
-                //TODO("SHOW THE USER AN ERROR MESSAGE")
+               Log.e("WriteDetailsFrag", "Server refused to create!")
             }
         }
 
@@ -70,6 +72,11 @@ class WriteDetailsFragment : Fragment() {
             }
         }
 
+        binding.writeDetailsResetTags.setOnClickListener {
+            viewModel.selectedTags.clear()
+            binding.writeDetailsTagList.text = "No tags selected!"
+        }
+
 
 
     }
@@ -81,6 +88,25 @@ class WriteDetailsFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(WriteDetailsFragVM::class.java)
         viewModel.setApplicationContext((requireActivity() as WritingActivity).application, storyToEdit)
         binding.viewmodel = viewModel
+
+
+        /*
+        ArrayAdapter.createFromResource(
+            (requireActivity() as WritingActivity),
+            R.array.tag_spinner_arr,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.writeDetailsTagSelector.adapter = adapter
+        }*/
+        binding.writeDetailsTagSelector.onItemSelectedListener = this
+
+        ArrayAdapter<String>((requireActivity() as WritingActivity), android.R.layout.simple_spinner_item, viewModel.allTags()).also {
+            adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.writeDetailsTagSelector.adapter = adapter
+        }
+
 
     }
 
@@ -103,5 +129,17 @@ class WriteDetailsFragment : Fragment() {
         bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
 
         return stream.toByteArray()
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        if(!viewModel.selectedTags.contains(binding.writeDetailsTagSelector.selectedItem.toString())){
+            viewModel.selectedTags.add(binding.writeDetailsTagSelector.selectedItem.toString())
+            Log.d("TEG", binding.writeDetailsTagSelector.selectedItem.toString())
+            binding.writeDetailsTagList.text = viewModel.selectedTags.toString()
+        }
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        //TODO("Not yet implemented")
     }
 }

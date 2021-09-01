@@ -174,7 +174,7 @@ class StoryRepository(application: Application){
 
     fun createStory(storyRequest: StoryRequest, tagsOfStoryRequest: List<String>): Boolean = runBlocking {
         val authToken = sharedPreferences.getJWT(application)!!
-        val client = getAuthHttpClient(authToken)
+        var client = getAuthHttpClient(authToken)
         try {
             var response: HttpResponse = client.post(CREATE_STORIES){
                 contentType(ContentType.Application.Json)
@@ -183,15 +183,19 @@ class StoryRepository(application: Application){
             var jsonString: String = response.receive()
             client.close()
             val createdStory: Story = Gson().fromJson(jsonString, Story::class.java)
+
+            client = getAuthHttpClient(authToken)
             response = client.post(MAP_Story_To_Tags){
                 contentType(ContentType.Application.Json)
                 body = MapStoryToTagRequest(tagsOfStoryRequest, createdStory.uuid)
             }
             jsonString = response.receive()
+            Log.e(TAG, jsonString)
             client.close()
             val webResponse: WebResponse = Gson().fromJson(jsonString, WebResponse::class.java)
             webResponse.success
         } catch (e: Exception){
+            Log.e(TAG, e.toString())
             client.close()
             false
         }
@@ -614,6 +618,7 @@ class StoryRepository(application: Application){
             val webResponse: WebResponse = Gson().fromJson(stringBody, WebResponse::class.java)
             webResponse.success
         } catch (e: Exception){
+            Log.d(TAG, e.toString())
             client.close()
             false
         }
@@ -638,24 +643,30 @@ class StoryRepository(application: Application){
     }
 
     fun getAllChaptersOfStory(storyId: String): List<hsfl.project.e_storymaker.roomDB.Entities.chapter.Chapter?> = runBlocking {
+        Log.d(TAG, "getAllChaptersOfStory()")
         return@runBlocking withContext(Dispatchers.IO) {
             val chapterTimestamps: List<PairLastUpdate> = getAllChaptersTimestampsFromStoryId(storyId)
             val chapters: MutableList<hsfl.project.e_storymaker.roomDB.Entities.chapter.Chapter?> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.chapter.Chapter?>()
             chapterTimestamps.map{
                 if (!chapterDao.rowExistByUUID(it.first)){
+                    Log.d(TAG, "HELLO; WE ARE HERE!")
                     val chapterToInsert = getChapterByUUIDwithoutTimestampCheck(it.first)
                     chapterDao.insertWithTimestamp(chapterToInsert)
                     chapters.add(chapterDao.getChapterByUuid(it.first))
                 } else {
                     if (chapterDao.getChapterByUuid(it.first).cachedTime < it.second){
+                        Log.d(TAG, "WE ARE HERE NOW!")
                         val chapterToInsert = getChapterByUUIDwithoutTimestampCheck(it.first)
                         chapterDao.insertWithTimestamp(chapterToInsert)
                         chapters.add(chapterDao.getChapterByUuid(it.first))
                     } else {
+                        Log.d(TAG, "WHY ARE WE HERE?!")
                         chapters.add(chapterDao.getChapterByUuid(it.first))
                     }
                 }
             }
+            Log.i(TAG, chapterTimestamps.isEmpty().toString())
+            Log.i(TAG, chapters.isEmpty().toString() + " Chapters ")
             chapters
         }
     }

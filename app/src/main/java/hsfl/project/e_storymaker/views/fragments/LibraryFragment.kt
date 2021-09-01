@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +14,6 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
-import hsfl.project.e_storymaker.viewModels.MainVM
 import hsfl.project.e_storymaker.R
 import hsfl.project.e_storymaker.databinding.LibraryFragmentBinding
 import hsfl.project.e_storymaker.roomDB.Entities.story.Story
@@ -23,7 +21,6 @@ import hsfl.project.e_storymaker.viewModels.fragmentViewModels.LibraryFragVM
 import hsfl.project.e_storymaker.views.activities.MainActivity
 import hsfl.project.e_storymaker.views.activities.ReadingActivity
 import hsfl.project.e_storymaker.views.activities.WritingActivity
-import java.util.zip.Inflater
 
 class LibraryFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
@@ -55,8 +52,9 @@ class LibraryFragment : Fragment(), AdapterView.OnItemSelectedListener {
         storylist.forEach {
             val cardLayout: View = layoutInflater.inflate(R.layout.story_overview_card, null, false)
             cardLayout.findViewById<ImageView>(R.id.storyCard_image).setImageBitmap(byteArrayToBitmap(it.cover))
+            cardLayout.findViewById<TextView>(R.id.storyCard_Tags).text = viewModel.storyTags(it.story_uuid)
             cardLayout.findViewById<TextView>(R.id.storyCard_title).text = it.storyTitle
-            cardLayout.findViewById<TextView>(R.id.storyCard_descr).text = it.description
+            cardLayout.findViewById<TextView>(R.id.storyFinder_tagList).text = it.description
             cardLayout.findViewById<ImageButton>(R.id.arrow_button).setOnClickListener {
                 //Log.d("LibraryFrag", "CLICKED EXP_L")
                 var expL: ConstraintLayout = cardLayout.findViewById(R.id.expandable_layout)

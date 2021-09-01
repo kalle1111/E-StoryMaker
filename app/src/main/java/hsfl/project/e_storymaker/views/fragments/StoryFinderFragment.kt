@@ -9,24 +9,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
-import hsfl.project.e_storymaker.viewModels.MainVM
 import hsfl.project.e_storymaker.R
-import hsfl.project.e_storymaker.databinding.MainActivityBinding
 import hsfl.project.e_storymaker.databinding.StoryFinderFragmentBinding
 import hsfl.project.e_storymaker.roomDB.Entities.story.Story
 import hsfl.project.e_storymaker.viewModels.fragmentViewModels.StoryFinderFragVM
 import hsfl.project.e_storymaker.views.activities.MainActivity
 import hsfl.project.e_storymaker.views.activities.ReadingActivity
 
-class StoryFinderFragment : Fragment() {
+class StoryFinderFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var _binding: StoryFinderFragmentBinding? = null
     private val binding get() = _binding!!
@@ -54,7 +48,7 @@ class StoryFinderFragment : Fragment() {
             val cardLayout: View = layoutInflater.inflate(R.layout.story_overview_card, null, false)
             cardLayout.findViewById<ImageView>(R.id.storyCard_image).setImageBitmap(byteArrayToBitmap(it.cover))
             cardLayout.findViewById<TextView>(R.id.storyCard_title).text = it.storyTitle
-            cardLayout.findViewById<TextView>(R.id.storyCard_descr).text = it.description
+            cardLayout.findViewById<TextView>(R.id.storyFinder_tagList).text = it.description
             cardLayout.findViewById<ImageButton>(R.id.arrow_button).setOnClickListener {
                 //Log.d("LibraryFrag", "CLICKED EXP_L")
                 var expL: ConstraintLayout = cardLayout.findViewById(R.id.expandable_layout)
@@ -78,6 +72,7 @@ class StoryFinderFragment : Fragment() {
         }
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -99,6 +94,17 @@ class StoryFinderFragment : Fragment() {
             populateStoryList(viewModel.CurrentStoryList())
         }
 
+        binding.storyFinderTagAddB.setOnClickListener {
+            addTag()
+        }
+
+        binding.storyFinderTagsReset.setOnClickListener {
+            viewModel.selectedTags.clear()
+            binding.storyFinderTagList.text = "No tags selected!"
+        }
+
+
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -107,6 +113,29 @@ class StoryFinderFragment : Fragment() {
         viewModel.setApplicationContext((requireActivity() as MainActivity).application)
         (requireActivity() as MainActivity).findViewById<TextView>(R.id.mToolbarTitle).setText("Story Finder")
         // TODO: Use the ViewModel
+
+        ArrayAdapter<String>((requireActivity() as MainActivity), android.R.layout.simple_spinner_item, viewModel.allTags()).also {
+                adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.storyFinderTagSelector.adapter = adapter
+        }
+        binding.storyFinderTagSelector.onItemSelectedListener = this
+    }
+
+    private fun addTag(){
+        val tagToAdd: String = binding.storyFinderTagSelector.selectedItem.toString()
+        if (tagToAdd != null && !viewModel.selectedTags.contains(tagToAdd)){
+            viewModel.selectedTags.add(binding.storyFinderTagSelector.selectedItem.toString())
+            binding.storyFinderTagList.text = viewModel.selectedTags.toString()
+        }
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        //TODO("Not yet implemented")
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        //TODO("Not yet implemented")
     }
 
 }

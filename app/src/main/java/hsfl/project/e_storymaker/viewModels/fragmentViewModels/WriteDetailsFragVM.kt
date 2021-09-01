@@ -4,7 +4,6 @@ package hsfl.project.e_storymaker.viewModels.fragmentViewModels
 
 import android.app.Application
 import android.util.Log
-import androidx.annotation.UiThread
 import hsfl.project.e_storymaker.models.remoteDataSource.StoryRepository
 import hsfl.project.e_storymaker.repository.webserviceModels.StoryRequest
 import hsfl.project.e_storymaker.roomDB.Entities.story.Story
@@ -18,6 +17,8 @@ class WriteDetailsFragVM() : WritingVM() {
 
     private var story: Story = Story("", "", "", "", "", 0, ByteArray(2), 2.0, 2)
 
+    var selectedTags: MutableList<String> = mutableListOf()
+
     fun setApplicationContext(application: Application, storyID: String?){
         this.application = application
         storyRep = application?.let { StoryRepository.getStoryRepository(it) }!!
@@ -29,7 +30,18 @@ class WriteDetailsFragVM() : WritingVM() {
 
     fun createStory(image: ByteArray?, title: String, desciption: String): Boolean {
         //Log.d("WriteDetails", "title: " + title + " ; " + "descr: " + desciption)
-        return storyRep?.createStory(StoryRequest(title, desciption, image))!!
+        Log.d("WriteDetailsFragVM", selectedTags.toString()+ "<---------------------------")
+        return storyRep?.createStory(StoryRequest(title, desciption, image), selectedTags)!!
+    }
+
+    fun allTags(): List<String>{
+        val tList: MutableList<String> = mutableListOf()
+        Log.d("WriteDetailsFRAGVM", (storyRep?.getAllTags() == null).toString())
+        storyRep?.getAllTags()?.forEach {
+            //Log.d("WriteDetailsFRAGVM", it.tagName)
+            tList.add(it.tagName)
+        }
+        return tList
     }
 
     fun title(): String{

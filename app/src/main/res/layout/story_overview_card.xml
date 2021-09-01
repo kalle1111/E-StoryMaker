@@ -97,14 +97,14 @@
                 android:id="@+id/expandable_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fixed_layout">
 
 
                 <TextView
-                    android:id="@+id/storyCard_descr"
+                    android:id="@+id/storyFinder_tagList"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"

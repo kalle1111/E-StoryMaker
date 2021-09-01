@@ -84,11 +84,19 @@ class LibraryFragVM : MainVM() {
         }
     }
 
+    fun storyTags(storyID: String): String{
+        val tList = mutableListOf<String>()
+        storyRep?.getTagsOfStory(storyID)?.forEach {
+            tList.add(it.tagName)
+        }
+        return tList.toString()
+    }
+
     fun username(): String{
         if (userRep != null && false){
             return userRep?.getMyProfile()?.username!!
         }else{
-            return "Your Library"//"MAX_MUSTERMANNS's Library"
+            return "Your Library"
         }
     }
 

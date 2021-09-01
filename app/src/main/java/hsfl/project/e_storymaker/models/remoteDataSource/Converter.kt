@@ -3,7 +3,7 @@ package hsfl.project.e_storymaker.models.remoteDataSource
 import hsfl.project.e_storymaker.repository.webserviceModels.*
 
 fun convertWebserviceUserToDBUser(user: User): hsfl.project.e_storymaker.roomDB.Entities.user.User{
-    return hsfl.project.e_storymaker.roomDB.Entities.user.User(user.userName, user.firstname, user.lastname, user.description, user.birthday, user.hashPassword, user.lastUpdate.toLong())
+    return hsfl.project.e_storymaker.roomDB.Entities.user.User(user.userName,  user.description, user.hashPassword, user.image!!, user.lastUpdate.toLong())
 }
 
 //TODO: Parameter und Storyklasse anpassen

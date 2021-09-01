@@ -6,7 +6,6 @@ import android.util.Log
 import com.google.gson.Gson
 import hsfl.project.e_storymaker.repository.webserviceModels.*
 import hsfl.project.e_storymaker.roomDB.AppDatabase
-import hsfl.project.e_storymaker.roomDB.AppRepository
 import hsfl.project.e_storymaker.roomDB.Entities.chapterProgress.ChapterProgressDao
 import hsfl.project.e_storymaker.roomDB.Entities.favoring.FavoringDao
 import hsfl.project.e_storymaker.roomDB.Entities.friendship.FriendshipDao
@@ -31,7 +30,6 @@ import java.util.*
 class UserRepository(application: Application) {
 
     private final val TAG = "User Rep"
-    private val repository: AppRepository
     private val application: Application = application
 
     val userDao: UserDao
@@ -52,11 +50,6 @@ class UserRepository(application: Application) {
         chapterProgressDao = database.chapterProgressDao()
         favoringDao = database.favoringDao()
         ratingDao = database.ratingDao()
-
-        repository = AppRepository(
-            userDao, storyDao, friendshipDao,
-            chapterProgressDao, favoringDao, ratingDao
-        )
     }
 
     /*********User Related Functions*********/

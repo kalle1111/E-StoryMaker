@@ -1,14 +1,11 @@
 package hsfl.project.e_storymaker.models.remoteDataSource
 
-import android.app.Activity
 import android.app.Application
 import android.util.Log
 
 import com.google.gson.Gson
 import hsfl.project.e_storymaker.repository.webserviceModels.*
 import hsfl.project.e_storymaker.roomDB.AppDatabase
-import hsfl.project.e_storymaker.roomDB.AppRepository
-import hsfl.project.e_storymaker.roomDB.Entities.chapter.Chapter
 import hsfl.project.e_storymaker.roomDB.Entities.chapter.ChapterDao
 import hsfl.project.e_storymaker.roomDB.Entities.chapterProgress.ChapterProgressDao
 import hsfl.project.e_storymaker.roomDB.Entities.favoring.FavoringDao
@@ -28,18 +25,14 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.utils.io.concurrent.*
-import io.reactivex.internal.util.AppendOnlyLinkedArrayList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.withTestContext
 import kotlinx.coroutines.withContext
-import kotlin.time.measureTimedValue
 
 class StoryRepository(application: Application){
 
     private final val TAG = "Story Rep"
 
-    private val repository: AppRepository
     private val application: Application = application
 
     val userDao: UserDao
@@ -63,9 +56,6 @@ class StoryRepository(application: Application){
         ratingDao = database.ratingDao()
         tagDao = database.tagDao()
         chapterDao = database.chapterDao()
-
-        repository = AppRepository(userDao, storyDao, friendshipDao,
-            chapterProgressDao, favoringDao, ratingDao)
     }
 
     /*********Story Related Functions*********/

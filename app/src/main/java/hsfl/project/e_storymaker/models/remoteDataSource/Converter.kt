@@ -32,5 +32,5 @@ fun convertWebserviceChapterToDbChapter(chapter: Chapter): hsfl.project.e_storym
 }
 
 fun convertWebserviceTagToDbTag(tag: Tag): hsfl.project.e_storymaker.roomDB.Entities.tag.Tag {
-    return hsfl.project.e_storymaker.roomDB.Entities.tag.Tag(tag.uuid, tag.name, 0.toLong())
+    return hsfl.project.e_storymaker.roomDB.Entities.tag.Tag(tag.name, 0.toLong())
 }

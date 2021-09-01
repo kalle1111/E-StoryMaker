@@ -16,7 +16,7 @@ fun convertWebserviceStoryToDbStory(story: Story): hsfl.project.e_storymaker.roo
 //}
 
 fun convertWebserviceRatedStoryToDbRatedStory(ratedStory: RatedStory): hsfl.project.e_storymaker.roomDB.Entities.rating.Rating{
-    return hsfl.project.e_storymaker.roomDB.Entities.rating.Rating(ratedStory.uuid, ratedStory.ratingOverallValue,ratedStory.ratingStyleValue, ratedStory.ratingStoryValue, ratedStory.ratingGrammarValue, ratedStory.ratingCharacterValue, ratedStory.user.uuid, ratedStory.story.uuid, ratedStory.lastUpdate.toLong())
+    return hsfl.project.e_storymaker.roomDB.Entities.rating.Rating(ratedStory.uuid, ratedStory.ratingOverallValue,ratedStory.ratingStyleValue, ratedStory.ratingStoryValue, ratedStory.ratingGrammarValue, ratedStory.ratingCharacterValue, ratedStory.user.uuid, ratedStory.story.uuid, ratedStory.ratingTitle, ratedStory.ratingDescription, ratedStory.lastUpdate)
 }
 
 fun convertWebserviceFavoriteToDbFavorite(storyAsFavorite: StoryAsFavorite): hsfl.project.e_storymaker.roomDB.Entities.favoring.Favoring{

@@ -14,11 +14,11 @@ abstract class TagDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertTag(tag: Tag)
 
-    @Query("SELECT * FROM tag WHERE tag_uuid LIKE :tag_uuid ")
-    abstract fun getTagByUUID(tag_uuid: String):Tag
+    @Query("SELECT * FROM tag WHERE tagName LIKE :tagName ")
+    abstract fun getTagByUUID(tagName: String): Tag
 
-    @Query("SELECT EXISTS(SELECT * FROM tag WHERE tag_uuid = :tag_uuid)")
-    abstract fun rowExistByUUID(tag_uuid : String) : Boolean
+    @Query("SELECT EXISTS(SELECT * FROM tag WHERE tagName = :tagName)")
+    abstract fun rowExistByUUID(tagName : String) : Boolean
 
     fun insertWithTimestamp(tag: Tag) {
         insertTag(tag.apply{

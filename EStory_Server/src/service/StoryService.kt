@@ -105,6 +105,8 @@ class StoryService {
         ratingGrammarValue: Int,
         ratingCharacterValue: Int
     ): RatedStory {
+
+
         val ratedStory = transaction {
             RatedStoryEntity.new {
                 this.userEntity = UserEntity.find { UsersTable.userName eq userName }.first()
@@ -119,14 +121,16 @@ class StoryService {
                 this.lastUpdate = Date().time
 
             }
-        }.toDTO()
+
+        }
         updateAverageRatingToStory(storyId)
-        return ratedStory
+        return ratedStory.toDTO()
     }
 
     private fun updateAverageRatingToStory(storyId: String) {
+        println("HELLO!")
         var r = 0
-        val ratings = getAllRatedStories().filter { it.uuid == storyId }
+        val ratings = getAllRatedStories().filter { it.story.uuid == storyId }
         ratings.forEach { r += it.ratingOverallValue }
         val averageValue = r.toDouble() / ratings.size.toDouble()
         transaction {
@@ -135,6 +139,7 @@ class StoryService {
                     StoriesTable.id.eq(UUID.fromString(storyId))
                 }
             ) { rs ->
+                println(averageValue.toString() + ";" + Date().time)
                 rs[this.averageRating] = averageValue
                 rs[this.lastUpdate] = Date().time
             }

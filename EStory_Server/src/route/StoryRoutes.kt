@@ -375,6 +375,7 @@ fun Route.storyRoutes(
 
         /**************Rating Story*******************/
         post<StoryRateRoute> {
+            println("RATE STORY")
             val rateStory = try {
 
                 call.receive<RateStoryRequest>()
@@ -403,7 +404,7 @@ fun Route.storyRoutes(
         }
 
         post<StoryUpdateRateRoute> {
-
+            println("UPDATE RATING")
             val ratedStory = try {
                 call.receive<RateStoryRequest>()
 

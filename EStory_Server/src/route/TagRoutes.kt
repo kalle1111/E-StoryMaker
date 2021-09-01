@@ -29,8 +29,8 @@ class GetStoriesByTagsAndTitle
 @Location(TAGS)
 class GetAllTagsRoute
 
-@Location(MAP_Story_To_Tag)
-class MapStoryToTagRoute
+@Location(MAP_Story_To_Tags)
+class MapStoryToTagsRoute
 
 @Location(GET_ALL_TAGS_TO_STORY)
 class GetAllTagsToStoryRoute
@@ -150,7 +150,7 @@ fun Route.tagRoutes(
         }
 
 
-        post<MapStoryToTagRoute> {
+        post<MapStoryToTagsRoute> {
             val mapStoryToTagRequest = try {
 
                 call.receive<MapStoryToTagRequest>()
@@ -160,10 +160,8 @@ fun Route.tagRoutes(
                 call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "Missing Fields.."))
                 return@post
             }
-
-
             try {
-                tagService.mapStoryToTag(mapStoryToTagRequest.storyId, mapStoryToTagRequest.tagName)
+                tagService.mapStoryToTag(mapStoryToTagRequest.storyId, mapStoryToTagRequest.listOfTags)
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story has been tagged successfully!"))
             } catch (e: Exception) {
                 call.respond(

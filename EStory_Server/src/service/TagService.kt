@@ -44,11 +44,19 @@ class TagService {
     }
 
     // mapping a story to a tag. A story can be mapped to more than one tag
-    fun mapStoryToTag(storyId: String, tagName: String): TaggedStory = transaction {
-        TaggedStoriesEntity.new {
-            this.tagEntity = TagEntity.find { TagsTable.name eq tagName }.first()
-            this.storyEntity = StoryEntity.findById(UUID.fromString(storyId))!!
-        }.toDTO()
+    fun mapStoryToTag(storyId: String, listOfTags: List<String>): List<TaggedStory> {
+        val taggedStories = mutableListOf<TaggedStory>()
+        transaction {
+            listOfTags.forEach { tagName ->
+                val taggedStory = TaggedStoriesEntity.new {
+                    this.tagEntity = TagEntity.find { TagsTable.name eq tagName }.first()
+                    this.storyEntity = StoryEntity.findById(UUID.fromString(storyId))!!
+                }.toDTO()
+                taggedStories.add(taggedStory)
+            }
+
+        }
+        return taggedStories
     }
 
 

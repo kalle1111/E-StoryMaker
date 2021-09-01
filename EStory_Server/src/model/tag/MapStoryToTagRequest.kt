@@ -1,3 +1,3 @@
 package com.eStory.model.tag
 
-data class MapStoryToTagRequest(val tagName: String, val storyId: String)
+data class MapStoryToTagRequest(val listOfTags: List<String>, val storyId: String)

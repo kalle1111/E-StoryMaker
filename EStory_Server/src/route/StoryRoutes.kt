@@ -365,7 +365,7 @@ fun Route.storyRoutes(
             }
             try {
                 val username = call.principal<User>()!!.userName
-                storyService.setStoryAsFavorite(username, setNotFavorite.storyId)
+                storyService.setStoryAsNotFavorite(username, setNotFavorite.storyId)
                 call.respond(HttpStatusCode.OK, SimpleResponse(true, "Story is now as not favorite!"))
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))

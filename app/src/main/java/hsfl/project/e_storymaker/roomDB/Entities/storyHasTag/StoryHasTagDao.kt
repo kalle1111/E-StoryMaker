@@ -31,8 +31,4 @@ abstract class StoryHasTagDao {
         })
     }
 
-    fun cacheStoryHasTag(shts: List<StoryHasTag>) {
-        shts.forEach { insertWithTimestamp(it) }
-    }
-
 }

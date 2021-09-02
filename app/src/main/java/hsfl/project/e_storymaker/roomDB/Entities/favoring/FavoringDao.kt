@@ -33,8 +33,4 @@ abstract class FavoringDao {
         })
     }
 
-    fun cacheFavorites(favorings: List<Favoring>) {
-        favorings.forEach { insertWithTimestamp(it) }
-    }
-
 }

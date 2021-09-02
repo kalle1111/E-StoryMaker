@@ -8,9 +8,6 @@ import hsfl.project.e_storymaker.roomDB.Entities.user.User
 @Dao
 abstract class TagDao {
 
-    @Delete
-    abstract fun deleteTag(tag: Tag)
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertTag(tag: Tag)
 
@@ -24,9 +21,5 @@ abstract class TagDao {
         insertTag(tag.apply{
             cachedTime = System.currentTimeMillis()
         })
-    }
-
-    fun cacheTags(tags: List<Tag>) {
-        tags.forEach { insertWithTimestamp(it) }
     }
 }

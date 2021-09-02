@@ -23,8 +23,4 @@ abstract class ChapterProgressDao {
             cachedTime = System.currentTimeMillis()
         })
     }
-
-    fun cacheTags(progresses: List<ChapterProgress>) {
-        progresses.forEach { insertWithTimestamp(it) }
-    }
 }

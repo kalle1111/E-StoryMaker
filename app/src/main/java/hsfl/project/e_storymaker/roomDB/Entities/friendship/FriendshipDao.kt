@@ -56,8 +56,4 @@ abstract class FriendshipDao {
         })
     }
 
-    fun cacheFriendships(friendships: List<Friendship>) {
-        friendships.forEach { insertWithTimestamp(it) }
-    }
-
 }

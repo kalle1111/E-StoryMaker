@@ -43,8 +43,4 @@ abstract class ChapterDao {
             cachedTime = System.currentTimeMillis()
         })
     }
-
-    fun cacheChapters(chapters: List<Chapter>) {
-        chapters.forEach { insertWithTimestamp(it) }
-    }
 }

@@ -47,8 +47,4 @@ abstract class StoryDao {
             cachedTime = System.currentTimeMillis()
         })
     }
-
-    fun cacheStories(stories: List<Story>) {
-        stories.forEach { insertWithTimestamp(it) }
-    }
 }

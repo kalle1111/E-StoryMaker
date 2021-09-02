@@ -29,8 +29,4 @@ abstract class UserDao {
             cachedTime = System.currentTimeMillis()
         })
     }
-
-    fun cacheUsers(users: List<User>) {
-        users.forEach { insertWithTimestamp(it) }
-    }
 }

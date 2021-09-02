@@ -18,9 +18,6 @@ abstract class RatingDao {
     @Query("SELECT * FROM rating WHERE rating.user_username LIKE :user_uuid AND rating.story_uuid LIKE :story_uuid ")
     abstract fun getUsersRatingOfStory(user_uuid: String, story_uuid: String): List<Rating>
 
-    @Update
-    abstract fun changeRating(rating: Rating)
-
     @Query("DELETE FROM rating WHERE rating.user_username LIKE :user_uuid AND rating.story_uuid LIKE :story_uuid ")
     abstract fun deleteRating(user_uuid: String, story_uuid: String)
 
@@ -49,7 +46,4 @@ abstract class RatingDao {
         })
     }
 
-    fun cacheRatings(ratings: List<Rating>) {
-        ratings.forEach { insertWithTimestamp(it) }
-    }
 }

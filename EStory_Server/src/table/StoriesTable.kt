@@ -13,7 +13,6 @@ object StoriesTable : UUIDTable() {
     val description = text("description")
     val createTime = long("createTime")
     val lastUpdate = long("lastUpdate")
-   // val storyChapters = text("story")
     val averageRating = double("averageRating")
     val cover = binary("cover", Int.MAX_VALUE)
 }
@@ -26,7 +25,6 @@ class StoryEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var description by StoriesTable.description
     var createTime by StoriesTable.createTime
     var lastUpdate by StoriesTable.lastUpdate
-   // var storyChapters by StoriesTable.storyChapters
     var averageRating by StoriesTable.averageRating
     var cover by StoriesTable.cover
     fun toDTO(): Story =

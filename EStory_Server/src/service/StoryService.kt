@@ -82,9 +82,6 @@ class StoryService {
                 if (description != null) {
                     st[this.description] = description
                 }
-                /* if (storyChapters != null) {
-                     st[this.storyChapters] = storyChapters
-                 }*/
                 st[this.cover] = cover
 
                 st[this.lastUpdate] = Date().time
@@ -216,6 +213,7 @@ class StoryService {
         getRatedStoryByStoryId(storyId).map { Pair(it.uuid, it.lastUpdate) }
 
     /******************Story as Favorite *****************/
+    // insert a new entity to the table when the story is favorite
     fun setStoryAsFavorite(userName: String, storyId: String) {
         transaction {
             StoryAsFavoriteEntity.new {
@@ -228,15 +226,18 @@ class StoryService {
     fun getFavoriteStoryByUUID(uuid: String): StoryAsFavorite? =
         transaction { StoryAsFavoriteEntity.findById(UUID.fromString(uuid))?.toDTO() }
 
+    // get all stories that have been marked as favorite
     fun getAllStoriesAsFavorite(): List<StoryAsFavorite> =
         transaction { StoryAsFavoriteEntity.all().map { it.toDTO() } }
 
+    // get all stories that hab been marked as favorite by username
     fun getMyFavoriteStories(userName: String): List<StoryAsFavorite> =
         getAllStoriesAsFavorite().filter { it.user.userName == userName }
 
     fun getLastUpdatesFromMyFavoriteStories(username: String): List<Pair<String, Long>> =
         getMyFavoriteStories(username).map { Pair(it.story.uuid, it.story.lastUpdate) }
 
+    //Delete the Entity from the table, when the is not favorite
     fun setStoryAsNotFavorite(userName: String, storyId: String): StoryAsFavorite {
         val storyAsFavorite = getMyFavoriteStories(userName).first { it.story.uuid == storyId }
         transaction {

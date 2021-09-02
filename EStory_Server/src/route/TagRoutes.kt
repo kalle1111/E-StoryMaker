@@ -17,9 +17,6 @@ import java.lang.Exception
 @Location(GET_TAGGED_STORIES)
 class GetTaggedStoriesRoute
 
-@Location(SEARCH_BY_Tag_STORIES)
-class GetStoriesByTag
-
 @Location(GET_BY_TAGS_STORIES)
 class GetStoriesByTags
 
@@ -41,8 +38,9 @@ class GetTagByUUIDRoute
 @Location(GET_LAST_UPDATES_BY_TAGS)
 class GetLastUpdatesByTags
 
-@Location (GET_LAST_UPDATES_BY_TAGS_AND_TITLE)
+@Location(GET_LAST_UPDATES_BY_TAGS_AND_TITLE)
 class GetLastUpdatesByTagsAndTitle
+
 fun Route.tagRoutes(
     tagService: TagService,
 ) {
@@ -80,7 +78,8 @@ fun Route.tagRoutes(
             return@get
         }
         try {
-            val lastUpdates = tagService.getLastUpdatesByTagsAndTitle(searchByTagsAndTitle.tags, searchByTagsAndTitle.title)
+            val lastUpdates =
+                tagService.getLastUpdatesByTagsAndTitle(searchByTagsAndTitle.tags, searchByTagsAndTitle.title)
             call.respond(HttpStatusCode.OK, lastUpdates)
         } catch (e: Exception) {
             call.respond(
@@ -118,27 +117,6 @@ fun Route.tagRoutes(
             }
         }
 
-
-
-        get<GetStoriesByTag> {
-            val tagName = try {
-                call.request.queryParameters["tagName"]!!
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "QueryParameter:tagName is not present"))
-                return@get
-            }
-            try {
-                val storiesByTag = tagService.findStoriesByTag(tagName)
-                call.respond(HttpStatusCode.OK, storiesByTag)
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
-            }
-        }
-
-
-
-
-
         get<GetAllTagsToStoryRoute> {
             val storyId = try {
                 call.request.queryParameters["storyId"]!!
@@ -158,16 +136,6 @@ fun Route.tagRoutes(
             try {
                 val allTags = tagService.getAllTags()
                 call.respond(HttpStatusCode.OK, allTags)
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
-
-            }
-        }
-
-        get<GetAllTagsRoute> {
-            try {
-                val allTags = tagService.getAllTags()
-                //     call.respond(bytes)
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.Conflict, e.message ?: "Some Problems Occurred!")
 

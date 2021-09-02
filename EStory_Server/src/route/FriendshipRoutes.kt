@@ -36,10 +36,8 @@ class MyFriendshipsGetRoute
 @Location(FRIENDSHIPS_GET_REQUESTS_TO_ME)
 class FriendshipsRequestsTOMeGetRoute
 
-
 @Location(FRIENDSHIPS_GET_REQUESTS_From_ME)
 class FriendshipsRequestsFromMeGetRoute
-
 
 @Location(REJECT_FRIENDSHIPS)
 class FriendshipRejectRequestRoute

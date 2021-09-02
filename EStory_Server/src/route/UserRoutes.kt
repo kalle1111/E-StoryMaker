@@ -35,7 +35,7 @@ class UpdateProfileRoute
 class UserGetLastUpdateRoute
 
 @Location(USERS_GET_LAST_UPDATE_VALUES)
-class UsersGetLastUpdateRouteValuesRoute
+class UsersGetLastUpdateValuesRoute
 
 @Location(GET_USER_BY_USERNAME)
 class GetUserByUsernameRoute
@@ -178,10 +178,7 @@ fun Route.userRoutes(
     }
 
 
-
-
-
-    get<UsersGetLastUpdateRouteValuesRoute> {
+    get<UsersGetLastUpdateValuesRoute> {
         try {
             val lastUpdateValues = userService.getAllLastUpdateValues()
             call.respond(HttpStatusCode.OK, lastUpdateValues)

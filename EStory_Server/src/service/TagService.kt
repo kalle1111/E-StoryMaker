@@ -30,14 +30,13 @@ class TagService {
 
     fun getByUUID(uuid: String): Tag? = transaction { TagEntity.findById(UUID.fromString(uuid))?.toDTO() }
 
-
     fun getAllTags(): List<Tag> = transaction { TagEntity.all().map { it.toDTO() } }
 
     private fun insertTag(name: String): Tag = transaction { TagEntity.new { this.name = name }.toDTO() }
 
     // inserting all tags into the database
     fun insertAllTags() {
-        if (getAllTags().size != tags.size) {
+        if (getAllTags().size != tags.size) {   // insert all tags again, when the database is empty
             transaction { TagsTable.deleteAll() }
             tags.forEach { insertTag(it) }
         }
@@ -57,10 +56,9 @@ class TagService {
         }
         return taggedStories
     }
+
     fun getAllTaggedStories(): List<TaggedStory> = transaction { TaggedStoriesEntity.all().map { it.toDTO() } }
 
-    //TODO: Diese Function brauchen wir nicht .....
-    fun findStoriesByTag(tagName: String): List<TaggedStory> = getAllTaggedStories().filter { it.tag.name == tagName }
 
     fun getAllTagsToStory(storyId: String): List<Tag> =
         getAllTaggedStories().filter { it.story.uuid == storyId }.map { it.tag }

@@ -73,7 +73,6 @@ fun Application.module(testing: Boolean = false) {
             call.sessions.set(session.copy(count = session.count + 1))
             call.respondText("Counter is ${session.count}. Refresh to increment.")
         }
-
     }
 }
 

@@ -16,104 +16,78 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import java.lang.Exception
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(CREAT_STORIES)
 class StoryCreateRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(MY_STORIES)
 class MyStoriesGetRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(STORIES)
 class StoriesGetRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(UPDATE_STORIES)
 class StoryUpdateRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(DELETE_STORIES)
 class StoryDeleteRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(RATE_STORIES)
 class StoryRateRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(UPDATE_RATED_STORIES)
 class StoryUpdateRateRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(RATED_STORIES)
 class RatedStoriesGetRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(FROM_ME_RATED_STORIES)
 class FromMeRatedStoriesGetRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(FAVORITE_STORIES)
 class FavoriteStoriesGetRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(MY_FAVORITE_STORIES)
 class MyFavoriteStoriesGetRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(SET_FAVORITE_STORIES)
 class SetFavoriteStoryRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(SET_AS_NOT_FAVORITE_STORIES)
 class SetAsNotFavoriteStoryRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(SEARCH_BY_TITLE_STORIES)
 class StorySearchByTitleRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(STORY_GET_BY_ID_LAST_UPDATE)
 class StoryGetLastUpdateRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(STORIES_GET_LAST_UPDATE_VALUES)
 class StoriesGetLastUpdateValuesRoute
 
-
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(RATED_STORY_GET_BY_ID_LAST_UPDATE)
 class RatedStoryGetLastUpdateRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(RATED_STORIES_GET_LAST_UPDATE_VALUES)
 class RatedStoriesGetLastUpdateValuesRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(MY_STORIES_GET_LAST_UPDATE_VALUES)
 class GetLastUpdatesMyStoriesRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(GET_STORY_BY_UUID)
 class GetStoryByUUIDRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(GET_FAVORITE_STORY_BY_UUID)
 class GetFavoriteStoryByUUIDRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(GET_RATED_STORY_BY_UUID)
 class GetRatedStoryByUUIDRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(GET_RATED_STORY_BY_STORY_ID)
 class GetRatedStoryByStoryIdRoute
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(FROM_RATED_STORIES_GET_LAST_UPDATES)
 class GetLastUpdatesFromMeRatedStories
 
-@OptIn(KtorExperimentalLocationsAPI::class)
 @Location(MY_FAVORITE_STORIES_GET_LAST_UPDATES)
 class GetLastUpdatesFromMyFavoriteStories
 
@@ -291,7 +265,9 @@ fun Route.storyRoutes(
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
             }
         }
+
         /****************Searching by title ************/
+
         get<StorySearchByTitleRoute> {
             val storyTitle = try {
                 call.request.queryParameters["title"]!!
@@ -306,8 +282,8 @@ fun Route.storyRoutes(
                 call.respond(HttpStatusCode.Conflict, SimpleResponse(false, e.message ?: "Some Problems occurred"))
             }
         }
+
         /****************Set Story as Favorite ************/
-        //We dont need it, it is not so important in the app
         get<FavoriteStoriesGetRoute> {
             try {
                 val favoriteStories = storyService.getAllStoriesAsFavorite()
@@ -317,7 +293,7 @@ fun Route.storyRoutes(
 
             }
         }
-        // this is more important to see just my important Stories
+        // get my favorite Stories
         get<MyFavoriteStoriesGetRoute> {
             try {
                 val userName = call.principal<User>()!!.userName
@@ -331,16 +307,12 @@ fun Route.storyRoutes(
 
         post<SetFavoriteStoryRoute> {
             val setFavorite = try {
-
                 call.receive<StoryAsFavoriteRequest>()
-
             } catch (e: Exception) {
 
                 call.respond(HttpStatusCode.BadRequest, SimpleResponse(false, "Missing Fields.."))
                 return@post
             }
-
-
             try {
                 val username = call.principal<User>()!!.userName
                 storyService.setStoryAsFavorite(username, setFavorite.storyId)
@@ -375,7 +347,6 @@ fun Route.storyRoutes(
 
         /**************Rating Story*******************/
         post<StoryRateRoute> {
-            println("RATE STORY")
             val rateStory = try {
 
                 call.receive<RateStoryRequest>()
@@ -404,7 +375,6 @@ fun Route.storyRoutes(
         }
 
         post<StoryUpdateRateRoute> {
-            println("UPDATE RATING")
             val ratedStory = try {
                 call.receive<RateStoryRequest>()
 

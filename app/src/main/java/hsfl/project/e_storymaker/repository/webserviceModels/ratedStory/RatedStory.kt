@@ -1,4 +1,7 @@
-package hsfl.project.e_storymaker.repository.webserviceModels
+package hsfl.project.e_storymaker.repository.webserviceModels.ratedStory
+
+import hsfl.project.e_storymaker.repository.webserviceModels.story.Story
+import hsfl.project.e_storymaker.repository.webserviceModels.user.User
 
 data class RatedStory (
     val uuid: String,

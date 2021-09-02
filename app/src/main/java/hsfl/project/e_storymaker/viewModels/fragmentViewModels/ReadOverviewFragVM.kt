@@ -4,10 +4,9 @@ package hsfl.project.e_storymaker.viewModels.fragmentViewModels
 import android.app.Application
 import android.util.Log
 import hsfl.project.e_storymaker.models.remoteDataSource.StoryRepository
-import hsfl.project.e_storymaker.repository.webserviceModels.StoryAsFavoriteRequest
+import hsfl.project.e_storymaker.repository.webserviceModels.favorite.StoryAsFavoriteRequest
 import hsfl.project.e_storymaker.roomDB.Entities.story.Story
 import hsfl.project.e_storymaker.viewModels.ReadingVM
-import io.ktor.auth.*
 
 class ReadOverviewFragVM : ReadingVM() {
 

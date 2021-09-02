@@ -1,4 +1,6 @@
-package hsfl.project.e_storymaker.repository.webserviceModels
+package hsfl.project.e_storymaker.repository.webserviceModels.story
+
+import hsfl.project.e_storymaker.repository.webserviceModels.user.User
 
 data class Story(
     val uuid: String,

@@ -4,6 +4,11 @@ import android.app.Application
 import android.util.Log
 import com.google.gson.Gson
 import hsfl.project.e_storymaker.repository.webserviceModels.*
+import hsfl.project.e_storymaker.repository.webserviceModels.friendship.Friendship
+import hsfl.project.e_storymaker.repository.webserviceModels.friendship.FriendshipServiceModel
+import hsfl.project.e_storymaker.repository.webserviceModels.login.LoginRequest
+import hsfl.project.e_storymaker.repository.webserviceModels.register.RegisterRequest
+import hsfl.project.e_storymaker.repository.webserviceModels.user.User
 import hsfl.project.e_storymaker.roomDB.AppDatabase
 import hsfl.project.e_storymaker.roomDB.Entities.chapterProgress.ChapterProgressDao
 import hsfl.project.e_storymaker.roomDB.Entities.favoring.FavoringDao
@@ -109,18 +114,6 @@ class UserRepository(application: Application) {
         }
     }
 
-
-
-    private fun getAllUsersTimestamp() = runBlocking {
-        val client = HttpClient(CIO)
-        val response: HttpResponse = client.get(USERS_GET_LAST_UPDATE_VALUES)
-        val jsonString: String = response.receive()
-        Log.d(TAG, jsonString)
-        client.close()
-        val usersPairLastUpdate = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
-        return@runBlocking usersPairLastUpdate
-    }
-
     private fun getUserByUserName(username: String): hsfl.project.e_storymaker.roomDB.Entities.user.User? = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
             val client = getHttpClient()
@@ -146,6 +139,24 @@ class UserRepository(application: Application) {
         }
     }
 
+    fun getMyProfile(): hsfl.project.e_storymaker.roomDB.Entities.user.User? = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO) {
+            val username = sharedPreferences.getUsername(application)!!
+            cacheUser(username)
+        }
+    }
+
+    /*********User Timestamps Functions*********/
+    private fun getAllUsersTimestamp() = runBlocking {
+        val client = HttpClient(CIO)
+        val response: HttpResponse = client.get(USERS_GET_LAST_UPDATE_VALUES)
+        val jsonString: String = response.receive()
+        Log.d(TAG, jsonString)
+        client.close()
+        val usersPairLastUpdate = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
+        return@runBlocking usersPairLastUpdate
+    }
+
     private fun getUserTimestamp(username: String): Long = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
             val authToken = sharedPreferences.getJWT(application)!!
@@ -158,13 +169,6 @@ class UserRepository(application: Application) {
             client.close()
             val userUpdate = Gson().fromJson(jsonString, Long::class.java)
             userUpdate
-        }
-    }
-
-    fun getMyProfile(): hsfl.project.e_storymaker.roomDB.Entities.user.User? = runBlocking {
-        return@runBlocking withContext(Dispatchers.IO) {
-            val username = sharedPreferences.getUsername(application)!!
-            cacheUser(username)
         }
     }
 
@@ -278,6 +282,7 @@ class UserRepository(application: Application) {
         }
     }
 
+    /*********Cache User Functions*********/
     private fun cacheUsers(userTimestamps: List<PairLastUpdate>): List<hsfl.project.e_storymaker.roomDB.Entities.user.User> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
             val dbUsers: MutableList<hsfl.project.e_storymaker.roomDB.Entities.user.User> = mutableListOf<hsfl.project.e_storymaker.roomDB.Entities.user.User>()

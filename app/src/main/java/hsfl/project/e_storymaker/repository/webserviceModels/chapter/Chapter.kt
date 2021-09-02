@@ -1,4 +1,4 @@
-package hsfl.project.e_storymaker.repository.webserviceModels
+package hsfl.project.e_storymaker.repository.webserviceModels.chapter
 
 class Chapter (
     val uuid: String,

@@ -5,6 +5,18 @@ import android.util.Log
 
 import com.google.gson.Gson
 import hsfl.project.e_storymaker.repository.webserviceModels.*
+import hsfl.project.e_storymaker.repository.webserviceModels.chapter.Chapter
+import hsfl.project.e_storymaker.repository.webserviceModels.chapter.InsertChapterRequest
+import hsfl.project.e_storymaker.repository.webserviceModels.chapter.UpdateChapterRequest
+import hsfl.project.e_storymaker.repository.webserviceModels.favorite.StoryAsFavoriteRequest
+import hsfl.project.e_storymaker.repository.webserviceModels.ratedStory.RateStoryRequest
+import hsfl.project.e_storymaker.repository.webserviceModels.ratedStory.RatedStory
+import hsfl.project.e_storymaker.repository.webserviceModels.story.MapStoryToTagRequest
+import hsfl.project.e_storymaker.repository.webserviceModels.story.Story
+import hsfl.project.e_storymaker.repository.webserviceModels.story.StoryRequest
+import hsfl.project.e_storymaker.repository.webserviceModels.story.UpdateStoryRequest
+import hsfl.project.e_storymaker.repository.webserviceModels.tag.SearchByTags
+import hsfl.project.e_storymaker.repository.webserviceModels.tag.SearchByTagsAndTitle
 import hsfl.project.e_storymaker.roomDB.AppDatabase
 import hsfl.project.e_storymaker.roomDB.Entities.chapter.ChapterDao
 import hsfl.project.e_storymaker.roomDB.Entities.chapterProgress.ChapterProgressDao
@@ -61,7 +73,6 @@ class StoryRepository(application: Application){
     /*********Story Related Functions*********/
     fun getAllStories():List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO) {
-            //val authToken = sharedPreferences.getJWT(activity)
             val storiesWithTimestamp = getAllStoriesTimestamp()
             cacheStories(storiesWithTimestamp)
         }
@@ -75,8 +86,6 @@ class StoryRepository(application: Application){
                     parameter("uuid", uuid)
                 }
                 val stringBody: String = response.receive()
-                Log.d(TAG, "HELLO...........................")
-                Log.d(TAG, stringBody)
                 client.close()
                 val story: Story = Gson().fromJson(stringBody, Story::class.java)
                 convertWebserviceStoryToDbStory(story)
@@ -87,38 +96,12 @@ class StoryRepository(application: Application){
         }
     }
 
-    private fun getAllStoriesTimestamp() = runBlocking {
-        return@runBlocking withContext(Dispatchers.IO){
-            val client = HttpClient(CIO)
-            val response: HttpResponse = client.get(STORIES_GET_LAST_UPDATE_VALUES)
-            val jsonString: String = response.receive()
-            Log.d(TAG, jsonString)
-            client.close()
-            val storiesPairLastUpdate = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
-            storiesPairLastUpdate
-        }
-    }
-
     fun getMyStories(): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO) {
             val username = sharedPreferences.getUsername(application)!!
             val authToken = sharedPreferences.getJWT(application)!!
             val storiesWithTimestamp = getMyStoriesTimestamp(username, authToken)
             cacheStories(storiesWithTimestamp)
-        }
-    }
-
-    private fun getMyStoriesTimestamp(username: String, authToken: String) = runBlocking {
-        return@runBlocking withContext(Dispatchers.IO){
-            val client = getAuthHttpClient(authToken)
-            val response: HttpResponse = client.get(MY_STORIES_GET_LAST_UPDATE_VALUES){
-                parameter("username", username)
-            }
-            val jsonString: String = response.receive()
-            Log.d(TAG, jsonString)
-            client.close()
-            val storiesPairLastUpdate = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
-            storiesPairLastUpdate
         }
     }
 
@@ -197,37 +180,6 @@ class StoryRepository(application: Application){
         }
     }
 
-    private fun compareStoriesWithTimestamp(timestamps: List<PairLastUpdate>, authToken: String): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
-        return@runBlocking withContext(Dispatchers.IO){
-            val stories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = mutableListOf()
-            timestamps.map{
-                if(!storyDao.rowExistByUUID(it.first)){
-                    val storyToInsert = getStoryByUUID(it.first)
-                    if (storyToInsert != null){
-                        storyDao.insertWithTimestamp(storyToInsert)
-                        stories.add(storyDao.getStoryByUuid(it.first))
-                    } else {
-
-                    }
-                } else {
-                    if(storyDao.getStoryByUuid(it.first).cachedTime < it.second){
-                        val storyToInsert = getStoryByUUID(it.first)
-                        if (storyToInsert != null){
-                            storyDao.delete(storyDao.getStoryByUuid(it.first))
-                            storyDao.insertWithTimestamp(storyToInsert)
-                            stories.add(storyDao.getStoryByUuid(it.first))
-                        } else {
-                            stories.add(storyDao.getStoryByUuid(it.first))
-                        }
-                    } else {
-
-                    }
-                }
-            }
-            stories
-        }
-    }
-
     fun getStoryPerUUIDList(uuidList: List<String>) : List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
             val stories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = mutableListOf()
@@ -262,19 +214,6 @@ class StoryRepository(application: Application){
         }
     }
 
-
-
-    private fun getStoryTimestampPerUUID(uuid: String): String = runBlocking {
-        return@runBlocking withContext(Dispatchers.IO) {
-            val client = HttpClient(CIO)
-            val response: HttpResponse = client.get(STORY_GET_BY_ID_LAST_UPDATE){
-                parameter("uuid", uuid)
-            }
-            val lastUpdate: String = response.receive()
-            lastUpdate
-        }
-    }
-
     fun getStory(uuid: String): hsfl.project.e_storymaker.roomDB.Entities.story.Story? = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
             val storyTimestamp = getStoryTimestampPerUUID(uuid).toLong()
@@ -285,11 +224,9 @@ class StoryRepository(application: Application){
             } else {
                 if(storyDao.getStoryByUuid(uuid).cachedTime < storyTimestamp){
                     val story = getStoryByUUID(uuid)!!
-                    Log.e(TAG, "WE ARE HERE, yay: outdated!")
                     storyDao.insertWithTimestamp(story)
                     storyDao.getStoryByUuid(uuid)
                 } else {
-                    Log.e(TAG, "WE ARE HERE, yay: uptodate!: " +storyTimestamp + ";" + storyDao.getStoryByUuid(uuid).cachedTime)
                     storyDao.getStoryByUuid(uuid)
                 }
             }
@@ -303,6 +240,32 @@ class StoryRepository(application: Application){
         }
     }
 
+    /*********Story Timestamps Functions*********/
+    private fun getAllStoriesTimestamp() = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val client = HttpClient(CIO)
+            val response: HttpResponse = client.get(STORIES_GET_LAST_UPDATE_VALUES)
+            val jsonString: String = response.receive()
+            Log.d(TAG, jsonString)
+            client.close()
+            val storiesPairLastUpdate = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
+            storiesPairLastUpdate
+        }
+    }
+
+    private fun getMyStoriesTimestamp(username: String, authToken: String) = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val client = getAuthHttpClient(authToken)
+            val response: HttpResponse = client.get(MY_STORIES_GET_LAST_UPDATE_VALUES){
+                parameter("username", username)
+            }
+            val jsonString: String = response.receive()
+            Log.d(TAG, jsonString)
+            client.close()
+            val storiesPairLastUpdate = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
+            storiesPairLastUpdate
+        }
+    }
 
     private fun getStoryTimestampsByTitle(title: String): List<PairLastUpdate> = runBlocking {
         val authToken = sharedPreferences.getJWT(application)!!
@@ -315,6 +278,17 @@ class StoryRepository(application: Application){
         client.close()
         val storyTimestamps = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
         storyTimestamps
+    }
+
+    private fun getStoryTimestampPerUUID(uuid: String): String = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO) {
+            val client = HttpClient(CIO)
+            val response: HttpResponse = client.get(STORY_GET_BY_ID_LAST_UPDATE){
+                parameter("uuid", uuid)
+            }
+            val lastUpdate: String = response.receive()
+            lastUpdate
+        }
     }
 
     /*********Rate Story Related Functions*********/
@@ -365,18 +339,6 @@ class StoryRepository(application: Application){
         }
     }
 
-    private fun getAllRatedStoriesTimestamp() = runBlocking {
-        return@runBlocking withContext(Dispatchers.IO){
-            val client = HttpClient(CIO)
-            val response: HttpResponse = client.get(RATED_STORIES_GET_LAST_UPDATE_VALUES)
-            val jsonString: String = response.receive()
-            Log.d(TAG, jsonString)
-            client.close()
-            val ratedStoriesPairLastUpdate = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
-            ratedStoriesPairLastUpdate
-        }
-    }
-
     private fun getRatedStoryByUUID(uuid: String): Rating? = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
             val client = getHttpClient()
@@ -402,6 +364,26 @@ class StoryRepository(application: Application){
         }
     }
 
+    fun getRatedStoriesByStoryId(uuid: String):  List<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = runBlocking{
+        return@runBlocking withContext(Dispatchers.IO){
+            val ratedStoryByIdTimestamp = getRatedStoriesTimestampByStoryId(uuid)
+            cacheRatedStories(ratedStoryByIdTimestamp)
+        }
+    }
+
+    /*********Rate Story Timestamps Functions*********/
+    private fun getAllRatedStoriesTimestamp() = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val client = HttpClient(CIO)
+            val response: HttpResponse = client.get(RATED_STORIES_GET_LAST_UPDATE_VALUES)
+            val jsonString: String = response.receive()
+            Log.d(TAG, jsonString)
+            client.close()
+            val ratedStoriesPairLastUpdate = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
+            ratedStoriesPairLastUpdate
+        }
+    }
+
     private fun getMyRatedStoriesTimestamp() = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
             val authToken = sharedPreferences.getJWT(application)!!
@@ -418,13 +400,6 @@ class StoryRepository(application: Application){
         }
     }
 
-    fun getRatedStoriesByStoryId(uuid: String):  List<hsfl.project.e_storymaker.roomDB.Entities.rating.Rating> = runBlocking{
-        return@runBlocking withContext(Dispatchers.IO){
-            val ratedStoryByIdTimestamp = getRatedStoriesTimestampByStoryId(uuid)
-            cacheRatedStories(ratedStoryByIdTimestamp)
-        }
-    }
-
     private fun getRatedStoriesTimestampByStoryId(storyId: String): List<PairLastUpdate> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
             val client = getHttpClient()
@@ -438,28 +413,11 @@ class StoryRepository(application: Application){
         }
     }
 
-
     /*********Favorite Story Related Functions*********/
     fun getMyFavoriteStories(): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
             val favoriteStoriesTimestamp = getMyFavoriteStoriesTimestamp()
             cacheStories(favoriteStoriesTimestamp)
-        }
-    }
-
-    private fun getMyFavoriteStoriesTimestamp(): List<PairLastUpdate> = runBlocking {
-        return@runBlocking withContext(Dispatchers.IO){
-            val authToken = sharedPreferences.getJWT(application)!!
-            val username = sharedPreferences.getUsername(application)!!
-            val client = getAuthHttpClient(authToken)
-            val response: HttpResponse = client.get(MY_FAVORITE_STORIES_GET_LAST_UPDATES){
-                parameter("username", username)
-            }
-            val jsonString: String = response.receive()
-            Log.d(TAG, jsonString)
-            client.close()
-            val ratedStoriesPairLastUpdate = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
-            ratedStoriesPairLastUpdate
         }
     }
 
@@ -496,6 +454,22 @@ class StoryRepository(application: Application){
         } catch (e: Exception){
             client.close()
             false
+        }
+    }
+
+    private fun getMyFavoriteStoriesTimestamp(): List<PairLastUpdate> = runBlocking {
+        return@runBlocking withContext(Dispatchers.IO){
+            val authToken = sharedPreferences.getJWT(application)!!
+            val username = sharedPreferences.getUsername(application)!!
+            val client = getAuthHttpClient(authToken)
+            val response: HttpResponse = client.get(MY_FAVORITE_STORIES_GET_LAST_UPDATES){
+                parameter("username", username)
+            }
+            val jsonString: String = response.receive()
+            Log.d(TAG, jsonString)
+            client.close()
+            val ratedStoriesPairLastUpdate = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
+            ratedStoriesPairLastUpdate
         }
     }
 
@@ -568,7 +542,6 @@ class StoryRepository(application: Application){
                 parameter("storyId", storyId)
             }
             val jsonString: String = response.receive()
-            Log.d(TAG, jsonString)
             client.close()
             val chapterTimestampPairLastUpdate = Gson().fromJson(jsonString, Array<PairLastUpdate>::class.java).toList()
             chapterTimestampPairLastUpdate
@@ -581,9 +554,8 @@ class StoryRepository(application: Application){
             parameter("uuid", uuid)
         }
         val jsonString: String = response.receive()
-        Log.d(TAG, jsonString)
         client.close()
-        val chapter = Gson().fromJson(jsonString, hsfl.project.e_storymaker.repository.webserviceModels.Chapter::class.java)
+        val chapter = Gson().fromJson(jsonString, Chapter::class.java)
         convertWebserviceChapterToDbChapter(chapter)
     }
 
@@ -607,7 +579,6 @@ class StoryRepository(application: Application){
     }
 
     private fun getChapterTimestampFromChapterUUID(uuid: String): PairLastUpdate = runBlocking {
-
             val authToken = sharedPreferences.getJWT(application)!!
             val client: HttpClient = getAuthHttpClient(authToken)
             val response: HttpResponse = client.get(GET_LAST_UPDATE_BY_CHAPTER_ID_ROUTE){
@@ -629,7 +600,7 @@ class StoryRepository(application: Application){
             val jsonString: String = response.receive()
             Log.d(TAG, jsonString)
             client.close()
-            val tags = Gson().fromJson(jsonString, Array<hsfl.project.e_storymaker.repository.webserviceModels.Tag>::class.java).toList()
+            val tags = Gson().fromJson(jsonString, Array<hsfl.project.e_storymaker.repository.webserviceModels.tag.Tag>::class.java).toList()
             val roomDBTags = tags.map{
                 tagDao.insertWithTimestamp(convertWebserviceTagToDbTag(it))
                 tagDao.getTagByTagname(it.name)
@@ -689,7 +660,7 @@ class StoryRepository(application: Application){
             val jsonString: String = response.receive()
             Log.d(TAG, jsonString)
             client.close()
-            val tags = Gson().fromJson(jsonString, Array<hsfl.project.e_storymaker.repository.webserviceModels.Tag>::class.java).toList()
+            val tags = Gson().fromJson(jsonString, Array<hsfl.project.e_storymaker.repository.webserviceModels.tag.Tag>::class.java).toList()
             val roomDBTags = tags.map{
                 if(!tagDao.rowExistByTagname(it.name)){
                     tagDao.insertWithTimestamp(convertWebserviceTagToDbTag(it))
@@ -740,6 +711,7 @@ class StoryRepository(application: Application){
             storyTimestamps
     }
 
+    /*********Cache Functions*********/
     private fun cacheStories(storiesTimestamps: List<PairLastUpdate>): List<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = runBlocking {
         return@runBlocking withContext(Dispatchers.IO){
             val stories: MutableList<hsfl.project.e_storymaker.roomDB.Entities.story.Story> = mutableListOf()
@@ -794,12 +766,6 @@ class StoryRepository(application: Application){
             dbRatedStories
         }
     }
-
-    fun deleteData() {
-    }
-
-    fun updateData(){}
-
 
     companion object {
         @Volatile

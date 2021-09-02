@@ -2,11 +2,9 @@ package hsfl.project.e_storymaker.viewModels.fragmentViewModels
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.viewModelScope
 import hsfl.project.e_storymaker.models.remoteDataSource.UserRepository
-import hsfl.project.e_storymaker.repository.webserviceModels.RegisterRequest
+import hsfl.project.e_storymaker.repository.webserviceModels.register.RegisterRequest
 import hsfl.project.e_storymaker.viewModels.AuthVM
-import kotlinx.coroutines.async
 
 class RegisterFragVM : AuthVM() {
 

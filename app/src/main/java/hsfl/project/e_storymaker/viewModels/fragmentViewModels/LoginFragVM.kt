@@ -1,12 +1,9 @@
 package hsfl.project.e_storymaker.viewModels.fragmentViewModels
 
 import android.app.Application
-import android.graphics.ColorSpace
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import hsfl.project.e_storymaker.models.remoteDataSource.StoryRepository
 import hsfl.project.e_storymaker.models.remoteDataSource.UserRepository
-import hsfl.project.e_storymaker.repository.webserviceModels.LoginRequest
+import hsfl.project.e_storymaker.repository.webserviceModels.login.LoginRequest
 import hsfl.project.e_storymaker.viewModels.AuthVM
 
 class LoginFragVM : AuthVM() {

@@ -4,9 +4,7 @@ package hsfl.project.e_storymaker.viewModels.fragmentViewModels
 import android.app.Application
 import android.util.Log
 import hsfl.project.e_storymaker.models.remoteDataSource.StoryRepository
-import hsfl.project.e_storymaker.repository.webserviceModels.InsertChapterRequest
-import hsfl.project.e_storymaker.roomDB.AppDatabase_Impl
-import hsfl.project.e_storymaker.viewModels.MainVM
+import hsfl.project.e_storymaker.repository.webserviceModels.chapter.InsertChapterRequest
 import hsfl.project.e_storymaker.viewModels.WritingVM
 
 class WriteChapterFragVM : WritingVM() {

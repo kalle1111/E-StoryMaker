@@ -1,4 +1,4 @@
-package hsfl.project.e_storymaker.repository.webserviceModels
+package hsfl.project.e_storymaker.repository.webserviceModels.ratedStory
 
 class RateStoryRequest (
     val storyId: String,

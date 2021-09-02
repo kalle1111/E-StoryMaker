@@ -1,9 +1,8 @@
 E-StoryMaker
 
-Name                   Matrikelnummer
-Henry Engel              650321
-Simon Liehr              650348
-Mohammad Assaf           650168
+Henry Engel              650321,
+Simon Liehr              650348,
+Mohammad Assaf           650168,
 Timothy Braasch          610308
 
 

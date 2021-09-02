@@ -24,9 +24,6 @@ abstract class UserDao {
     @Query("SELECT EXISTS(SELECT * FROM user WHERE username = :username)")
     abstract fun rowExistByUsername(username : String) : Boolean
 
-//    @Query("SELECT EXISTS(SELECT * FROM user WHERE user_uuid = :uuid)")
-//    abstract fun rowExistByUUID(uuid : String) : Boolean
-
     fun insertWithTimestamp(user:User) {
         insertUser(user.apply{
             cachedTime = System.currentTimeMillis()

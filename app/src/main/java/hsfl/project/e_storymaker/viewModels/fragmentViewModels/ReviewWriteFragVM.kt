@@ -4,8 +4,6 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import hsfl.project.e_storymaker.models.remoteDataSource.StoryRepository
 import hsfl.project.e_storymaker.repository.webserviceModels.RateStoryRequest
-import hsfl.project.e_storymaker.roomDB.Entities.rating.Rating
-import hsfl.project.e_storymaker.roomDB.Entities.rating.RatingsFromUser
 
 class ReviewWriteFragVM : ViewModel() {
 

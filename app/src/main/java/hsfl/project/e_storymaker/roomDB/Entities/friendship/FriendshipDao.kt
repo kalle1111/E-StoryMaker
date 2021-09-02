@@ -34,18 +34,6 @@ abstract class FriendshipDao {
     @Query("SELECT requester_username FROM friendship WHERE friendship.isAccepted AND target_username = :user_username")
     abstract fun getFriendsAsTarget(user_username: String): List<String>
 
-    /*
-    fun getFriends(user_uuid: String): Set<User>{
-
-        val requesterList = getFriendsAsRequester(user_uuid)
-
-        val targetList = getFriendsAsTarget(user_uuid)
-
-        return (requesterList+targetList).toSet()
-    }
-    */
-
-
     @Query("SELECT * FROM friendship WHERE friendship_uuid LIKE :friendship_uuid")
     abstract fun getFriendshipByUuid(friendship_uuid : String): Friendship
 
